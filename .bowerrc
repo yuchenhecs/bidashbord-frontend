@@ -1,0 +1,14 @@
+{
+  "directory": "bower_components",
+  "registry" : {
+    "search" : [
+      "http://ec2-13-58-208-121.us-east-2.compute.amazonaws.com:8081/repository/bower-all/"
+    ],
+    "register" : "http://oranjfrontend:oranj123@ec2-13-58-208-121.us-east-2.compute.amazonaws.com:8081/repository/bower-oranj/"
+  },
+  "resolvers" : [ "bower-nexus3-resolver" ],
+  "nexus" : {
+    "username" : "oranjfrontend",
+    "password" : "oranj123"
+  }
+}

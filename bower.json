@@ -1,0 +1,28 @@
+{
+  "name": "oranj-bi-dashboard",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "~3.2.1",
+    "angular": "1.5.11",
+    "angular-mocks": "~1.5.11",
+    "angular-ui-router": "1.0.0-beta.3",
+    "oranj-navigation": "~1.0.0",
+    "oranj-highcharts": "~1.0.0",
+    "oranj-scss-global": "~1.0.0",
+    "kendo-ui": "https://bower.telerik.com/bower-kendo-ui.git#~2017.2.504"
+  },
+  "authors": [
+    "Nate Smith <nsmith@runoranj.com>"
+  ],
+  "description": "Oranj business intelligence dashboard",
+  "main": "bower_dist/main.js",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

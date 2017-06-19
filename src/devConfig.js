@@ -4,5 +4,5 @@ angular
 	.config(devConfig);
 
 function devConfig($urlRouterProvider) {
-	$urlRouterProvider.otherwise('/bi-dashboard');
+	$urlRouterProvider.otherwise('/home');
 };

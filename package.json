@@ -61,7 +61,8 @@
     "main-bower-files": "^2.13.1",
     "phantomjs-prebuilt": "^2.1.14",
     "uglify-save-license": "^0.4.1",
-    "wiredep": "^4.0.0"
+    "wiredep": "^4.0.0",
+    "bower-nexus3-resolver":"~1.0.2"
   },
   "scripts": {
     "build": "gulp",

@@ -8,7 +8,6 @@
     "angular-ui-router": "1.0.0-beta.3",
     "oranj-navigation": "~1.0.5",
     "oranj-highcharts": "~1.0.0",
-    "oranj-navigation": "~1.0.0",
     "oranj-scss-global": "~1.0.0"
   },
   "authors": [

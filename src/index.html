@@ -14,13 +14,15 @@
 	<!-- run `gulp inject` to automatically populate bower styles dependencies -->
 	<!-- endbower -->
 	<!-- endbuild -->
+
+	<!-- build:css({.tmp,src}) styles/app.css -->
+	<link rel="stylesheet" href="index.css" />
+	<!-- endbuild -->
 </head>
 
 <body>
-
-	<!-- all content will go within here -->
 	<div id="main">
-		<ui-view class="main-container"></ui-view>
+		<ui-view></ui-view>
 	</div>
 </body>
 

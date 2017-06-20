@@ -1,6 +1,3 @@
-
-
-
 // dependencies for whole module
 const requiredModules = [
 	'ui.router',

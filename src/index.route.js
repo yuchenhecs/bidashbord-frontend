@@ -2,24 +2,16 @@ angular
   .module('app')
   .config(routesConfig);
 
-
-
-function routerConfig($stateProvider, $urlRouterProvider) {
-	
-	$stateProvider
-		.state('app', {
-			url: '/bi-dashboard',
-			templateUrl: 'app/tradeWarrior/tradeWarrior.html',
-			controller: 'TradeWarriorController',
-			controllerAs: 'tw',
-			authRequired: false
-		})
+function routesConfig($stateProvider) {
+  	$stateProvider
 		.state('home', {
 			url: '/home',
 			templateUrl: 'app/home/home.html',
 			controller: 'HomeController',
-			controllerAs: 'home'
-		}).state('goals', {
+			controllerAs: 'home',
+			authRequired: false
+		})
+        .state('goals', {
 			url: '/goals',
 			templateUrl: 'app/goals/goals.html',
 			controller: 'GoalsController',
@@ -30,8 +22,11 @@ function routerConfig($stateProvider, $urlRouterProvider) {
 			templateUrl: 'app/aum/aum.html',
 			controller: 'AUMController',
 			controllerAs: 'aum'
+		})
+		.state('netWorth', {
+			url: '/netWorth',
+			templateUrl: 'app/netWorth/netWorth.html',
+			controller: 'NetWorthController',
+			controllerAs: 'netWorth'
 		});
-
-	$urlRouterProvider.otherwise('/bi-dashboard');
-
-}
+};

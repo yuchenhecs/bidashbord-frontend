@@ -1,5 +1,8 @@
+
+
+
 // dependencies for whole module
-var requiredModules = [
+const requiredModules = [
 	'ui.router',
 	'oranjNavigation',
 	'oranjHighcharts'

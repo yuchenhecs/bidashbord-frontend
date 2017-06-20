@@ -1,6 +1,6 @@
 angular
-  .module('app')
-  .config(routesConfig);
+  .module('app');
+ // .config(routesConfig);
 
 function routesConfig($stateProvider) {
   	$stateProvider

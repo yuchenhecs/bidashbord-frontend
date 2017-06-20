@@ -2,294 +2,519 @@ angular
     .module('app')
     .controller('AUMController', AUMController);
 
-function AUMController() {
+function AUMController($http, $scope, $compile, $sce, MetricsController) {
 	var vm = this;
+    $scope.test = 111;
 
-    vm.mainGridOptions = {
-        dataSource: {
-            data: [{ Name: "Stable Earnings", RiskLevel: "Conservative", Source: "Vanguard", Type: "ClassModel", ExpenseRatio: "20%", StandardDevition: "1%", ThreeMonthReturn: "2%", OneYearReturn: "3%", ThreeYearReturn: "4%", FiveYearReturn: "5%" },
-            { Name: "Tmo Seven", RiskLevel: "Moderate", Source: "Vanguard" },
-            { Name: "Senior Care", RiskLevel: "Balanced", Source: "Vanguard" },
-            { Name: "Gold All the Way", RiskLevel: "Aggressive", Source: "BlackRock" }],
-            schema: {
-                model: {
-                    fields: {
-                        Name: { type: "string" },
-                        RiskLevel: { type: "string" },
-                        Source: { type: "string" },
-                        Type: { type: "string" },
-                        ExpenseRatio: { type: "string" },
-                        StandardDevition: { type: "string" },
-                        ThreeMonthReturn: { type: "string" },
-                        OneYearReturn: { type: "string" },
-                        ThreeYearReturn: { type: "string" },
-                        FiveYearReturn: { type: "string" }
+    var aum = new AUMControllerClass($http, $scope, $compile, $sce, MetricsController)
+    
+};
+
+
+class AUMControllerClass {
+    constructor($http, $scope, $compile, $sce, MetricsController) {
+        'ngInject';
+       // super($http, $scope, $compile, $sce);
+       //console.log($scope.test);
+      // MetricsController.test();
+        for(var k in MetricsController){ 
+            this[k] = MetricsController[k]
+        };
+     
+        //this.launch = MetricsController.launch;
+        console.log(this);
+
+        // constants
+        this.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        this.SUB_DOMAIN = "/bi/aums";
+        this.USE_DUMMY_DATA = true;
+        this.COLOR_ARRAY = Highcharts.getOptions().colors;
+        this.controllerName = "aum";
+        this.isRequired = true;
+        this.startDate = new Date(new Date().getFullYear(), 0, 1);
+        this.endDate = new Date();
+
+        this.data1 = [
+            {
+                "firmId": 283,
+                "name": "mattfirm",
+                "previous": {
+                    "date": "2017-06-12",
+                    "total": null,
+                    "assetClass": {
+                        "US Bond": 17292,
+                        "Non US Stock": 20529.6,
+                        "US Stock": 24773.06,
+                        "Cash": 28150.9,
+                        "Other": 9543.31
+                    }
+                },
+                "current": {
+                    "date": "2017-06-12",
+                    "total": 304229.27,
+                    "assetClass": {
+                        "US Bond": 7292.4,
+                        "Non US Stock": 20529.6,
+                        "US Stock": 247713.06,
+                        "Cash": 18150.9,
+                        "Other": 10543.31
                     }
                 }
             },
-            pagesize: 10,
-        },
-        sortable: true,
-        pageable: true,
-        height: 500,
-        filterable: {
-            mode: "row"
-        },
-        dataBound: function () {
-            this.expandRow(this.tbody.find("tr.k-master-row").first());
-        },
-        columns: [{
-            field: "Id",
-            title: "Name",
-            width: 150,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    operator: "contains",
-                    width: 150,
-                    height: 30
-                }
-            },
-            template: "<a href='\\#' class='templateLink' ng-click='details.open()' style='color:viking;text-decoration:none;'>#=Name#</a>"
-        }, {
-            field: "RiskLevel",
-            title: "Risk Level",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    operator: "contains",
-                    width: 75,
-                    height: 30
+            {
+                "firmId": 509,
+                "name": "auto",
+                "previous": {
+                    "date": "2017-06-12",
+                    "total": null,
+                    "assetClass": {}
+                },
+                "current": {
+                    "date": "2017-06-12",
+                    "total": 133576.06,
+                    "assetClass": {
+                        "US Stock": 114459.75,
+                        "Cash": 1031.1,
+                        "Other": 18085.21
+                    }
                 }
             }
-        }, {
-            field: "Source",
-            title: "Vendor",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    operator: "contains",
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "Type",
-            title: "Type",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "ExpenseRatio",
-            title: "Expense Ratio",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "StandardDevition",
-            title: "Standard Devition",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "ThreeMonthReturn",
-            title: "Three Month Return",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "OneYearReturn",
-            title: "One Year Return",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "ThreeYearReturn",
-            title: "Three Year Return",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }, {
-            field: "FiveYearReturn",
-            title: "Five Year Return",
-            width: 75,
-            height: 40,
-            filterable: {
-                cell: {
-                    showOperators: false,
-                    width: 75,
-                    height: 30
-                }
-            }
-        }]
-    };
+        ];
 
-    vm.windowOptions = {
-        modal: true,
-        draggable: true,
-        width: 1425,
-        height: 444,
-        title: "Grid Window",
-        actions: ['Close'],
-        visible: false,
-        animation: {
-            open: {
-                effects: "slideIn:left fadeIn",
-                duration: 500
-            },
-            close: {
-                effects: "slideIn:left fadeIn",
-                reverse: true,
-                duration: 500
-            }
-        },
-        position: {
-            // top: 135,
-            top: angular.element('#grid').offset().top,
-            left: 448
-        },
-        resizable: true
-    };
 
-    vm.chartsConfig = {
-        history: {
-            chart: {
-                type: 'pie',
-                height: 350
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+        this.data2 = [
+            {
+                "firmId": 283,
+                "name": "mattfirm",
+                "previous": {
+                    "date": "2017-06-12",
+                    "total": null,
+                    "assetClass": {
+                        "US Bond": 222.4,
+                        "Non US Stock": 33.6,
+                        "US Stock": 232.06,
+                        "Cash": 77.9,
+                        "Other": 88.31
+                    }
+                },
+                "current": {
+                    "date": "2017-06-12",
+                    "total": 304229.27,
+                    "assetClass": {
+                        "US Bond": 123.4,
+                        "Non US Stock": 312.6,
+                        "US Stock": 411.06,
+                        "Cash": 11.9,
+                        "Other": 33.31
                     }
                 }
             },
-            tooltip: {
-                shared: true
+            {
+                "firmId": 509,
+                "name": "auto",
+                "previous": {
+                    "date": "2017-06-12",
+                    "total": null,
+                    "assetClass": {
+                        "US Bond": 1222.4,
+                        "Non US Stock": 233.6,
+                        "US Stock": 232.06,
+                        "Cash": 177.9,
+                        "Other": 188.31
+                    }
+                },
+                "current": {
+                    "date": "2017-06-12",
+                    "total": 133576.06,
+                    "assetClass": {
+                        "US Stock": 233.75,
+                        "Cash": 444.1,
+                        "Other": 777.21
+                    }
+                }
+            }
+        ];
+
+        this.data3 = [
+            {
+                "firmId": 283,
+                "name": "mattfirm",
+                "previous": {
+                    "date": "2017-06-12",
+                    "total": null,
+                    "assetClass": {
+                        "US Bond": 89.4,
+                        "Non US Stock": 89.6,
+                        "US Stock": 78.06,
+                        "Cash": 99.9,
+                        "Other": 9.31
+                    }
+                },
+                "current": {
+                    "date": "2017-06-12",
+                    "total": 304229.27,
+                    "assetClass": {
+                        "US Bond": 89.4,
+                        "Non US Stock": 111.6,
+                        "US Stock": 22.06,
+                        "Cash": 33.9,
+                        "Other": 88.31
+                    }
+                }
             },
-            legend: {
-                align: 'right',
-                verticalAlign: 'center',
-                layout: 'vertical',
-                x: 0,
-                y: 100
-            },
-            series: [{
-                showInLegend: true,
-                innerSize: '50%'
-            }],
-            title: {
-                text: 'Stable Earnings',
-                align: 'left'
-            },
-            credits: {
-                enabled: false
+            {
+                "firmId": 509,
+                "name": "auto",
+                "previous": {
+                    "date": "2017-06-12",
+                    "total": null,
+                    "assetClass": {}
+                },
+                "current": {
+                    "date": "2017-06-12",
+                    "total": 99.06,
+                    "assetClass": {
+                        "US Stock": 99.75,
+                        "Cash": 88.1,
+                        "Other": 66.21
+                    }
+                }
+            }
+        ];
+
+
+
+
+        // tooltip formatter
+        var formatter = function () {
+            var s = '<b>' + this.x + '</b>';
+
+            var currentStack = this.series.userOptions['stackId'];
+
+            this.series.chart.series.forEach(function (series) {
+                if (currentStack == series.userOptions['stackId'] && series.processedYData[this.point.index] != undefined) {
+                    s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
+                }
+
+            }, this);
+
+            return s;
+
+        }
+
+
+
+        var chartOnRedraw = function (event) {
+            var self = MetricsController.self;
+            if (this.xAxis) {
+
+                var extremes = this.xAxis[0].getExtremes();
+                if (extremes && extremes.max == extremes.dataMax) {
+                    var current_level = self.level_list[self.current_level];
+                    var last = current_level['last'];
+
+                    if (!last) {
+                        return;
+                    }
+                    //console.log(self.canLoadMore);
+                    if (self.canLoadMore) {
+                        self.canLoadMore = false;
+                        self.getData(current_level['name'], current_level['id'], current_level['page'] + 1);
+                        //self.canLoadMore = true;
+                    }
+                }
+            }
+
+        }
+
+        this.optionTemplate.chart.events.load = this.chartOnLoad;
+        this.optionTemplate.chart.events.redraw = chartOnRedraw;
+
+        this.optionTemplate.tooltip['shared'] = false;
+        this.optionTemplate.tooltip['formatter'] = formatter;
+        this.optionTemplate['subtitle'] = {
+            text: "Note: lighter bar - previous quarter, darker bar - current quarter",
+            y: 50
+        };
+
+        this.optionTemplate.legend['y'] = 60;
+
+        this.launch();
+    }
+
+    chartOnUpdate(){
+        this.chartOnLoad.call(AUMController.self);
+
+    }
+    // chart onload event
+    chartOnLoad(event) {
+        
+        var self = AUMController.self;
+        var chart = this == self? this.chart : this;
+       
+        self.baseChartOnLoad(chart);
+
+        // lighten the color of previous date bar
+        chart.series.forEach(function (x) {
+
+            if (x.options.stackId == 1) {
+                return;
+            }
+            var hex = x.color;
+            var percent = 50;
+
+            // increase brightness
+            var colorCode;
+
+            // strip the leading # if it's there
+            hex = hex.replace(/^\s*#|\s*$/g, '');
+
+            // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+            if (hex.length == 3) {
+                hex = hex.replace(/(.)/g, '$1$1');
+            }
+
+            var r = parseInt(hex.substr(0, 2), 16),
+                g = parseInt(hex.substr(2, 2), 16),
+                b = parseInt(hex.substr(4, 2), 16);
+
+            colorCode = '#' +
+                ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+                ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+                ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+
+
+            x.update({
+                color: colorCode
+            });
+        });
+
+    }
+
+
+
+    getData(name, id, page) {
+        this.canLoadMore = false; // lock the chartOnRedraw scroll-to-load function
+
+        this.showLoading();
+
+        var domain = this.DOMAIN;
+        var subdomain = this.SUB_DOMAIN;
+        var baseUrl;
+        var currentDate = this.endDate.toISOString().slice(0, 10);
+        var previousDate = this.startDate.toISOString().slice(0, 10);
+
+        // construct url based on current drilldown level
+        if (this.current_level == 0) {
+            baseUrl = domain + subdomain + "/firms?page=" + page + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
+        } else if (this.current_level == 1) {
+            baseUrl = domain + subdomain + "/advisors?page=" + page + "&firmId=" + id + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
+        } else if (this.current_level == 2) {
+            baseUrl = domain + subdomain + "/clients?page=" + page + "&advisorId=" + id + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
+        }
+
+        console.log(baseUrl);
+        this.getDataFromApi(baseUrl, name, id, page);
+    }
+
+    getDataFromApi(newUrl, name, id, page) {
+        if (this.USE_DUMMY_DATA) {
+            var type;
+            if (this.current_level == 0) {
+                type = this.data1;
+            } else if (this.current_level == 1) {
+                type = this.data2;
+            } else if (this.current_level == 2) {
+                type = this.data3;
+            }
+            if (page == 0) {
+                this.loadData(type, name, id, page, true);
+                this.createChart();
+            } else {
+                this.loadData(type, name, id, page, true);
+                this.hideLoading();
+                this.chart.update(this.level_list[this.current_level]['option']);
+                
+                this.chartOnUpdate();
+                //TODO cant detect yMax somehow!!!!!!!
+                // setTimeout(function(){
+
+                // },1000);
+            }
+            this.canLoadMore = true;
+            return;
+        }
+
+        this.$http.get(newUrl).then(function mySuccess(response) {
+            var self = MetricsController.self;
+            var type;
+            if (self.current_level == 0) {
+                type = 'firms';
+            } else if (self.current_level == 1) {
+                type = 'advisors';
+            } else if (self.current_level == 2) {
+                type = 'clients';
+            }
+
+            var last = response.data.data['hasNext'];
+            self.loadData(response.data.data[type], name, id, page, last);
+
+            if (page == 0) { // create new chart	
+                self.createChart();
+            } else {// append to existing chart
+                self.hideLoading();
+                self.chart.update(self.level_list[self.current_level]['option']);
+            }
+            self.canLoadMore = true;
+        }, function myError(response, error) {
+            console.log("Error " + response.status + ": " + response.statusText + "!");
+            MetricsController.self.hideLoading();
+        });
+    }
+
+    //construct categories data for chart template
+    prepareCategories(input) {
+        var categories = input.map(function (x) {
+            var self = MetricsController.self;
+            var name = x['name'];
+            if (self.current_level == 0) {
+                name = x['name'];
+            } else if (self.current_level == 1) {
+                name = x['name'];
+                //name = x['firstName'] + " " + x['lastName'];
+            } else if (self.current_level == 2) {
+                name = x['name'];
+                //name = x['firstName'] + " " + x['lastName'];
+            }
+            return name;
+        });
+
+        var output = [];
+        categories.forEach(function (x) {
+            output.push(x);
+        });
+
+        return output;
+    }
+
+    //aumDiffs
+    prepareSeries(input) {
+        var aums = ['previous', 'current'];
+        var aumMaps = Array.apply(null, Array(aums.length)).map(function () { return {}; }); // [{prev_map},{curr_map}]
+        // for each of firms, advisors or clients
+        input.forEach(function (x, i) {
+            // for each of the periods
+            aums.forEach(function (aum, p) {
+                // add zero paddings to place data on the correct column
+                for (var category in aumMaps[p]) {
+                    aumMaps[p][category].push(0);
+                }
+
+                // each asset
+                var field = 'assetClass';
+                for (var key in x[aum][field]) {
+                    if (aumMaps[p][key] == null) {
+                        aumMaps[p][key] = Array.apply(null, Array(i + 1)).map(Number.prototype.valueOf, 0);
+                    }
+                    aumMaps[p][key][i] = x[aum][field][key];
+                }
+            });
+
+        });
+
+        //make sure both period have the same categories
+        for (var key in aumMaps[0]) {
+            if (aumMaps[1][key] == null) {
+                aumMaps[1][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
             }
         }
-    };
-    vm.chartsConfig.history.series[0].data = [{
-        name: 'US Bond',
-        y: 22,
-        color: '#C0C0C0'
-    }, {
-        name: 'US Stock',
-        y: 18,
-        color: '#C0C0C0'
-    }, {
-        name: 'Non US Bond',
-        y: 24,
-        color: '#A9A9A9'
-    }, {
-        name: 'Non US Stock',
-        y: 16,
-        color: '#808080'
-    }, {
-        name: 'Cash',
-        y: 20,
-        color: '#696969'
-    }];
 
-    vm.detailGridOptions = {
-        selectable: true,
-        resizable: true,
-        pageable: false,
-        editable: false,
-        height: 70,
-        dataSource: {
-            //type: "odata",
-            //transport: {
-            //    read: "//demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
-            //},
-            data: [{ Name: "Stable Earnings", RiskLevel: "Conservative", Source: "Vanguard", Type: "ClassModel", ExpenseRatio: "20%", StandardDevition: "1%", ThreeMonthReturn: "2%", OneYearReturn: "3%", ThreeYearReturn: "4%", FiveYearReturn: "5%" }],
-        },
-        columns: [{
-            field: "ExpenseRatio",
-            title: "Expense Ratio",
-            width: "120px",
-        }, {
-            field: "StandardDevition",
-            title: "Standard Devition",
-            width: "120px"
-        }, {
-            field: "ThreeMonthReturn",
-            title: "Three Month Return",
-            width: "120px"
-        }, {
-            field: "OneYearReturn",
-            title: "One Year Return",
-            width: "120px"
-        }, {
-            field: "ThreeYearReturn",
-            title: "Three Year Return",
-            width: "120px"
-        }, {
-            field: "FiveYearReturn",
-            title: "Five Year Return",
-            width: "120px"
-        }]
+        for (var key in aumMaps[1]) {
+            if (aumMaps[0][key] == null) {
+                aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
+            }
+        }
+
+
+
+        // combine all points for each series into lists
+        var series = [];
+
+        aumMaps.forEach(function (aumMap, p) {
+            var counter = 0;
+            for (var key in aumMap) {
+                var dataDrillDown = aumMap[key].map(function (x, i) {
+                    var self = MetricsController.self;
+                    var name = 'firmId';
+                    if (self.current_level == 0) {
+                        name = 'firmId';
+                    } else if (self.current_level == 1) {
+                        name = 'advisorId';
+                    } else if (self.current_level == 2) {
+                        name = 'clientId'
+                    }
+
+                    return { id: input[i][name], y: x };
+                });
+                var points =
+                    {
+                        name: key,
+                        data: dataDrillDown,
+                        stack: "stack" + p,
+                        color: AUMController.self.COLOR_ARRAY[counter],
+                        stackId: p,
+                        showInLegend: (p == 0 ? false : true)
+                    };
+                series.push(points);
+                counter++;
+            }
+        });
+
+        return series;
     }
-};
+
+
+    mergeOption(options) {
+        // assume we are expanding the current chart 
+        var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
+
+        var originalLength = originalCategories.length;
+        var newLength = options['xAxis']['categories'].length;
+
+        options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
+
+        var originalSeries = this.level_list[this.current_level]['option']['series'];
+        var newSeries = options['series'];
+
+        var seriesMap = Array.apply(null, Array(2)).map(function () { return {}; });;
+
+        // 1. initialize seriesMap with originalSeries
+        originalSeries.forEach(function (element) {
+            seriesMap[element['stackId']][element['name']] = element;
+        });
+
+        // 2. append newSeries
+        newSeries.forEach(function (element) {
+            if (seriesMap[element['stackId']][element['name']] == null) {
+                var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
+                seriesMap[element['stackId']][element['name']]['data'] = zeroPaddings.concat(element['data']);
+            } else {
+                seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(element['data']);
+
+            }
+        });
+
+        // 3. fill the rest of originalSeries with zeros
+        originalSeries.forEach(function (element) {
+            if (seriesMap[element['stackId']][element['name']]['data'].length < originalLength + newLength) {
+                var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
+                seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(zeroPaddings);
+            }
+        });
+
+
+        options['series'] = Object.values(seriesMap[0]).concat(Object.values(seriesMap[1]));
+        return options;
+    }
+
+}

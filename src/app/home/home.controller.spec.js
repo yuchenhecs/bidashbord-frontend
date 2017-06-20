@@ -273,7 +273,7 @@ describe('Home App Module:', function() {
         });
 
 
-        //needs fixing
+        //TODO:needs fixing
         it('should return 2 yAxis titles and their labels for "netWorthContainer"', function() {
             yAxis = [{
 				title: {
@@ -297,9 +297,9 @@ describe('Home App Module:', function() {
 					}
 				},
 				labels: {
-					formatter: function() {
-						return '$' + this.axis.defaultLabelFormatter.call(this);
-					},
+					// formatter: function() {
+					// 	return '$' + this.axis.defaultLabelFormatter.call(this);
+					// },
 					style: {
 						color: Highcharts.getOptions().colors[0]
 					}

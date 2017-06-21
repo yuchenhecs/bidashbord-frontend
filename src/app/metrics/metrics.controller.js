@@ -5,8 +5,8 @@ angular
 
 function MetricsService($http, $rootScope, $compile) {
     return function () {
+        
         MetricsService.self = this;
-        this.test = 11111;
 
         // constants
         this.DOMAIN = $rootScope.domain;
@@ -16,7 +16,6 @@ function MetricsService($http, $rootScope, $compile) {
         this.USE_DUMMY_DATA = false;
         this.controllerName = null;
         
-
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
         };
@@ -177,9 +176,6 @@ function MetricsService($http, $rootScope, $compile) {
                     }, 300, chart);
                 }
             });
-
-            this.canLoadMore = true;// can load more data when scrolling to the right now
-
         };
 
 
@@ -293,6 +289,8 @@ function MetricsService($http, $rootScope, $compile) {
         this.chartOnLoad = function () {
             var self = MetricsService.self;
             self.baseChartOnLoad(this.chart);
+
+            self.canLoadMore = true;
         }
 
 

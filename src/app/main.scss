@@ -1,4 +1,251 @@
-﻿.templateLink {
+﻿/**
+ *  Do not remove the comment below. It's the markers used by wiredep to inject
+ *  sass dependencies when defined in the bower.json of your dependencies
+ */
+// bower:scss
+// endbower
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+$app-main-bg: #EFEFEF;
+$tile-bg: #FFFFFF;
+$dark-blue: #10223F;
+$gray-blue: #8294A4;
+$main-font: #3D4051;
+$sidebar-background:#294763;
+
+$sub-sidebar-width:150px;
+
+$padding-page: 24px;
+$padding-tiles-out: 12px;
+$padding-tiles-in: 30px;
+
+$header-height: 80px;
+$header-padding-tb: 15px;
+$header-padding-rl: 20px;
+
+$header-text-padding: 12.5px 0px;
+
+$font-size-heading: 18px;
+$font-extended-sidebar:13px;
+$font-menu-tile:12px;
+$font-universal: 'Open Sans', sans-serif;
+
+
+
+body {
+	font-family: $font-universal;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.top-nav {
+    position: fixed;
+    z-index: 1001;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 64px;
+    line-height: 64px;
+    padding-left: 20px;
+    color: #3D4051;
+    background-color: #fff;
+    color: #3D4051;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.main-container {
+	padding: 64px 0 0 100px;
+    
+}
+
+.side-nav {
+	background: $dark-blue;
+	color: $gray-blue ;
+	position: fixed;
+    z-index: 1000;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    width: 80px;
+    font-size: $font-menu-tile;
+
+    li {
+    	padding: 10px;
+        transition: 0.3s;
+        &:hover {
+            background:$sidebar-background;
+        }
+
+	    &:hover > a{
+	    	color: #fff;
+	    }
+    }
+}
+
+.side-nav a{
+    color:$gray-blue;
+    display: block;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.page {
+	padding: $padding-page;
+	background-color: $app-main-bg;
+}
+
+// .row {
+// 	padding: $padding-tiles-out 0px;
+// }
+
+#top-row {
+	padding-top: 0px;
+}
+
+.header {
+	height: $header-height;
+	padding: $header-padding-tb $header-padding-rl;
+	background-color: $tile-bg;
+}
+
+.header-text {
+	font-size: $font-size-heading;
+	padding: $header-text-padding;
+}
+
+.tile {
+//	padding: $padding-tiles-out 0px;
+	padding-top: $padding-tiles-out;
+	padding-bottom: $padding-tiles-out;
+}
+.tile-outer {
+	background-color: $tile-bg;
+}
+
+.tile-inner {
+	padding: $padding-tiles-in;
+}
+
+.more {
+	float: right;
+}
+
+.tile-header {
+	padding: 0px;
+}
+
+.open-width{
+    width: $sub-sidebar-width !important
+}
+
+.open-marginLeft{
+    margin-left: $sub-sidebar-width !important
+}
+
+.open-left{
+    left: $sub-sidebar-width+80px !important
+}
+
+
+
+
+
+.side-toggle {
+        width: 20px;
+        height: 100%;
+        z-index: 1;
+        top: 64px;
+        left: 80px;
+        background-color: $sidebar-background;
+        position: fixed;
+        text-align: center
+}
+
+.sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 64px;
+        left: 80px;
+        background-color:$sidebar-background;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top:15px;
+}
+
+.sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: $font-extended-sidebar;
+        color: $tile-bg;
+        display: block;
+        transition: 0.3s;
+}
+
+.sidenav a:hover,
+.offcanvas a:focus {
+		color: #f1f1f1;
+}
+
+#main {
+		transition: margin-left .5s;
+}
+
+#toggle {
+		transition: left .5s;
+}
+
+#inner {
+		top: 50%;
+		position: fixed;
+		width: 20px;
+		color: white
+}
+
+#chart {
+	min-width: 310px;
+	max-width: 800px;
+	height: 400px;
+	margin: 0 auto
+}
+
+.icon{
+    font-size: 22px
+}
+
+.current{
+    background: $sidebar-background;
+     color: $tile-bg;
+}
+
+.current-icon{
+    color: $tile-bg !important;
+}
+
+.path-link:hover{
+    text-decoration: underline;
+}
+
+.curr-path-link{
+    fill: red ;
+}
+
+/**
+ *  Do not remove the comment below. It's the markers used by gulp-inject to inject
+ *  all your sass files automatically
+ */
+// injector
+// endinjector
+
+
+
+.templateLink {
   color: #3db6b6;
 }
 

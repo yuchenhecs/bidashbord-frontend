@@ -1,9 +1,9 @@
 // dependencies for whole module
-var requiredModules = [
+const requiredModules = [
 	'ui.router',
 	'oranjNavigation',
-	'oranjHighcharts'
-	//'kendo.directives'
+	'ngMessages',
+	'ngMaterial'
 ];
 
 angular

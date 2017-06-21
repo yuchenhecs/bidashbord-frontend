@@ -176,7 +176,7 @@ function AUMService($http, MetricsService) {
             var currentStack = this.series.userOptions['stackId'];
 
             this.series.chart.series.forEach(function (series) {
-                if (currentStack == series.userOptions['stackId'] && series.processedYData[this.point.index] != undefined) {
+                if (currentStack === series.userOptions['stackId'] && series.processedYData[this.point.index]) {
                     s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
                 }
 
@@ -232,7 +232,7 @@ function AUMService($http, MetricsService) {
             // lighten the color of previous date bar
             chart.series.forEach(function (x) {
 
-                if (x.options.stackId == 1) {
+                if (x.options.stackId === 1) {
                     return;
                 }
                 var hex = x.color;
@@ -245,7 +245,7 @@ function AUMService($http, MetricsService) {
                 hex = hex.replace(/^\s*#|\s*$/g, '');
 
                 // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-                if (hex.length == 3) {
+                if (hex.length === 3) {
                     hex = hex.replace(/(.)/g, '$1$1');
                 }
 
@@ -283,11 +283,11 @@ function AUMService($http, MetricsService) {
             var previousDate = this.startDate.toISOString().slice(0, 10);
 
             // construct url based on current drilldown level
-            if (this.current_level == 0) {
+            if (this.current_level === 0) {
                 baseUrl = domain + subdomain + "/firms?page=" + page + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
-            } else if (this.current_level == 1) {
+            } else if (this.current_level === 1) {
                 baseUrl = domain + subdomain + "/advisors?page=" + page + "&firmId=" + id + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
-            } else if (this.current_level == 2) {
+            } else if (this.current_level === 2) {
                 baseUrl = domain + subdomain + "/clients?page=" + page + "&advisorId=" + id + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
             }
 
@@ -298,16 +298,16 @@ function AUMService($http, MetricsService) {
         base.getDataFromApi = function (newUrl, name, id, page) {
             if (this.USE_DUMMY_DATA) {
                 var type;
-                if (this.current_level == 0) {
+                if (this.current_level === 0) {
                     type = this.data1;
-                } else if (this.current_level == 1) {
+                } else if (this.current_level === 1) {
                     type = this.data2;
-                } else if (this.current_level == 2) {
+                } else if (this.current_level === 2) {
                     type = this.data3;
                 }
 
                 this.loadData(type, name, id, page, true);
-                if (page == 0) {
+                if (page === 0) {
                     this.createChart();
                 } else {
                     this.hideLoading();
@@ -320,18 +320,18 @@ function AUMService($http, MetricsService) {
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = AUMService.self;
                 var type;
-                if (self.current_level == 0) {
+                if (self.current_level === 0) {
                     type = 'firms';
-                } else if (self.current_level == 1) {
+                } else if (self.current_level === 1) {
                     type = 'advisors';
-                } else if (self.current_level == 2) {
+                } else if (self.current_level === 2) {
                     type = 'clients';
                 }
 
                 var last = response.data.data['hasNext'];
                 self.loadData(response.data.data[type], name, id, page, last);
 
-                if (page == 0) { // create new chart	
+                if (page === 0) { // create new chart	
                     self.createChart();
                 } else {// append to existing chart
                     self.hideLoading();
@@ -349,12 +349,12 @@ function AUMService($http, MetricsService) {
             var categories = input.map(function (x) {
                 var self = AUMService.self;
                 var name = x['name'];
-                if (self.current_level == 0) {
+                if (self.current_level === 0) {
                     name = x['name'];
-                } else if (self.current_level == 1) {
+                } else if (self.current_level === 1) {
                     name = x['name'];
                     //name = x['firstName'] + " " + x['lastName'];
-                } else if (self.current_level == 2) {
+                } else if (self.current_level === 2) {
                     name = x['name'];
                     //name = x['firstName'] + " " + x['lastName'];
                 }
@@ -385,7 +385,7 @@ function AUMService($http, MetricsService) {
                     // each asset
                     var field = 'assetClass';
                     for (var key in x[aum][field]) {
-                        if (aumMaps[p][key] == null) {
+                        if (!aumMaps[p][key]) {
                             aumMaps[p][key] = Array.apply(null, Array(i + 1)).map(Number.prototype.valueOf, 0);
                         }
                         aumMaps[p][key][i] = x[aum][field][key];
@@ -396,13 +396,13 @@ function AUMService($http, MetricsService) {
 
             //make sure both period have the same categories
             for (var key in aumMaps[0]) {
-                if (aumMaps[1][key] == null) {
+                if (!aumMaps[1][key]) {
                     aumMaps[1][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
                 }
             }
 
             for (var key in aumMaps[1]) {
-                if (aumMaps[0][key] == null) {
+                if (!aumMaps[0][key]) {
                     aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
                 }
             }
@@ -418,11 +418,11 @@ function AUMService($http, MetricsService) {
                     var dataDrillDown = aumMap[key].map(function (x, i) {
                         var self = AUMService.self;
                         var name = 'firmId';
-                        if (self.current_level == 0) {
+                        if (self.current_level === 0) {
                             name = 'firmId';
-                        } else if (self.current_level == 1) {
+                        } else if (self.current_level === 1) {
                             name = 'advisorId';
-                        } else if (self.current_level == 2) {
+                        } else if (self.current_level === 2) {
                             name = 'clientId'
                         }
 
@@ -435,7 +435,7 @@ function AUMService($http, MetricsService) {
                             stack: "stack" + p,
                             color: AUMService.self.COLOR_ARRAY[counter],
                             stackId: p,
-                            showInLegend: (p == 0 ? false : true)
+                            showInLegend: (p === 0 ? false : true)
                         };
                     series.push(points);
                     counter++;

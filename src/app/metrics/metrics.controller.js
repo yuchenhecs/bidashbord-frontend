@@ -43,7 +43,7 @@ function MetricsService($http, $rootScope, $compile) {
             var s = '<b>' + this.x + '</b>';
             this.points.forEach(function (element) {
                 //element.hover
-                if (element.y == 0 || element.y == undefined || element.y == null) {
+                if (!element.y || element.y === 0 ) {
                     return;
                 }
                 s += '<br/>' + element.series.name + ': ' + element.y;
@@ -216,16 +216,16 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.validateDate = function () {
             var startDate_X = this.level_list[this.current_level + 0]['start'];
-            startDate_X = startDate_X == null ? null : startDate_X.getTime();
+            startDate_X = !startDate_X ? null : startDate_X.getTime();
 
             var startDate_Y = this.startDate;
-            startDate_Y = startDate_Y == null ? null : startDate_Y.getTime();
+            startDate_Y = !startDate_Y ? null : startDate_Y.getTime();
 
             var endDate_X = this.level_list[this.current_level + 0]['end'];
-            endDate_X = endDate_X == null ? null : endDate_X.getTime();
+            endDate_X = !endDate_X ? null : endDate_X.getTime();
 
             var endDate_Y = this.endDate;
-            endDate_Y = endDate_Y == null ? null : endDate_Y.getTime();
+            endDate_Y = !endDate_Y ? null : endDate_Y.getTime();
 
             return (startDate_X == startDate_Y && endDate_X == endDate_Y)
         }
@@ -341,7 +341,7 @@ function MetricsService($http, $rootScope, $compile) {
             var i = 0;
 
             pathBlocks.forEach(function (element) {
-                if (flag == true) {
+                if (flag) {
                     if (i === MetricsService.self.current_level) {
                         element.classList.add("curr-path-link");
                     }
@@ -442,20 +442,20 @@ function MetricsService($http, $rootScope, $compile) {
             var domain = this.DOMAIN;
             var subdomain = this.SUB_DOMAIN;
             var baseUrl;
-            var endDate = this.endDate == null ? null : this.endDate.toISOString().slice(0, 10);
-            var startDate = this.startDate == null ? null : this.startDate.toISOString().slice(0, 10);
+            var endDate = !this.endDate ? null : this.endDate.toISOString().slice(0, 10);
+            var startDate = !this.startDate ? null : this.startDate.toISOString().slice(0, 10);
 
             // construct url based on current drilldown level
-            if (this.current_level == 0) {
+            if (this.current_level === 0) {
                 baseUrl = domain + subdomain + "/firms?page=" + page;
-            } else if (this.current_level == 1) {
+            } else if (this.current_level === 1) {
                 baseUrl = domain + subdomain + "/advisors?page=" + page + "&firmId=" + id;
-            } else if (this.current_level == 2) {
+            } else if (this.current_level === 2) {
                 baseUrl = domain + subdomain + "/clients?page=" + page + "&advisorId=" + id;
             }
 
-            baseUrl = startDate == null ? baseUrl : baseUrl + "&startDate=" + startDate;
-            baseUrl = endDate == null ? baseUrl : baseUrl + "&endDate=" + endDate;
+            baseUrl = !startDate ? baseUrl : baseUrl + "&startDate=" + startDate;
+            baseUrl = !endDate ? baseUrl : baseUrl + "&endDate=" + endDate;
 
             console.log(baseUrl);
             this.getDataFromApi(baseUrl, name, id, page);
@@ -464,15 +464,15 @@ function MetricsService($http, $rootScope, $compile) {
         this.getDataFromApi = function (newUrl, name, id, page) {
             if (this.USE_DUMMY_DATA) {
                 var type;
-                if (this.current_level == 0) {
+                if (this.current_level === 0) {
                     type = this.data1;
-                } else if (this.current_level == 1) {
+                } else if (this.current_level === 1) {
                     type = this.data2;
-                } else if (this.current_level == 2) {
+                } else if (this.current_level === 2) {
                     type = this.data3;
                 }
                 this.loadData(type, name, id, page, false);
-                if (page == 0) {
+                if (page === 0) {
                     this.createChart();
                 } else {
                     this.hideLoading();
@@ -486,17 +486,17 @@ function MetricsService($http, $rootScope, $compile) {
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = MetricsService.self;
                 var type;
-                if (self.current_level == 0) {
+                if (self.current_level === 0) {
                     type = 'firms';
-                } else if (self.current_level == 1) {
+                } else if (self.current_level === 1) {
                     type = 'advisors';
-                } else if (self.current_level == 2) {
+                } else if (self.current_level === 2) {
                     type = 'clients';
                 }
 
                 var last = response.data['last'];
                 self.loadData(response.data[type], name, id, page, last);
-                if (page == 0) { // create new chart	
+                if (page === 0) { // create new chart	
                     self.createChart();
                 } else {// append to existing chart
                     self.hideLoading();
@@ -518,12 +518,12 @@ function MetricsService($http, $rootScope, $compile) {
             var categories = input.map(function (x) {
                 var self = MetricsService.self;
                 var name = x['name'];
-                if (self.current_level == 0) {
+                if (self.current_level === 0) {
                     name = x['name'];
-                } else if (self.current_level == 1) {
+                } else if (self.current_level === 1) {
                     //name = x['name'];
                     name = x['firstName'] + " " + x['lastName'];
-                } else if (self.current_level == 2) {
+                } else if (self.current_level === 2) {
                     //name = x['name'];
                     name = x['firstName'] + " " + x['lastName'];
                 }
@@ -547,7 +547,7 @@ function MetricsService($http, $rootScope, $compile) {
                 }
                 var goals = x['goals'];
                 for (var key in goals) {
-                    if (goalMap[key] == null) {
+                    if (!goalMap[key]) {
                         goalMap[key] = Array.apply(null, Array(i + 1)).map(Number.prototype.valueOf, 0);
                     }
                     goalMap[key][i] = goals[key];
@@ -561,11 +561,11 @@ function MetricsService($http, $rootScope, $compile) {
                 var dataDrillDown = goalMap[key].map(function (x, i) {
                     var self = MetricsService.self;
                     var name = 'firmId';
-                    if (self.current_level == 0) {
+                    if (self.current_level === 0) {
                         name = 'firmId';
-                    } else if (self.current_level == 1) {
+                    } else if (self.current_level === 1) {
                         name = 'advisorId';
-                    } else if (self.current_level == 2) {
+                    } else if (self.current_level === 2) {
                         name = 'clientId'
                     }
                     return { id: input[i][name], y: x };
@@ -583,8 +583,8 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.createNewLevel = function (options, name, id, page, last) {
-            var startDate = this.startDate == null ? null : new Date(this.startDate);
-            var endDate = this.endDate == null ? null : new Date(this.endDate);
+            var startDate = !this.startDate ? null : new Date(this.startDate);
+            var endDate = !this.endDate ? null : new Date(this.endDate);
 
 
 
@@ -602,7 +602,7 @@ function MetricsService($http, $rootScope, $compile) {
             };
 
 
-            if (this.current_level == this.level_list.length) {
+            if (this.current_level === this.level_list.length) {
                 this.level_list.push(newLevel);
             } else {
                 this.level_list[this.current_level] = newLevel;
@@ -630,7 +630,7 @@ function MetricsService($http, $rootScope, $compile) {
 
             // 2. append newSeries
             newSeries.forEach(function (element) {
-                if (seriesMap[element['name']] == null) {
+                if (!seriesMap[element['name']]) {
                     var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
                     seriesMap[element['name']]['data'] = zeroPaddings.concat(element['data']);
                 } else {

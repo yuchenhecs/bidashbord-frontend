@@ -195,16 +195,14 @@ function AUMService($http, $rootScope, $compile, MetricsService) {
             if (extremes && extremes.max == extremes.dataMax) {
                 var current_level = self.level_list[self.current_level];
                 var last = current_level['last'];
-                //console.log(last);
-                if (!last) {
+                
+                if (!last) { // it's actually hasNext
                     return;
                 }
-                console.log(self.canLoadMore);
-                //console.log(self.canLoadMore);
+              
                 if (self.canLoadMore) {
                     self.canLoadMore = false;
                     self.getData(current_level['name'], current_level['id'], current_level['page'] + 1);
-                    //self.canLoadMore = true;
                 }
             }
         }
@@ -230,7 +228,7 @@ function AUMService($http, $rootScope, $compile, MetricsService) {
     // chart onload event
     base.chartOnLoad = function () {
         var self = AUMService.self;
-        var chart = this == self ? this.chart : this;
+        var chart = this.chart ;
         self.baseChartOnLoad(chart);
 
         // lighten the color of previous date bar
@@ -268,6 +266,7 @@ function AUMService($http, $rootScope, $compile, MetricsService) {
             });
         });
 
+        //unlock scroll to load
         self.canLoadMore = true;
     }
 

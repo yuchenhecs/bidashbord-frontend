@@ -290,14 +290,13 @@ function MetricsService($http, $rootScope, $compile) {
 
         //----------------------------------chart utilities-----------------------------------------------------------------
         // chart onload event
-        this.chartOnLoad = function (event) {
+        this.chartOnLoad = function () {
             var self = MetricsService.self;
-            self.baseChartOnLoad(this);
+            self.baseChartOnLoad(this.chart);
         }
 
 
         this.baseChartOnLoad = function (chart) {
-
             var xSetMax = this.MAX_COLUMN_NUM;
             var xDataMax = chart.xAxis[0].getExtremes().dataMax;
             var xMax = xDataMax < xSetMax ? xDataMax : xSetMax;
@@ -305,7 +304,7 @@ function MetricsService($http, $rootScope, $compile) {
             // limit max number of columns shown
             chart.xAxis[0].update({
                 max: xMax
-            });
+            });   
         }
 
         this.showLoading = function () {

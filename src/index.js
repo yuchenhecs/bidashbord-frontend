@@ -2,7 +2,8 @@
 const requiredModules = [
 	'ui.router',
 	'oranjNavigation',
-	'oranjHighcharts'
+	'ngMessages',
+	'ngMaterial'
 ];
 
 angular

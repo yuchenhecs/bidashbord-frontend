@@ -1,257 +1,236 @@
 angular
     .module('app')
-    .controller('AUMController', AUMController);
+    .controller('AUMController', AUMController)
+    .factory('AUMService', AUMService);
 
-function AUMController($http, $scope, $compile, $sce, MetricsController) {
-	var vm = this;
-    $scope.test = 111;
+function AUMService($http, $rootScope, $compile, MetricsService) {
+    var base = new MetricsService();
+    AUMService.self = base;
+    // constants
+    base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    base.SUB_DOMAIN = "/bi/aums";
+    base.USE_DUMMY_DATA = true;
+    base.COLOR_ARRAY = Highcharts.getOptions().colors;
+    base.controllerName = "aum";
+    base.isRequired = true;
+    base.startDate = new Date(new Date().getFullYear(), 0, 1);
+    base.endDate = new Date();
 
-    var aum = new AUMControllerClass($http, $scope, $compile, $sce, MetricsController)
-    
-};
-
-
-class AUMControllerClass {
-    constructor($http, $scope, $compile, $sce, MetricsController) {
-        'ngInject';
-       // super($http, $scope, $compile, $sce);
-       //console.log($scope.test);
-      // MetricsController.test();
-        for(var k in MetricsController){ 
-            this[k] = MetricsController[k]
-        };
-     
-        //this.launch = MetricsController.launch;
-        console.log(this);
-
-        // constants
-        this.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-        this.SUB_DOMAIN = "/bi/aums";
-        this.USE_DUMMY_DATA = true;
-        this.COLOR_ARRAY = Highcharts.getOptions().colors;
-        this.controllerName = "aum";
-        this.isRequired = true;
-        this.startDate = new Date(new Date().getFullYear(), 0, 1);
-        this.endDate = new Date();
-
-        this.data1 = [
-            {
-                "firmId": 283,
-                "name": "mattfirm",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 17292,
-                        "Non US Stock": 20529.6,
-                        "US Stock": 24773.06,
-                        "Cash": 28150.9,
-                        "Other": 9543.31
-                    }
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 304229.27,
-                    "assetClass": {
-                        "US Bond": 7292.4,
-                        "Non US Stock": 20529.6,
-                        "US Stock": 247713.06,
-                        "Cash": 18150.9,
-                        "Other": 10543.31
-                    }
+    base.data1 = [
+        {
+            "firmId": 283,
+            "name": "mattfirm",
+            "previous": {
+                "date": "2017-06-12",
+                "total": null,
+                "assetClass": {
+                    "US Bond": 17292,
+                    "Non US Stock": 20529.6,
+                    "US Stock": 24773.06,
+                    "Cash": 28150.9,
+                    "Other": 9543.31
                 }
             },
-            {
-                "firmId": 509,
-                "name": "auto",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {}
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 133576.06,
-                    "assetClass": {
-                        "US Stock": 114459.75,
-                        "Cash": 1031.1,
-                        "Other": 18085.21
-                    }
+            "current": {
+                "date": "2017-06-12",
+                "total": 304229.27,
+                "assetClass": {
+                    "US Bond": 7292.4,
+                    "Non US Stock": 20529.6,
+                    "US Stock": 247713.06,
+                    "Cash": 18150.9,
+                    "Other": 10543.31
                 }
             }
-        ];
-
-
-        this.data2 = [
-            {
-                "firmId": 283,
-                "name": "mattfirm",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 222.4,
-                        "Non US Stock": 33.6,
-                        "US Stock": 232.06,
-                        "Cash": 77.9,
-                        "Other": 88.31
-                    }
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 304229.27,
-                    "assetClass": {
-                        "US Bond": 123.4,
-                        "Non US Stock": 312.6,
-                        "US Stock": 411.06,
-                        "Cash": 11.9,
-                        "Other": 33.31
-                    }
-                }
+        },
+        {
+            "firmId": 509,
+            "name": "auto",
+            "previous": {
+                "date": "2017-06-12",
+                "total": null,
+                "assetClass": {}
             },
-            {
-                "firmId": 509,
-                "name": "auto",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 1222.4,
-                        "Non US Stock": 233.6,
-                        "US Stock": 232.06,
-                        "Cash": 177.9,
-                        "Other": 188.31
-                    }
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 133576.06,
-                    "assetClass": {
-                        "US Stock": 233.75,
-                        "Cash": 444.1,
-                        "Other": 777.21
-                    }
+            "current": {
+                "date": "2017-06-12",
+                "total": 133576.06,
+                "assetClass": {
+                    "US Stock": 114459.75,
+                    "Cash": 1031.1,
+                    "Other": 18085.21
                 }
             }
-        ];
-
-        this.data3 = [
-            {
-                "firmId": 283,
-                "name": "mattfirm",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 89.4,
-                        "Non US Stock": 89.6,
-                        "US Stock": 78.06,
-                        "Cash": 99.9,
-                        "Other": 9.31
-                    }
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 304229.27,
-                    "assetClass": {
-                        "US Bond": 89.4,
-                        "Non US Stock": 111.6,
-                        "US Stock": 22.06,
-                        "Cash": 33.9,
-                        "Other": 88.31
-                    }
-                }
-            },
-            {
-                "firmId": 509,
-                "name": "auto",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {}
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 99.06,
-                    "assetClass": {
-                        "US Stock": 99.75,
-                        "Cash": 88.1,
-                        "Other": 66.21
-                    }
-                }
-            }
-        ];
-
-
-
-
-        // tooltip formatter
-        var formatter = function () {
-            var s = '<b>' + this.x + '</b>';
-
-            var currentStack = this.series.userOptions['stackId'];
-
-            this.series.chart.series.forEach(function (series) {
-                if (currentStack == series.userOptions['stackId'] && series.processedYData[this.point.index] != undefined) {
-                    s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
-                }
-
-            }, this);
-
-            return s;
-
         }
+    ];
 
 
-
-        var chartOnRedraw = function (event) {
-            var self = MetricsController.self;
-            if (this.xAxis) {
-
-                var extremes = this.xAxis[0].getExtremes();
-                if (extremes && extremes.max == extremes.dataMax) {
-                    var current_level = self.level_list[self.current_level];
-                    var last = current_level['last'];
-
-                    if (!last) {
-                        return;
-                    }
-                    //console.log(self.canLoadMore);
-                    if (self.canLoadMore) {
-                        self.canLoadMore = false;
-                        self.getData(current_level['name'], current_level['id'], current_level['page'] + 1);
-                        //self.canLoadMore = true;
-                    }
+    base.data2 = [
+        {
+            "firmId": 283,
+            "name": "mattfirm",
+            "previous": {
+                "date": "2017-06-12",
+                "total": null,
+                "assetClass": {
+                    "US Bond": 222.4,
+                    "Non US Stock": 33.6,
+                    "US Stock": 232.06,
+                    "Cash": 77.9,
+                    "Other": 88.31
+                }
+            },
+            "current": {
+                "date": "2017-06-12",
+                "total": 304229.27,
+                "assetClass": {
+                    "US Bond": 123.4,
+                    "Non US Stock": 312.6,
+                    "US Stock": 411.06,
+                    "Cash": 11.9,
+                    "Other": 33.31
                 }
             }
-
+        },
+        {
+            "firmId": 509,
+            "name": "auto",
+            "previous": {
+                "date": "2017-06-12",
+                "total": null,
+                "assetClass": {
+                    "US Bond": 1222.4,
+                    "Non US Stock": 233.6,
+                    "US Stock": 232.06,
+                    "Cash": 177.9,
+                    "Other": 188.31
+                }
+            },
+            "current": {
+                "date": "2017-06-12",
+                "total": 133576.06,
+                "assetClass": {
+                    "US Stock": 233.75,
+                    "Cash": 444.1,
+                    "Other": 777.21
+                }
+            }
         }
+    ];
 
-        this.optionTemplate.chart.events.load = this.chartOnLoad;
-        this.optionTemplate.chart.events.redraw = chartOnRedraw;
+    base.data3 = [
+        {
+            "firmId": 283,
+            "name": "mattfirm",
+            "previous": {
+                "date": "2017-06-12",
+                "total": null,
+                "assetClass": {
+                    "US Bond": 89.4,
+                    "Non US Stock": 89.6,
+                    "US Stock": 78.06,
+                    "Cash": 99.9,
+                    "Other": 9.31
+                }
+            },
+            "current": {
+                "date": "2017-06-12",
+                "total": 304229.27,
+                "assetClass": {
+                    "US Bond": 89.4,
+                    "Non US Stock": 111.6,
+                    "US Stock": 22.06,
+                    "Cash": 33.9,
+                    "Other": 88.31
+                }
+            }
+        },
+        {
+            "firmId": 509,
+            "name": "auto",
+            "previous": {
+                "date": "2017-06-12",
+                "total": null,
+                "assetClass": {}
+            },
+            "current": {
+                "date": "2017-06-12",
+                "total": 99.06,
+                "assetClass": {
+                    "US Stock": 99.75,
+                    "Cash": 88.1,
+                    "Other": 66.21
+                }
+            }
+        }
+    ];
 
-        this.optionTemplate.tooltip['shared'] = false;
-        this.optionTemplate.tooltip['formatter'] = formatter;
-        this.optionTemplate['subtitle'] = {
-            text: "Note: lighter bar - previous quarter, darker bar - current quarter",
-            y: 50
-        };
 
-        this.optionTemplate.legend['y'] = 60;
 
-        this.launch();
+
+    // tooltip formatter
+    var formatter = function () {
+        var s = '<b>' + this.x + '</b>';
+
+        var currentStack = this.series.userOptions['stackId'];
+
+        this.series.chart.series.forEach(function (series) {
+            if (currentStack == series.userOptions['stackId'] && series.processedYData[this.point.index] != undefined) {
+                s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
+            }
+
+        }, this);
+
+        return s;
+
     }
 
-    chartOnUpdate(){
-        this.chartOnLoad.call(AUMController.self);
+
+
+    var chartOnRedraw = function (event) {
+        var self = AUMService.self;
+
+        if (this.xAxis) {
+
+            var extremes = this.xAxis[0].getExtremes();
+            if (extremes && extremes.max == extremes.dataMax) {
+                var current_level = self.level_list[self.current_level];
+                var last = current_level['last'];
+                //console.log(last);
+                if (!last) {
+                    return;
+                }
+                console.log(self.canLoadMore);
+                //console.log(self.canLoadMore);
+                if (self.canLoadMore) {
+                    self.canLoadMore = false;
+                    self.getData(current_level['name'], current_level['id'], current_level['page'] + 1);
+                    //self.canLoadMore = true;
+                }
+            }
+        }
 
     }
+
+    //base.optionTemplate.chart.events.load = this.chartOnLoad;
+    base.optionTemplate.chart.events.redraw = chartOnRedraw;
+
+    base.optionTemplate.tooltip['shared'] = false;
+    base.optionTemplate.tooltip['formatter'] = formatter;
+    base.optionTemplate['subtitle'] = {
+        text: "Note: lighter bar - previous quarter, darker bar - current quarter",
+        y: 50
+    };
+
+    base.optionTemplate.legend['y'] = 60;
+
+    // base.chartOnUpdate = function () {
+    //     this.chartOnLoad.call(AUMService.self);
+
+    // }
     // chart onload event
-    chartOnLoad(event) {
-        
-        var self = AUMController.self;
-        var chart = this == self? this.chart : this;
-       
+    base.chartOnLoad = function () {
+        var self = AUMService.self;
+        var chart = this == self ? this.chart : this;
         self.baseChartOnLoad(chart);
 
         // lighten the color of previous date bar
@@ -289,11 +268,12 @@ class AUMControllerClass {
             });
         });
 
+        self.canLoadMore = true;
     }
 
 
 
-    getData(name, id, page) {
+    base.getData = function (name, id, page) {
         this.canLoadMore = false; // lock the chartOnRedraw scroll-to-load function
 
         this.showLoading();
@@ -317,7 +297,7 @@ class AUMControllerClass {
         this.getDataFromApi(baseUrl, name, id, page);
     }
 
-    getDataFromApi(newUrl, name, id, page) {
+    base.getDataFromApi = function (newUrl, name, id, page) {
         if (this.USE_DUMMY_DATA) {
             var type;
             if (this.current_level == 0) {
@@ -327,26 +307,20 @@ class AUMControllerClass {
             } else if (this.current_level == 2) {
                 type = this.data3;
             }
+
+            this.loadData(type, name, id, page, true);
             if (page == 0) {
-                this.loadData(type, name, id, page, true);
                 this.createChart();
             } else {
-                this.loadData(type, name, id, page, true);
                 this.hideLoading();
                 this.chart.update(this.level_list[this.current_level]['option']);
-                
-                this.chartOnUpdate();
-                //TODO cant detect yMax somehow!!!!!!!
-                // setTimeout(function(){
-
-                // },1000);
             }
-            this.canLoadMore = true;
+            this.chartOnLoad();
             return;
         }
 
         this.$http.get(newUrl).then(function mySuccess(response) {
-            var self = MetricsController.self;
+            var self = AUMService.self;
             var type;
             if (self.current_level == 0) {
                 type = 'firms';
@@ -365,17 +339,17 @@ class AUMControllerClass {
                 self.hideLoading();
                 self.chart.update(self.level_list[self.current_level]['option']);
             }
-            self.canLoadMore = true;
+            self.chartOnLoad();
         }, function myError(response, error) {
             console.log("Error " + response.status + ": " + response.statusText + "!");
-            MetricsController.self.hideLoading();
+            AUMService.self.hideLoading();
         });
     }
 
     //construct categories data for chart template
-    prepareCategories(input) {
+    base.prepareCategories = function (input) {
         var categories = input.map(function (x) {
-            var self = MetricsController.self;
+            var self = AUMService.self;
             var name = x['name'];
             if (self.current_level == 0) {
                 name = x['name'];
@@ -398,7 +372,7 @@ class AUMControllerClass {
     }
 
     //aumDiffs
-    prepareSeries(input) {
+    base.prepareSeries = function (input) {
         var aums = ['previous', 'current'];
         var aumMaps = Array.apply(null, Array(aums.length)).map(function () { return {}; }); // [{prev_map},{curr_map}]
         // for each of firms, advisors or clients
@@ -444,7 +418,7 @@ class AUMControllerClass {
             var counter = 0;
             for (var key in aumMap) {
                 var dataDrillDown = aumMap[key].map(function (x, i) {
-                    var self = MetricsController.self;
+                    var self = AUMService.self;
                     var name = 'firmId';
                     if (self.current_level == 0) {
                         name = 'firmId';
@@ -461,7 +435,7 @@ class AUMControllerClass {
                         name: key,
                         data: dataDrillDown,
                         stack: "stack" + p,
-                        color: AUMController.self.COLOR_ARRAY[counter],
+                        color: AUMService.self.COLOR_ARRAY[counter],
                         stackId: p,
                         showInLegend: (p == 0 ? false : true)
                     };
@@ -474,7 +448,7 @@ class AUMControllerClass {
     }
 
 
-    mergeOption(options) {
+    base.mergeOption = function (options) {
         // assume we are expanding the current chart 
         var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
@@ -517,4 +491,42 @@ class AUMControllerClass {
         return options;
     }
 
+
+    return base;
+}
+
+
+function AUMController($http, $scope, $compile, AUMService) {
+    this.startDate = AUMService.startDate;
+    this.endDate = AUMService.endDate;
+    this.today = new Date();
+    this.isRequired = AUMService.isRequired;
+    
+    this.checkDate = function () {
+        AUMService.startDate = this.startDate; // bind data to service
+        AUMService.endDate = this.endDate;
+
+        AUMService.checkDate();
+    };
+
+
+    this.assignYTD = function () {
+        this.startDate = new Date(new Date().getFullYear(), 0, 1);
+        this.endDate = new Date();
+        AUMService.startDate = this.startDate; // bind data to service
+        AUMService.endDate = this.endDate;
+        AUMService.applyDateFilter();
+    }
+
+    this.clearDate = function () {
+        this.endDate = null;
+        this.startDate = null;
+        AUMService.startDate = this.startDate; // bind data to service
+        AUMService.endDate = this.endDate;
+
+        AUMService.applyDateFilter();
+
+    }
+    
+    AUMService.launch($scope);
 }

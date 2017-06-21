@@ -1,25 +1,21 @@
 angular
     .module('app')
-    .factory('MetricsController', MetricsControllerWrapper);
-
-function MetricsControllerWrapper($http, $rootScope, $compile, $sce) {
-    return new MetricsController($http, $rootScope, $compile, $sce);
-}
-
-class MetricsController {
-    constructor($http, $rootScope, $compile, $sce) {
-        'ngInject';
+    .factory('MetricsService', MetricsService);
 
 
-        console.log("MetricsController Initiated");
+function MetricsService($http, $rootScope, $compile) {
+    return function () {
+        MetricsService.self = this;
+        this.test = 11111;
+
         // constants
+        this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
         this.SUB_DOMAIN = "/bi/goals";
         this.TITLE_TEMPLATE = "Total goals created by ";
-        this.USE_DUMMY_DATA = true;
+        this.USE_DUMMY_DATA = false;
         this.controllerName = null;
-        this.today = new Date();
-
+        
 
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
@@ -28,9 +24,8 @@ class MetricsController {
         Highcharts.setOptions(colorTheme);
 
         // init
-        MetricsController.self = this; // singleton
+        //MetricsService.self = this; // singleton
         this.$http = $http;
-        this.$rootScope = $rootScope;
         this.$compile = $compile;
 
         this.chart = null;
@@ -59,11 +54,11 @@ class MetricsController {
 
         // chart bar onclick event
         var chartOnClick = function () {
-            MetricsController.self.drillDown(this.category, this.id);
+            MetricsService.self.drillDown(this.category, this.id);
         }
 
         var chartOnRedraw = function (event) {
-            var self = MetricsController.self;
+            var self = MetricsService.self;
             if (this.xAxis) {
 
                 var extremes = this.xAxis[0].getExtremes();
@@ -92,7 +87,6 @@ class MetricsController {
                 type: 'column',
                 zoomType: 'y',
                 events: {
-                    load: this.chartOnLoad,
                     redraw: chartOnRedraw
                 },
             },
@@ -156,31 +150,37 @@ class MetricsController {
 
 
 
-        $rootScope.$watch(function () {
-            return angular.element(document.getElementById("main")).attr('class');
-        }, function (newValue) {
-            var chart = MetricsController.self.chart;
-
-            if (chart != null) {
-                setTimeout(function (c) {
-                    c.reflow();
-                }, 300, chart);
-            }
-        });
 
 
-        this.test = function () {
-            alert("zzzz");
-        }
 
-        this.launch = function () {
+
+
+
+
+
+
+        this.launch = function (scope) {
             var root = 'Oranj';  // dummy root name, should be returned by Oranj API
             var rootId = -1;
             this.getData(root, rootId, 0);
-            this.createDatepicker();
+            this.createDatepicker(scope);
+
+
+            scope.$watch(function () {
+                return angular.element(document.getElementById("main")).attr('class');
+            }, function (newValue) {
+                var chart = MetricsService.self.chart;
+
+                if (chart != null) {
+                    setTimeout(function (c) {
+                        c.reflow();
+                    }, 300, chart);
+                }
+            });
+
             this.canLoadMore = true;// can load more data when scrolling to the right now
 
-        }
+        };
 
 
 
@@ -189,7 +189,6 @@ class MetricsController {
         this.assignYTD = function () {
             this.startDate = new Date(new Date().getFullYear(), 0, 1);
             this.endDate = new Date();
-
             this.applyDateFilter();
         }
 
@@ -210,9 +209,12 @@ class MetricsController {
         }
 
         this.applyDateFilter = function () {
-            if (!this.validateDate()) {
+            var isValid = this.validateDate();
+            if (!isValid) {
                 this.getData(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], 0);
             }
+
+            return isValid;
         }
 
 
@@ -232,49 +234,50 @@ class MetricsController {
             return (startDate_X == startDate_Y && endDate_X == endDate_Y)
         }
 
-        this.createDatepicker = function () {
+        this.createDatepicker = function (scope) {
+
             var ctrl = this.controllerName;
             var datePickerHTML = `
-		<div>
-			 <div layout="row"  layout-align="center center">
-				<form name="startForm">
-				<md-input-container style="margin-bottom: 0px !important;">
-					<label>Start date</label>
-					<md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.today"
-					ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+            <div>
+                 <div layout="row"  layout-align="center center">
+                    <form name="startForm">
+                    <md-input-container style="margin-bottom: 0px !important;">
+                        <label>Start date</label>
+                        <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.today"
+                        ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-					<div ng-messages="startForm.dateField.$error">
-					<div ng-message="valid">The entered value is not a date!</div>
-					<div ng-message="required">This date is required!</div>
-					<div ng-message="mindate">Date is too early!</div>
-					<div ng-message="maxdate">Date is too late!</div>
-					</div>
-				</md-input-container>
-				</form>
+                        <div ng-messages="startForm.dateField.$error">
+                        <div ng-message="valid">The entered value is not a date!</div>
+                        <div ng-message="required">This date is required!</div>
+                        <div ng-message="mindate">Date is too early!</div>
+                        <div ng-message="maxdate">Date is too late!</div>
+                        </div>
+                    </md-input-container>
+                    </form>
 
-				<form name="endForm">
-				<md-input-container style="margin-bottom: 0px !important;">
-					<label>End date</label>
-					<md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-					md-max-date="`+ ctrl + `.today" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                    <form name="endForm">
+                    <md-input-container style="margin-bottom: 0px !important;">
+                        <label>End date</label>
+                        <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
+                        md-max-date="`+ ctrl + `.today" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-					<div ng-messages="endForm.dateField.$error">
-					<div ng-message="valid">The entered value is not a date!</div>
-					<div ng-message="required">This date is required!</div>
-					<div ng-message="mindate">Date is too early!</div>
-					<div ng-message="maxdate">Date is too late!</div>
-					</div>
-				</md-input-container>
-				</form>
+                        <div ng-messages="endForm.dateField.$error">
+                        <div ng-message="valid">The entered value is not a date!</div>
+                        <div ng-message="required">This date is required!</div>
+                        <div ng-message="mindate">Date is too early!</div>
+                        <div ng-message="maxdate">Date is too late!</div>
+                        </div>
+                    </md-input-container>
+                    </form>
 
-				<md-button class=" md-raised" ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-				<md-button class="md-primary md-raised" ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
-			</div>
-  		</div>
-  		`;
+                    <md-button class=" md-raised" ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
+                    <md-button class="md-primary md-raised" ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+                </div>
+            </div>
+      		`;
 
             var chartHTML = angular.element(document.getElementById("chart-container"));
-            chartHTML.append(this.$compile(datePickerHTML)(this.$rootScope));
+            chartHTML.append(this.$compile(datePickerHTML)(scope));
         }
 
 
@@ -288,41 +291,21 @@ class MetricsController {
         //----------------------------------chart utilities-----------------------------------------------------------------
         // chart onload event
         this.chartOnLoad = function (event) {
-            var self = MetricsController.self;
+            var self = MetricsService.self;
             self.baseChartOnLoad(this);
         }
 
 
         this.baseChartOnLoad = function (chart) {
-            //console.log(chart);
-            //debugger;
+
             var xSetMax = this.MAX_COLUMN_NUM;
             var xDataMax = chart.xAxis[0].getExtremes().dataMax;
             var xMax = xDataMax < xSetMax ? xDataMax : xSetMax;
 
-            // var yDataMax = chart.yAxis[0].getExtremes().dataMax;
-            // var yMax = yDataMax * 1.1;
-
-            // if (xMax == xDataMax) {
-            // 	chart.xAxis[0].update({
-            // 		scrollbar: {
-            // 			enabled: false
-            // 		}
-            // 	});
-            // }
-
+            // limit max number of columns shown
             chart.xAxis[0].update({
                 max: xMax
             });
-
-            // chart.yAxis[0].update({
-            // 	max: yMax
-            // });
-
-
-            this.createPathSelector(chart); // create new path selector on top left
-            chart.renderer.text("Zoom in by drag & select ", 20, 40).css({ fontSize: '10px' }).add();
-
         }
 
         this.showLoading = function () {
@@ -362,13 +345,13 @@ class MetricsController {
 
             pathBlocks.forEach(function (element) {
                 if (flag == true) {
-                    if (i === MetricsController.self.current_level) {
+                    if (i === MetricsService.self.current_level) {
                         element.classList.add("curr-path-link");
                     }
                     element.setAttribute('data-level', i);
                     element.classList.add("path-link");
                     element.onclick = function () {
-                        MetricsController.self.pathOnClick(this);
+                        MetricsService.self.pathOnClick(this);
                     };
                     i++;
                 }
@@ -381,11 +364,16 @@ class MetricsController {
 
             var level = parseInt(element.dataset.level);
             //drill up 
-            MetricsController.self.drillToLevel(level);
+            MetricsService.self.drillToLevel(level);
             // shouldn't replace the chart until this onClick function terminates
             // it seems that Promise is too faster and still causes error compared to setTimeOut
             // could fix later
-            setTimeout(function () { MetricsController.self.createChart(); }, 10);
+            setTimeout(function () {
+                if (MetricsService.self.applyDateFilter()) {
+                    MetricsService.self.createChart();
+                    MetricsService.self.chartOnLoad();
+                };
+            }, 10);
 
         }
 
@@ -486,21 +474,20 @@ class MetricsController {
                 } else if (this.current_level == 2) {
                     type = this.data3;
                 }
+                this.loadData(type, name, id, page, false);
                 if (page == 0) {
-                    this.loadData(type, name, id, page, false);
                     this.createChart();
                 } else {
-                    this.loadData(type, name, id, page, false);
                     this.hideLoading();
                     this.chart.update(this.level_list[this.current_level]['option']);
                 }
-                this.canLoadMore = true;
+                this.chartOnLoad();
                 //console.log(this.chart);
                 return;
             }
 
             this.$http.get(newUrl).then(function mySuccess(response) {
-                var self = MetricsController.self;
+                var self = MetricsService.self;
                 var type;
                 if (self.current_level == 0) {
                     type = 'firms';
@@ -518,12 +505,12 @@ class MetricsController {
                     self.hideLoading();
                     self.chart.update(self.level_list[self.current_level]['option']);
                 }
-                self.canLoadMore = true;
+                self.chartOnLoad();
             }, function myError(response, error) {
                 console.log("Error " + response.status + ": " + response.statusText + "!");
                 //alert("Error " + response.status + ": " + response.statusText + "!");
 
-                MetricsController.self.hideLoading();
+                MetricsService.self.hideLoading();
             });
         }
 
@@ -532,7 +519,7 @@ class MetricsController {
         //construct categories data for chart template
         this.prepareCategories = function (input) {
             var categories = input.map(function (x) {
-                var self = MetricsController.self;
+                var self = MetricsService.self;
                 var name = x['name'];
                 if (self.current_level == 0) {
                     name = x['name'];
@@ -575,7 +562,7 @@ class MetricsController {
             var series = [];
             for (var key in goalMap) {
                 var dataDrillDown = goalMap[key].map(function (x, i) {
-                    var self = MetricsController.self;
+                    var self = MetricsService.self;
                     var name = 'firmId';
                     if (self.current_level == 0) {
                         name = 'firmId';
@@ -689,49 +676,15 @@ class MetricsController {
         }
 
         this.createChart = function () {
+
+            //debugger;
             this.hideLoading();
             this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
-            this.applyDateFilter();
+            this.createPathSelector(this.chart); // create new path selector on top left
+            this.chart.renderer.text("Zoom in by drag & select ", 20, 40).css({ fontSize: '10px' }).add();
         }
 
-    }
 
+    };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // activate($timeout, webDevTec) {
-    // 	this.getWebDevTec(webDevTec);
-    // 	$timeout(() => {
-    // 		this.classAnimation = 'rubberBand';
-    // 	}, 4000);
-    // }
-
-    // getWebDevTec(webDevTec) {
-    // 	this.awesomeThings = webDevTec.getTec();
-
-    // 	angular.forEach(this.awesomeThings, (awesomeThing) => {
-    // 		awesomeThing.rank = Math.random();
-    // 	});
-    // }
-
-    // showToastr() {
-    // 	this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    // 	this.classAnimation = '';
-    // }
 }

@@ -5,7 +5,7 @@ angular
 
 function MetricsService($http, $rootScope, $compile) {
     return function () {
-        
+
         MetricsService.self = this;
 
         // constants
@@ -15,7 +15,8 @@ function MetricsService($http, $rootScope, $compile) {
         this.TITLE_TEMPLATE = "Total goals created by ";
         this.USE_DUMMY_DATA = false;
         this.controllerName = null;
-        
+        this.showDatepicker = true;
+
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
         };
@@ -157,12 +158,12 @@ function MetricsService($http, $rootScope, $compile) {
 
 
 
-
         this.launch = function (scope) {
             var root = 'Oranj';  // dummy root name, should be returned by Oranj API
             var rootId = -1;
             this.getData(root, rootId, 0);
-            this.createDatepicker(scope);
+            if(this.showDatepicker)
+              this.createDatepicker(scope);
 
 
             scope.$watch(function () {
@@ -302,7 +303,7 @@ function MetricsService($http, $rootScope, $compile) {
             // limit max number of columns shown
             chart.xAxis[0].update({
                 max: xMax
-            });   
+            });
         }
 
         this.showLoading = function () {
@@ -328,7 +329,7 @@ function MetricsService($http, $rootScope, $compile) {
         //----------------------------------path selector-----------------------------------------------------------------
 
 
-        //path selector 
+        //path selector
         this.createPathSelector = function (chart) {
             var pathHTML = this.generatePathSelectorHTML();
 
@@ -360,7 +361,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.pathOnClick = function (element) {
 
             var level = parseInt(element.dataset.level);
-            //drill up 
+            //drill up
             MetricsService.self.drillToLevel(level);
             // shouldn't replace the chart until this onClick function terminates
             // it seems that Promise is too faster and still causes error compared to setTimeOut
@@ -374,7 +375,7 @@ function MetricsService($http, $rootScope, $compile) {
 
         }
 
-        //TODO: only show levels that the user is authorized to see 
+        //TODO: only show levels that the user is authorized to see
         this.generatePathSelectorHTML = function () {
             var output = "Path:";
 
@@ -496,7 +497,7 @@ function MetricsService($http, $rootScope, $compile) {
 
                 var last = response.data['last'];
                 self.loadData(response.data[type], name, id, page, last);
-                if (page === 0) { // create new chart	
+                if (page === 0) { // create new chart
                     self.createChart();
                 } else {// append to existing chart
                     self.hideLoading();
@@ -610,7 +611,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.mergeOption = function (options) {
-            // assume we are expanding the current chart 
+            // assume we are expanding the current chart
             var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
             var originalLength = originalCategories.length;

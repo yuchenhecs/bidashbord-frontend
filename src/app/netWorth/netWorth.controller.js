@@ -15,12 +15,9 @@ function NetWorthService(MetricsService) {
         base.SUB_DOMAIN = "/bi/netWorth";
         base.USE_DUMMY_DATA = true;
         base.controllerName = "netWorth";
+        base.showDatepicker = false;
 
-        base.data1 = [
-          {
-        "hasNext": true,
-        "page": 0,
-        "firms": [{
+        base.data1 = [{
           "firmId": 510,
           "name": "Oranj",
           "absNet": 123,
@@ -37,170 +34,181 @@ function NetWorthService(MetricsService) {
             "name": "USA",
             "absNet": 123,
             "avgNet": 123
-          }
-
-        ]
-      },
-      {
-      "hasNext": true,
-      "page": 0,
-      "firms": [{
-        "firmId": 510,
-        "name": "Oranj",
-        "absNet": 123,
-        "avgNet": 123
-      },
-        {
-          "firmId": 511,
-          "name": "Chicago",
-          "absNet": 123,
-          "avgNet": 123
-        },
-        {
-          "firmId": 512,
-          "name": "USA",
-          "absNet": 123,
-          "avgNet": 123
-        }
-
-      ]
-    },
-    {
-    "hasNext": true,
-    "page": 0,
-    "firms": [{
-      "firmId": 510,
-      "name": "Oranj",
-      "absNet": 123,
-      "avgNet": 123
-    },
-      {
-        "firmId": 511,
-        "name": "Chicago",
-        "absNet": 123,
-        "avgNet": 123
-      },
-      {
-        "firmId": 512,
-        "name": "USA",
-        "absNet": 123,
-        "avgNet": 123
-      }
-
-    ]
-  }];
+          }];
 
 
         base.data2 = [{
-            "name": "advisor 1",
-            "total": 23,
-            "goals": {
-                "custom": 10,
-                "college": 4,
-                "retirement": 6,
-                "insurance": 2,
-                "home": 1
-            }
+          "advisorId": 510,
+          "firstName": "Oranj",
+          "lastName": "Oranj",
+          "absNet": 123,
+          "avgNet": 123
         },
-        {
-            "total": 24,
-            "name": "advisor 2",
-            "goals": {
-                "custom": 1,
-                "college": 14,
-                "retirement": 6,
-                "insurance": 2,
-                "home": 1
-            }
-        },
-        {
-            "total": 14,
-            "name": "advisor 3",
-            "goals": {
-                "custom": 1,
-                "college": 4,
-                "retirement": 6,
-                "insurance": 2,
-                "home": 1
-            }
-        }];
+          {
+            "advisorId": 511,
+            "firstName": "Oranj",
+            "lastName": "Oranj",
+            "absNet": 123,
+            "avgNet": 123
+          },
+          {
+            "advisorId": 512,
+            "firstName": "Oranj",
+            "lastName": "Oranj",
+            "absNet": 123,
+            "avgNet": 123
+          }];
 
 
         base.data3 = [{
-            "name": "client 1",
-            "total": 14,
-            "goals": {
-                "custom": 1,
-                "college": 4,
-                "retirement": 6,
-                "insurance": 2,
-                "home": 1
-            }
+          "clientId": 510,
+          "firstName": "Oranj",
+          "lastName": "Oranj",
+          "absNet": 123,
+          "avgNet": 123
         },
-        {
-            "total": 14,
-            "name": "client 2",
-            "goals": {
-                "custom": 1,
-                "college": 4,
-                "retirement": 6,
-                "insurance": 2,
-                "home": 1
-            }
-        },
-        {
-            "total": 8,
-            "name": "client 3",
-            "goals": {
-                "custom": 1,
-                "college": 4,
-                "retirement": 0,
-                "insurance": 2,
-                "home": 1
-            }
-        }];
+          {
+            "clientId": 511,
+            "firstName": "Oranj",
+            "lastName": "Oranj",
+            "absNet": 123,
+            "avgNet": 123
+          },
+          {
+            "clientId": 512,
+            "firstName": "Oranj",
+            "lastName": "Oranj",
+            "absNet": 123,
+            "avgNet": 123
+          }];
+
+        base.prepareCategories = function(input){
+          var categories = input.map(function (x) {
+              var self = NetWorthService.self;
+              var name = x['name'];
+              if (self.current_level === 0) {
+                  name = x['name'];
+              } else if (self.current_level === 1) {
+                  //name = x['name'];
+                  name = x['firstName'] + " " + x['lastName'];
+              } else if (self.current_level === 2) {
+                  //name = x['name'];
+                  name = x['firstName'] + " " + x['lastName'];
+              }
+              return name;
+          });
+
+          var output = [];
+          categories.forEach(function (x) {
+              output.push(x);
+          });
+
+          return output;
+        };
+
+        base.prepareSeries = function (input){
+          var goalMap = {};
+          var avgNet = [];
+          var absNet = [];
+          input.forEach(function (x, i) {
+              avgNet.push(x['avgNet']);
+              absNet.push(x['absNet']);
+              // for (var category in goalMap) {
+              //     goalMap[category].push(0);
+              // }
+              // var goals = x['goals'];
+              // for (var key in goals) {
+              //     if (!goalMap[key]) {
+              //         goalMap[key] = Array.apply(null, Array(i + 1)).map(Number.prototype.valueOf, 0);
+              //     }
+              //     goalMap[key][i] = goals[key];
+              // }
+          });
+
+          // combine all points for each series into lists
+
+          var series = [];
+          for (var key in goalMap) {
+              var dataDrillDown = goalMap[key].map(function (x, i) {
+                  var self = NetWorthService.self;
+                  var name = 'firmId';
+                  if (self.current_level === 0) {
+                      name = 'firmId';
+                  } else if (self.current_level === 1) {
+                      name = 'advisorId';
+                  } else if (self.current_level === 2) {
+                      name = 'clientId'
+                  }
+                  return { id: input[i][name], y: x };
+              });
+
+              var points =
+                  {
+                      name: key,
+                      data: dataDrillDown
+                  };
+              series.push(points);
+          }
+
+[
+  {name:'abs', data:[
+    {id:id, y:},
+    {},
+
+  ]},
+
+
+  {},
+
+]
+
+
+          return series;
+        };
 
         return base;
     }
+
+
 }
 
 
 function NetWorthController($scope, NetWorthService) {
     var netWorth = new NetWorthService();
 
-    this.startDate = netWorth.startDate;
-    this.endDate = netWorth.endDate;
-    this.today = new Date();
-    this.isRequired = netWorth.isRequired;
-
-    this.checkDate = function () {
-        netWorth.startDate = this.startDate; // bind data to service
-        netWorth.endDate = this.endDate;
-
-        netWorth.checkDate();
-
-        this.startDate = netWorth.startDate;
-        this.endDate = netWorth.endDate;
-    };
-
-
-    this.assignYTD = function () {
-        this.startDate = new Date(new Date().getFullYear(), 0, 1);
-        this.endDate = new Date();
-        netWorth.startDate = this.startDate; // bind data to service
-        netWorth.endDate = this.endDate;
-        netWorth.applyDateFilter();
-    }
-
-    this.clearDate = function () {
-        this.endDate = null;
-        this.startDate = null;
-        netWorth.startDate = this.startDate; // bind data to service
-        netWorth.endDate = this.endDate;
-
-        netWorth.applyDateFilter();
-
-    }
+    // this.startDate = netWorth.startDate;
+    // this.endDate = netWorth.endDate;
+    // this.today = new Date();
+    // this.isRequired = false;
+    //
+    // this.checkDate = function () {
+    //     netWorth.startDate = this.startDate; // bind data to service
+    //     netWorth.endDate = this.endDate;
+    //
+    //     netWorth.checkDate();
+    //
+    //     this.startDate = netWorth.startDate;
+    //     this.endDate = netWorth.endDate;
+    // };
+    //
+    //
+    // this.assignYTD = function () {
+    //     this.startDate = new Date(new Date().getFullYear(), 0, 1);
+    //     this.endDate = new Date();
+    //     netWorth.startDate = this.startDate; // bind data to service
+    //     netWorth.endDate = this.endDate;
+    //     netWorth.applyDateFilter();
+    // }
+    //
+    // this.clearDate = function () {
+    //     this.endDate = null;
+    //     this.startDate = null;
+    //     netWorth.startDate = this.startDate; // bind data to service
+    //     netWorth.endDate = this.endDate;
+    //
+    //     netWorth.applyDateFilter();
+    //
+    // }
 
     netWorth.launch($scope);
 }

@@ -13,10 +13,10 @@ function AUMService($http, MetricsService) {
         base.USE_DUMMY_DATA = true;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
-        base.isRequired = true;
+        base.isRequired = true; //datepicker date required
         base.startDate = new Date(new Date().getFullYear(), 0, 1);
         base.endDate = new Date();
-        base.test = 111;
+        // base.test = 111;
 
         base.data1 = [
             {
@@ -331,7 +331,7 @@ function AUMService($http, MetricsService) {
                 var last = response.data.data['hasNext'];
                 self.loadData(response.data.data[type], name, id, page, last);
 
-                if (page === 0) { // create new chart	
+                if (page === 0) { // create new chart
                     self.createChart();
                 } else {// append to existing chart
                     self.hideLoading();
@@ -447,7 +447,7 @@ function AUMService($http, MetricsService) {
 
 
         base.mergeOption = function (options) {
-            // assume we are expanding the current chart 
+            // assume we are expanding the current chart
             var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
             var originalLength = originalCategories.length;
@@ -500,7 +500,7 @@ function AUMService($http, MetricsService) {
 
 function AUMController($scope, AUMService) {
     var aum = new AUMService();
-   
+
     this.startDate = aum.startDate;
     this.endDate = aum.endDate;
     this.today = new Date();
@@ -531,7 +531,7 @@ function AUMController($scope, AUMService) {
         aum.startDate = this.startDate; // bind data to service
         aum.endDate = this.endDate;
 
-        aumapplyDateFilter();
+        aum.applyDateFilter();
 
     }
     aum.launch($scope);

@@ -21,7 +21,7 @@ function runBlock($location, $rootScope) {
 		//console.log('Environment:', $rootScope.environment);
 	};
 
-	environmentDetection();	
+	environmentDetection();
 
 
 		// configuration obj for <oranj-navigation></oranj-navigation> directive
@@ -64,6 +64,10 @@ function runBlock($location, $rootScope) {
 				{
 					name: 'AUM',
 					state: 'aum'
+				},
+        {
+					name: 'Net Worth',
+					state: 'netWorth'
 				}
 			]
 		}

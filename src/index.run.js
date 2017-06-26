@@ -24,8 +24,8 @@ function runBlock($location, $rootScope) {
 	environmentDetection();	
 
 
-		// configuration obj for <oranj-navigation></oranj-navigation> directive
-	$rootScope.navConfig = [
+	// configuration obj for <oranj-navigation></oranj-navigation> directive
+	$rootScope.sideNavConfig = [
 		{
 			name: 'Home',
 			iconClass: 'glyphicon glyphicon-home',

@@ -7,9 +7,8 @@
     "angular-mocks": "~1.5.11",
     "angular-ui-router": "1.0.0-beta.3",
     "oranj-navigation": "~1.0.5",
-    "oranj-scss-global": "~1.0.0",
     "angular-messages": "~1.5.3",
-     "angular-material": "~1.1.4"
+    "angular-material": "~1.1.4"
   },
   "authors": [
     "Nate Smith <nsmith@runoranj.com>"

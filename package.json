@@ -12,7 +12,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "bower": "^1.8.0",
-    "bower-nexus3-resolver": "^1.0.2",
+    "bower-nexus3-resolver": "~1.0.2",
     "browser-sync": "^2.18.8",
     "browser-sync-spa": "^1.0.3",
     "del": "^2.2.2",
@@ -61,8 +61,7 @@
     "main-bower-files": "^2.13.1",
     "phantomjs-prebuilt": "^2.1.14",
     "uglify-save-license": "^0.4.1",
-    "wiredep": "^4.0.0",
-    "bower-nexus3-resolver":"~1.0.2"
+    "wiredep": "^4.0.0"
   },
   "scripts": {
     "build": "gulp",

@@ -149,8 +149,10 @@ function MetricsService($http, $rootScope, $compile) {
 
 
 
-
-
+        // 1. Initial launch pipeline 
+        // 2. Drilldown pipeline
+        // 3. Drill-to-certain-Level pipeline
+        // 4. Load-next-page pipeline
 
 
 

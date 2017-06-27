@@ -88,6 +88,25 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
+            name: 'Metrics',
+            iconClass: 'fa fa-globe',
+            state: 'home',
+            options: [
+                {
+                    name: 'Goals',
+                    state: 'goals'
+                },
+                {
+                    name: 'AUM',
+                    state: 'aum'
+                },
+                {
+                    name: 'Net Worth',
+                    state: 'netWorth'
+                }
+            ]
+        },
+        {
             name: 'Contacts',
             iconClass: 'fa fa-users',
             state: 'advisor',
@@ -161,4 +180,10 @@ function runBlock($location, $rootScope) {
             ]
         }
     ];
+
+
+
+
+
+    
 }

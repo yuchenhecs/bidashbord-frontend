@@ -275,7 +275,6 @@ function NetWorthService(MetricsService) {
                   marker: {
                     enabled: false
                   },
-                  // dashStyle: 'shortdash',
                   width: 2,
                   zIndex:4,
                   label: {

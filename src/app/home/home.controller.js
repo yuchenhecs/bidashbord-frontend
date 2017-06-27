@@ -79,8 +79,12 @@ function foo($http) {
 				categories: dates
 			};
 		} else if (chartId === "netWorthContainer") {
+			var categories = [];
+			apiData.summary.forEach(function(x){
+				categories.push(x.date);
+			});
 			xAxis = {
-				categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+				categories: categories
 			};
 		}
 
@@ -121,9 +125,6 @@ function foo($http) {
 					}
 				},
 				labels: {
-					// formatter: function() {
-					// 	return '$' + this.axis.defaultLabelFormatter.call(this);
-					// },
 					style: {
 						color: Highcharts.getOptions().colors[0]
 					}
@@ -239,13 +240,22 @@ function foo($http) {
 			}
 		// } else if (chartId.localeCompare("netWorthContainer")) {
 		} else if (chartId ==="netWorthContainer") {
+			apiData = apiData.summary;
+			var data = [];
+			var clientsDiff = [];
+			apiData.forEach(function(x){
+					data.push(x.absNet);
+					clientsDiff.push(x.clientsDiff);
+			});
+
+
 			series = [{
 				name: 'Net Worth',
-				data: [5000, 5400, 3900, 6700, 10000, 8090],
+				data: data,
 				yAxis: 1
 			}, {
 				name: 'Clients',
-				data: [0, 1, 3, -5, 10, -3]
+				data: clientsDiff
 			}];
 		}
 
@@ -287,7 +297,7 @@ function HomeController($scope, $http, $log, chartData) {
 	this.chart = Highcharts.setOptions(colorTheme);
 	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
 	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', null);
+	chartData.callApi('line', 'netWorthContainer', 'http://10.1.10.28:8080/bi/networth');
 
 	//console.log(apiData.$$state);
 	//chartData.createOptions('pie', 'aumContainer', apiData);

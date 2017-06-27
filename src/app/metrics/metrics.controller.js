@@ -322,11 +322,6 @@ function MetricsService($http, $rootScope, $compile) {
 
 
 
-
-
-
-
-
         //----------------------------------path selector-----------------------------------------------------------------
 
 
@@ -437,6 +432,7 @@ function MetricsService($http, $rootScope, $compile) {
         //----------------------------------api calls-----------------------------------------------------------------
 
         this.getData = function (name, id, page) {
+            //debugger;
             console.log("getData");
             this.canLoadMore = false;
 
@@ -485,14 +481,10 @@ function MetricsService($http, $rootScope, $compile) {
                     this.createChart();
                 } else {
                     this.hideLoading();
-                    console.log(this.canLoadMore);
-                    console.log(this.level_list[this.current_level]['option']);
                     this.chart.update(this.level_list[this.current_level]['option']);
 
-                    console.log("qqqqqq");
                 }
                 this.chartOnLoad();
-                //console.log(this.chart);
                 return;
             }
 
@@ -630,7 +622,7 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.mergeOption = function (options) {
           console.log("mergeOption");
-      //    debugger;
+
             // assume we are expanding the current chart
             var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
@@ -700,7 +692,7 @@ function MetricsService($http, $rootScope, $compile) {
           console.log(this.level_list[this.current_level]['option']);
 
 
-            //debugger;
+
             this.hideLoading();
             this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
             this.createPathSelector(this.chart); // create new path selector on top left

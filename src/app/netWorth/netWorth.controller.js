@@ -14,10 +14,10 @@ function NetWorthService(MetricsService) {
 
         NetWorthService.self = base;
         // constants
-        // base.DOMAIN = "http://10.1.10.11:8080";
-        base.DOMAIN = "http://localhost:8080";
-        base.SUB_DOMAIN = "/bi/netWorth";
-        base.USE_DUMMY_DATA = true;
+        base.DOMAIN = "http://10.1.10.28:8080";
+        // base.DOMAIN = "http://localhost:8080";
+        base.SUB_DOMAIN = "/bi/networth";
+        base.USE_DUMMY_DATA = false;
         base.controllerName = "netWorth";
         base.showDatepicker = false;
 
@@ -130,8 +130,6 @@ function NetWorthService(MetricsService) {
           var series = [];
 
           input.forEach(function (x, i) {
-              avgNet.push(x['avgNet']);
-              absNet.push(x['absNet']);
               var self = NetWorthService.self;
               var name = '';
               if (self.current_level === 0) {
@@ -141,10 +139,15 @@ function NetWorthService(MetricsService) {
               } else if (self.current_level === 2) {
                   name = 'clientId'
               }
+
+              avgNet.push({id: x[name],y: x['avgNet']});
+              absNet.push({id: x[name],y: x['absNet']});
+
           });
 
           series.push(absNet);
           series.push(avgNet);
+
           return series;
         };
 
@@ -170,6 +173,7 @@ function NetWorthService(MetricsService) {
             yAxis: yAxisSelector( data),
             tooltip: tooltipSelector()
           };
+
 
           currentOptions = Object.assign({}, base.optionTemplate, currentOptions);
 
@@ -199,7 +203,6 @@ function NetWorthService(MetricsService) {
 
         function xAxisSelector( data) {
           var xAxis;
-          console.log(data);
           xAxis = {
             scrollbar: {
                 enabled: true
@@ -259,7 +262,7 @@ function NetWorthService(MetricsService) {
                   color: 'red',
                   dashStyle: 'shortdash',
                   marker: {
-                    enabled: true
+                    enabled: false
                   },
                   width: 2,
                   zIndex:4,
@@ -281,8 +284,6 @@ function NetWorthService(MetricsService) {
                   }
                 }];
           }
-          console.log("yAxis");
-          console.log(yAxis);
 
           return yAxis;
         }
@@ -329,8 +330,6 @@ function NetWorthService(MetricsService) {
             );
           }
 
-          console.log("test");
-          console.log(series);
           return series;
         }
 

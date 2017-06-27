@@ -158,6 +158,18 @@ function MetricsService($http, $rootScope, $compile) {
         };
 
 
+
+        // 1. Initial launch pipeline 
+        // 2. Drilldown pipeline
+        // 3. Drill-to-certain-Level pipeline
+        // 4. Load-next-page pipeline
+
+
+
+
+
+
+
         this.launch = function (scope) {
             var root = 'Oranj';  // dummy root name, should be returned by Oranj API
             var rootId = -1;

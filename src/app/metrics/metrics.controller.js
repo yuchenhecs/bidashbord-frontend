@@ -130,6 +130,9 @@ function MetricsService($http, $rootScope, $compile) {
                         events: {
                             click: chartOnClick
                         }
+                    },
+                    marker: {
+                        enabled: true
                     }
                 },
                 column: {
@@ -404,7 +407,7 @@ function MetricsService($http, $rootScope, $compile) {
                 return;
             }
 
-            if (name.localeCompare(this.level_list[this.current_level]['name']) != 0) {
+            if (name.toString().localeCompare(this.level_list[this.current_level]['name']) != 0) {
                 this.removeFromLevel(this.current_level);
                 this.getData(name, id, 0);
                 return;
@@ -473,6 +476,12 @@ function MetricsService($http, $rootScope, $compile) {
                     type = this.data3;
                 }
                 this.loadData(type, name, id, page, false);
+                // var last = response.data['last'];
+                // if (this.controllerName.localeCompare("netWorth") === 0){
+                //   this.loadData(response.data.data, name, id, page, last);
+                // } else {
+                //   this.loadData(response.data[type], name, id, page, last);
+                // }
                 if (page === 0) {
                     this.createChart();
                 } else {
@@ -496,7 +505,12 @@ function MetricsService($http, $rootScope, $compile) {
                 }
 
                 var last = response.data['last'];
-                self.loadData(response.data[type], name, id, page, last);
+                if (self.controllerName.localeCompare("netWorth") === 0){
+                  self.loadData(response.data.data, name, id, page, last);
+                } else {
+                  self.loadData(response.data[type], name, id, page, last);
+                }
+
                 if (page === 0) { // create new chart
                     self.createChart();
                 } else {// append to existing chart

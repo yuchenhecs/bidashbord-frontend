@@ -7,14 +7,20 @@ angular
 function foo($http) {
 	var chartData = {};
 
+
 	chartData.callApi = function(chartType, chartId, url) {
-		return $http.get(url).then(function mySuccess(response) {
-			var apiData = response["data"]["data"];
-			chartData.createOptions(chartType, chartId, apiData);
-			return response.data;
-		}, function myError(response) {
-			$log.error("Error " + response.status + ": " + response.statusText + "!");
-		});
+		if (url === null) {
+			chartData.createOptions(chartType, chartId, '');
+		}
+		else {
+				return $http.get(url).then(function mySuccess(response) {
+				var apiData = response["data"]["data"];
+				chartData.createOptions(chartType, chartId, apiData);
+				return response.data;
+			}, function myError(response) {
+				$log.error("Error " + response.status + ": " + response.statusText + "!");
+			});
+		}
 	};
 
 	chartData.titleSelector = function(chartId, apiData) {
@@ -91,6 +97,7 @@ function foo($http) {
 					text: "Dollars"
 				}
 			};
+		// } else if (chartId.localeCompare("netWorthContainer")) {
 		} else if (chartId === "netWorthContainer") {
 			yAxis = [{
 				title: {
@@ -137,7 +144,8 @@ function foo($http) {
 			tooltip = {
 				split: true
 			};
-		} else if (chartId === "netWorthContainer") {
+		// } else if (chartId.localeCompare("netWorthContainer")) {
+		} else if (chartId ==="netWorthContainer") {
 			tooltip = {
 				split: true
 			};
@@ -171,8 +179,11 @@ function foo($http) {
 					}
 				}
 			};
-		} else if (chartId === "netWorthContainer") {
-			options = {};
+		// } else if (chartId.localeCompare("netWorthContainer")) {
+		} else if (chartId ==="netWorthContainer") {
+			options = {
+
+			};
 		}
 
 		return options;
@@ -226,7 +237,8 @@ function foo($http) {
 
 				series.push(points);
 			}
-		} else if (chartId === "netWorthContainer") {
+		// } else if (chartId.localeCompare("netWorthContainer")) {
+		} else if (chartId ==="netWorthContainer") {
 			series = [{
 				name: 'Net Worth',
 				data: [5000, 5400, 3900, 6700, 10000, 8090],
@@ -239,7 +251,6 @@ function foo($http) {
 
 		return series;
 	};
-
 
 	chartData.createOptions = function(chartType, chartId, apiData) {
 		var currentOptions = {
@@ -276,7 +287,7 @@ function HomeController($scope, $http, $log, chartData) {
 	this.chart = Highcharts.setOptions(colorTheme);
 	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
 	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	//chartData.callApi('pie', 'goalsContainer', '');
+	chartData.callApi('line', 'netWorthContainer', null);
 
 	//console.log(apiData.$$state);
 	//chartData.createOptions('pie', 'aumContainer', apiData);

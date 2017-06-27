@@ -124,6 +124,11 @@ function MetricsService($http, $rootScope, $compile) {
                 shared: true
             },
             plotOptions: {
+                line: {
+                    marker: {
+                      enabled: false
+                    }
+                },
                 series: {
                     cursor: 'pointer',
                     point: {
@@ -132,7 +137,7 @@ function MetricsService($http, $rootScope, $compile) {
                         }
                     },
                     marker: {
-                        enabled: true
+                        enabled: false
                     }
                 },
                 column: {

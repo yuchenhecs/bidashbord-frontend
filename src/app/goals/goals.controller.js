@@ -10,7 +10,7 @@ function GoalsService(MetricsService) {
         var base = new MetricsService();
         GoalsService.self = base;
         // constants
-        base.DOMAIN = "http://10.1.10.11:8080";
+        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/goals";
         base.USE_DUMMY_DATA = false;
         base.controllerName = "goals";

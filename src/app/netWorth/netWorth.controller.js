@@ -77,7 +77,7 @@ function NetWorthService(MetricsService) {
 
         base.data3 = {
       	"avgAdvsior": 50,
-      	"avgFirm": 123,
+      	"avgFirm": 70,
       	"hasNext": true,
         "page": 0,
         "clients": [{
@@ -173,9 +173,7 @@ function NetWorthService(MetricsService) {
 
           currentOptions = Object.assign({}, base.optionTemplate, currentOptions);
 
-          console.log(currentOptions);
           return currentOptions;
-          // this.chart = Highcharts.chart( currentOptions);
         };
 
 
@@ -267,7 +265,8 @@ function NetWorthService(MetricsService) {
                   width: 2,
                   zIndex:4,
                   label: {
-                    text: 'Avg Firm'
+                    // text: 'Avg Firm'
+                    text: null
                   }
                 },{
                   value: avgAdvsior,
@@ -278,7 +277,8 @@ function NetWorthService(MetricsService) {
                   width: 2,
                   zIndex:4,
                   label: {
-                    text: 'Avg Advisor'
+                    // text: 'Avg Advisor'
+                    text: null
                   }
                 }];
           }
@@ -315,7 +315,7 @@ function NetWorthService(MetricsService) {
                   color: 'green',
                   yAxis: 2,
                   marker: {
-                    enabled: false
+                    enabled: true
                   }
                 },
               {
@@ -330,6 +330,8 @@ function NetWorthService(MetricsService) {
             );
           }
 
+          console.log("test");
+          console.log(series);
           return series;
         }
 
@@ -354,6 +356,12 @@ function NetWorthService(MetricsService) {
           };
           return legend;
         };
+
+        // var colorTheme = {
+        //   colors: ['#64B5F6']
+        // };
+        //
+        // base.Highcharts.setOptions(colorTheme);
 
         return base;
     };

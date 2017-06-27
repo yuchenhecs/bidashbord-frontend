@@ -58,6 +58,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         var chartOnRedraw = function (event) {
+            console.log("chart on readraw");
             var self = MetricsService.self;
             if (this.xAxis) {
 
@@ -137,7 +138,7 @@ function MetricsService($http, $rootScope, $compile) {
                         }
                     },
                     marker: {
-                        enabled: false
+                        enabled: true
                     }
                 },
                 column: {
@@ -155,15 +156,6 @@ function MetricsService($http, $rootScope, $compile) {
             },
             series: null
         };
-
-
-
-
-
-
-
-
-
 
 
         this.launch = function (scope) {
@@ -296,6 +288,7 @@ function MetricsService($http, $rootScope, $compile) {
         //----------------------------------chart utilities-----------------------------------------------------------------
         // chart onload event
         this.chartOnLoad = function () {
+            console.log("chartOnLoad");
             var self = MetricsService.self;
             self.baseChartOnLoad(this.chart);
 
@@ -444,6 +437,7 @@ function MetricsService($http, $rootScope, $compile) {
         //----------------------------------api calls-----------------------------------------------------------------
 
         this.getData = function (name, id, page) {
+            console.log("getData");
             this.canLoadMore = false;
 
             this.showLoading();
@@ -491,7 +485,11 @@ function MetricsService($http, $rootScope, $compile) {
                     this.createChart();
                 } else {
                     this.hideLoading();
+                    console.log(this.canLoadMore);
+                    console.log(this.level_list[this.current_level]['option']);
                     this.chart.update(this.level_list[this.current_level]['option']);
+
+                    console.log("qqqqqq");
                 }
                 this.chartOnLoad();
                 //console.log(this.chart);
@@ -603,6 +601,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.createNewLevel = function (options, name, id, page, last) {
+
             var startDate = !this.startDate ? null : new Date(this.startDate);
             var endDate = !this.endDate ? null : new Date(this.endDate);
 
@@ -630,6 +629,8 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.mergeOption = function (options) {
+          console.log("mergeOption");
+      //    debugger;
             // assume we are expanding the current chart
             var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
@@ -674,6 +675,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.loadData = function (input, name, id, page, last) {
+          console.log("loadData");
 
             var currentOptions = Object.assign({}, this.optionTemplate, {
                 title: {
@@ -690,9 +692,13 @@ function MetricsService($http, $rootScope, $compile) {
                 }
             });
             this.createNewLevel(currentOptions, name, id, page, last); // update drilldown level and prepare chart data
+
+            console.log("createNewLevel");
         }
 
         this.createChart = function () {
+          console.log(this.level_list[this.current_level]['option']);
+
 
             //debugger;
             this.hideLoading();

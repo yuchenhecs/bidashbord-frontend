@@ -205,7 +205,6 @@ function NetWorthService(MetricsService) {
                 enabled: true
             },
             categories: prepareCategories(data),
-            // categories: ['Firm 1', 'Firm 2', 'Firm 3', 'Firm 4', 'Firm 5', 'Firm 6', 'Firm 7', 'Firm 8', 'Firm 9', 'Firm 10', 'Firm 11', 'Firm 12'],
             crosshair: false
           };
 
@@ -260,7 +259,7 @@ function NetWorthService(MetricsService) {
                   color: 'red',
                   dashStyle: 'shortdash',
                   marker: {
-                    enabled: false
+                    enabled: true
                   },
                   width: 2,
                   zIndex:4,
@@ -272,7 +271,7 @@ function NetWorthService(MetricsService) {
                   value: avgAdvsior,
                   color: 'green',
                   marker: {
-                    enabled: false
+                    enabled: true
                   },
                   width: 2,
                   zIndex:4,
@@ -320,11 +319,11 @@ function NetWorthService(MetricsService) {
                 },
               {
                   name: 'Avg Firm',
-                  color: 'red',
                   dashStyle: 'shortdash',
+                  color: 'red',
                   yAxis: 2,
                   marker: {
-                    enabled: false
+                    enabled: true
                   }
               }
             );

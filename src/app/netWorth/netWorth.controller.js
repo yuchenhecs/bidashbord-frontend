@@ -255,6 +255,7 @@ function NetWorthService(MetricsService) {
           ];
 
           if (base.current_level === 2){
+            yAxis[0]['title']['text'] = null;
             yAxis[1]['plotLines']=
                  [{
                   value: avgFirm,

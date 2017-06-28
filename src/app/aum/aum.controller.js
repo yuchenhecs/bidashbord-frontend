@@ -10,7 +10,7 @@ function AUMService($http, MetricsService) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
-        base.USE_DUMMY_DATA = true;
+        base.USE_DUMMY_DATA = false;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
@@ -166,11 +166,45 @@ function AUMService($http, MetricsService) {
             }
         ];
 
+        
 
+        base.subtitleSelector = function () {
+            var subtitle = {
+                text: "Note: lighter bar - previous quarter, darker bar - current quarter",
+                y: 50
+            };
+            return subtitle;
+        }
+
+        base.tooltipSelector = function () {
+            var tooltip = {
+                formatter: this.formatter,
+                shared: false
+            }
+            return tooltip;
+        }
+
+        this.legendSelector = function () {
+            var legend = {
+                align: 'right',
+                verticalAlign: 'top',
+                x: -30,
+                y: 60,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false,
+                itemHoverStyle: {
+                    cursor: 'auto'
+                }
+            }
+            return legend;
+        }
 
 
         // tooltip formatter
-        var formatter = function () {
+        base.formatter = function () {
             var s = '<b>' + this.x + '</b>';
 
             var currentStack = this.series.userOptions['stackId'];
@@ -187,190 +221,9 @@ function AUMService($http, MetricsService) {
         }
 
 
-
-        var chartOnRedraw = function (event) {
-            var self = AUMService.self;
-
-            if (this.xAxis) {
-
-                var extremes = this.xAxis[0].getExtremes();
-                if (extremes && extremes.max == extremes.dataMax) {
-                    var current_level = self.level_list[self.current_level];
-                    var last = current_level['last'];
-
-                    if (!last) { // it's actually hasNext
-                        return;
-                    }
-
-                    if (self.canLoadMore) {
-                        self.canLoadMore = false;
-                        self.getData(current_level['name'], current_level['id'], current_level['page'] + 1);
-                    }
-                }
-            }
-
-        }
-
-        base.optionTemplate.chart.events.redraw = chartOnRedraw;
-
-        base.optionTemplate.tooltip['shared'] = false;
-        base.optionTemplate.tooltip['formatter'] = formatter;
-        base.optionTemplate['subtitle'] = {
-            text: "Note: lighter bar - previous quarter, darker bar - current quarter",
-            y: 50
-        };
-
-        base.optionTemplate.legend['y'] = 60;
-
-
-        // chart onload event
-        base.chartOnLoad = function () {
-            var self = AUMService.self;
-            var chart = this.chart;
-            self.baseChartOnLoad(chart);
-
-            // lighten the color of previous date bar
-            chart.series.forEach(function (x) {
-
-                if (x.options.stackId === 1) {
-                    return;
-                }
-                var hex = x.color;
-                var percent = 50;
-
-                // increase brightness
-                var colorCode;
-
-                // strip the leading # if it's there
-                hex = hex.replace(/^\s*#|\s*$/g, '');
-
-                // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-                if (hex.length === 3) {
-                    hex = hex.replace(/(.)/g, '$1$1');
-                }
-
-                var r = parseInt(hex.substr(0, 2), 16),
-                    g = parseInt(hex.substr(2, 2), 16),
-                    b = parseInt(hex.substr(4, 2), 16);
-
-                colorCode = '#' +
-                    ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
-                    ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
-                    ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
-
-
-                x.update({
-                    color: colorCode
-                });
-            });
-
-            //unlock scroll to load
-            self.canLoadMore = true;
-        }
-
-
-
-        base.getData = function (name, id, page) {
-
-            this.canLoadMore = false; // lock the chartOnRedraw scroll-to-load function
-
-            this.showLoading();
-
-            var domain = this.DOMAIN;
-            var subdomain = this.SUB_DOMAIN;
-            var baseUrl;
-            var currentDate = this.endDate.toISOString().slice(0, 10);
-            var previousDate = this.startDate.toISOString().slice(0, 10);
-
-            // construct url based on current drilldown level
-            if (this.current_level === 0) {
-                baseUrl = domain + subdomain + "/firms?page=" + page + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
-            } else if (this.current_level === 1) {
-                baseUrl = domain + subdomain + "/advisors?page=" + page + "&firmId=" + id + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
-            } else if (this.current_level === 2) {
-                baseUrl = domain + subdomain + "/clients?page=" + page + "&advisorId=" + id + "&previousDate=" + previousDate + "&currentDate=" + currentDate;
-            }
-
-            console.log(baseUrl);
-            this.getDataFromApi(baseUrl, name, id, page);
-        }
-
-        base.getDataFromApi = function (newUrl, name, id, page) {
-            if (this.USE_DUMMY_DATA) {
-                var type;
-                if (this.current_level === 0) {
-                    type = this.data1;
-                } else if (this.current_level === 1) {
-                    type = this.data2;
-                } else if (this.current_level === 2) {
-                    type = this.data3;
-                }
-
-                this.loadData(type, name, id, page, true);
-                if (page === 0) {
-                    this.createChart();
-                } else {
-                    this.hideLoading();
-                    this.chart.update(this.level_list[this.current_level]['option']);
-                }
-                this.chartOnLoad();
-                return;
-            }
-
-            this.$http.get(newUrl).then(function mySuccess(response) {
-                var self = AUMService.self;
-                var type;
-                if (self.current_level === 0) {
-                    type = 'firms';
-                } else if (self.current_level === 1) {
-                    type = 'advisors';
-                } else if (self.current_level === 2) {
-                    type = 'clients';
-                }
-
-                var last = response.data.data['hasNext'];
-                self.loadData(response.data.data[type], name, id, page, last);
-
-                if (page === 0) { // create new chart
-                    self.createChart();
-                } else {// append to existing chart
-                    self.hideLoading();
-                    self.chart.update(self.level_list[self.current_level]['option']);
-                }
-                self.chartOnLoad();
-            }, function myError(response, error) {
-                console.log("Error " + response.status + ": " + response.statusText + "!");
-                AUMService.self.hideLoading();
-            });
-        }
-
-        //construct categories data for chart template
-        base.prepareCategories = function (input) {
-            var categories = input.map(function (x) {
-                var self = AUMService.self;
-                var name = x['name'];
-                if (self.current_level === 0) {
-                    name = x['name'];
-                } else if (self.current_level === 1) {
-                    name = x['name'];
-                    //name = x['firstName'] + " " + x['lastName'];
-                } else if (self.current_level === 2) {
-                    name = x['name'];
-                    //name = x['firstName'] + " " + x['lastName'];
-                }
-                return name;
-            });
-
-            var output = [];
-            categories.forEach(function (x) {
-                output.push(x);
-            });
-
-            return output;
-        }
-
         //aumDiffs
         base.prepareSeries = function (input) {
+            console.log(input);
             var aums = ['previous', 'current'];
             var aumMaps = Array.apply(null, Array(aums.length)).map(function () { return {}; }); // [{prev_map},{curr_map}]
             // for each of firms, advisors or clients
@@ -499,40 +352,58 @@ function AUMService($http, MetricsService) {
 
 
 function AUMController($scope, AUMService) {
-    var aum = new AUMService();
+    var service = new AUMService();
 
-    this.startDate = aum.startDate;
-    this.endDate = aum.endDate;
+    
+    this.startDate = service.startDate;
+    this.endDate = service.endDate;
     this.today = new Date();
-    this.isRequired = aum.isRequired;
+    this.isRequired = service.isRequired;
 
     this.checkDate = function () {
-        aum.startDate = this.startDate; // bind data to service
-        aum.endDate = this.endDate;
+        service.startDate = this.startDate; // bind data to service
+        service.endDate = this.endDate;
 
-        aum.checkDate();
+        try {
+            service.checkDate();
+        }
+        catch (err) {
+            console.log("Error when checking date!");
+        }
 
-        this.startDate = aum.startDate;
-        this.endDate = aum.endDate;
+
+        this.startDate = service.startDate;
+        this.endDate = service.endDate;
     };
 
 
     this.assignYTD = function () {
-        this.startDate = new Date(new Date().getFullYear(), 0, 1);
-        this.endDate = new Date();
-        aum.startDate = this.startDate; // bind data to service
-        aum.endDate = this.endDate;
-        aum.applyDateFilter();
+
+
+        try {
+            service.assignYTD();
+        }
+        catch (err) {
+            console.log("Error when assigning YTD!");
+        }
+
+        this.startDate = service.startDate;
+        this.endDate = service.endDate;
     }
 
     this.clearDate = function () {
-        this.endDate = null;
-        this.startDate = null;
-        aum.startDate = this.startDate; // bind data to service
-        aum.endDate = this.endDate;
 
-        aum.applyDateFilter();
+        try {
+            service.clearDate();
+        }
+        catch (err) {
+            console.log("Error when clearing dates!");
+        }
+
+        this.startDate = service.startDate;
+        this.endDate = service.endDate;
 
     }
-    aum.launch($scope);
+
+    service.launch($scope);
 }

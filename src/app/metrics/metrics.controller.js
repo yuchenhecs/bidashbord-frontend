@@ -35,7 +35,6 @@ function MetricsService($http, $rootScope, $compile) {
         this.isRequired = false;
         this.current_level = 0;
 
-        this.canLoadMore = false;
         this.doUpdate = false;
 
 
@@ -55,8 +54,6 @@ function MetricsService($http, $rootScope, $compile) {
         //      drillDown -> createChart
         // 3. Drill-to-certain-Level pipeline
         //      drillToLevel -> createChart
-        // 4. Load-next-page pipeline
-        //      chartOnRedraw -> getData -> loadData -> updateChart
         // 5. Date change pipeline
         //      applyDateFilter -> getData -> loadData -> createChart
 
@@ -66,7 +63,6 @@ function MetricsService($http, $rootScope, $compile) {
         this.launch = function (scope) {
             var root = 'Oranj';  // dummy root name, should be returned by Oranj API
             var rootId = -1;
-            this.canLoadMore = false;
 
             this.getData(root, rootId, 0);
 
@@ -88,14 +84,13 @@ function MetricsService($http, $rootScope, $compile) {
         };
 
         this.drillDown = function (name, id) {
-            this.canLoadMore = false;
             if (this.current_level >= 2) {
                 alert('Cannot drilldown anymore!');
                 return; //level number overflowed, cannot drilldown anymore
             }
 
             var new_level = this.current_level + 1;
-         
+
 
             if (new_level == this.level_list.length) {
                 this.getDataForLevel(name, id, 0, new_level);
@@ -119,39 +114,38 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.drillToLevel = function (level) {
-            this.canLoadMore = false;
             // shouldn't replace the chart until this onClick function terminates
             // it seems that Promise is too faster and still causes error compared to setTimeOut
             // could fix later
             setTimeout(function () {
-                if(MetricsService.self.applyDateFilter(level)){
+                if (MetricsService.self.applyDateFilter(level)) {
                     MetricsService.self.current_level = level;
                     MetricsService.self.createChart();
                 }
             }, 10);
         }
 
-        this.scrollToLoad = function (chart) {
-            var self = MetricsService.self;
-            if (chart.xAxis) {
+        // this.scrollToLoad = function (chart) {
+        //     var self = MetricsService.self;
+        //     if (chart.xAxis) {
 
-                var extremes = chart.xAxis[0].getExtremes();
-                if (extremes && extremes.max == extremes.dataMax) {
-                    var current_level = self.level_list[self.current_level];
-                    var last = current_level['last'];
+        //         var extremes = chart.xAxis[0].getExtremes();
+        //         if (extremes && extremes.max == extremes.dataMax) {
+        //             var current_level = self.level_list[self.current_level];
+        //             var last = current_level['last'];
 
-                    if (last) {
-                        return;
-                    }
+        //             if (self.controllerName.localeCompare("aum") === 0 ? !last : last) {
+        //                 return;
+        //             }
 
-                    if (self.canLoadMore) {
-                        self.canLoadMore = false;
-                        self.doUpdate = true;
-                        self.getDataForPage(current_level['page'] + 1, self.current_level);
-                    }
-                }
-            }
-        }
+        //             if (self.canLoadMore) {
+        //                 self.canLoadMore = false;
+        //                 self.doUpdate = true;
+        //                 self.getDataForPage(current_level['page'] + 1, self.current_level);
+        //             }
+        //         }
+        //     }
+        // }
 
         this.getDataForPage = function (page, level) {
             this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level);
@@ -162,7 +156,6 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.getDataForLevel = function (name, id, page, level) {
-            this.canLoadMore = false;
 
             this.showLoading();
 
@@ -172,6 +165,9 @@ function MetricsService($http, $rootScope, $compile) {
             var endDate = !this.endDate ? null : this.endDate.toISOString().slice(0, 10);
             var startDate = !this.startDate ? null : this.startDate.toISOString().slice(0, 10);
 
+            var startName = this.controllerName.localeCompare("aum") === 0 ? "previousDate" : "startDate";
+            var endName = this.controllerName.localeCompare("aum") === 0 ? "currentDate" : "endDate";
+
 
             // construct url based on current drilldown level
             if (level === 0) {
@@ -180,20 +176,20 @@ function MetricsService($http, $rootScope, $compile) {
                 baseUrl = domain + subdomain + "/advisors?page=" + page + "&firmId=" + id;
             } else if (level === 2) {
                 baseUrl = domain + subdomain + "/clients?page=" + page + "&advisorId=" + id;
-            }else{
+            } else {
                 console.log("Invalid level!");
                 MetricsService.self.hideLoading();
                 return;
             }
 
-            baseUrl = !startDate ? baseUrl : baseUrl + "&startDate=" + startDate;
-            baseUrl = !endDate ? baseUrl : baseUrl + "&endDate=" + endDate;
+            baseUrl = !startDate ? baseUrl : baseUrl + "&" + startName + "=" + startDate;
+            baseUrl = !endDate ? baseUrl : baseUrl + "&" + endName + "=" + endDate;
 
             console.log(baseUrl);
             this.getDataFromApi(baseUrl, name, id, page, level);
         }
 
-        this.getDataFromApi = function (newUrl, name, id, page, level) {
+        this.getDataFromApi = function (newUrl, name, id, page, level, data) {
             if (this.USE_DUMMY_DATA) {
                 this.current_level = level;
                 var type;
@@ -204,7 +200,9 @@ function MetricsService($http, $rootScope, $compile) {
                 } else if (level === 2) {
                     type = this.data3;
                 }
-                this.loadData(type, name, id, page, false);
+                var last = this.controllerName.localeCompare("aum") === 0 ? true : false;
+
+                this.loadData(type, name, id, page, last);
                 return;
             }
 
@@ -220,15 +218,22 @@ function MetricsService($http, $rootScope, $compile) {
                 }
 
                 self.current_level = level;
-                var last = response.data['last'];
-                if (self.controllerName.localeCompare("netWorth") === 0) {
+                var last = self.controllerName.localeCompare("aum") === 0 ? response.data['hasNext'] : response.data['last'];;
+                if (self.controllerName.localeCompare("goals") != 0) {
+                    // if(!data){
+                    //     data = {};
+                    //     data[type] = 
+                    // }
                     self.loadData(response.data.data, name, id, page, last);
                 } else {
+                    // if(!data){
+                    //     data = [];
+                    // }
                     self.loadData(response.data[type], name, id, page, last);
                 }
             }, function myError(response, error) {
                 console.log("Error " + response.status + ": " + response.statusText + "!");
-               
+
                 MetricsService.self.hideLoading();
             });
         }
@@ -257,11 +262,17 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.createChart = function () {
             this.hideLoading();
-            
+
+            var last = this.level_list[this.current_level]['last'];
+
+            if (last) {
+                return;
+            }
+
             if (!this.doUpdate) {
                 this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
+                this.doUpdate = true;
             } else {
-                this.doUpdate = false;
                 this.chart.update(this.level_list[this.current_level]['option']);
                 this.chartOnLoad(true);
             }
@@ -365,8 +376,7 @@ function MetricsService($http, $rootScope, $compile) {
                 type: 'column',
                 zoomType: 'y',
                 events: {
-                    load: this.chartOnLoad,
-                    redraw: this.chartOnRedraw
+                    load: this.chartOnLoad
                 },
             }
 
@@ -394,9 +404,9 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.xAxisSelector = function (input) {
             var xAxis = {
-                scrollbar: {
-                    enabled: true
-                },
+                // scrollbar: {
+                //     enabled: true
+                // },
                 categories: this.prepareCategories(input)
             };
             return xAxis;
@@ -437,6 +447,7 @@ function MetricsService($http, $rootScope, $compile) {
                     }
                 },
                 series: {
+                    turboThreshold:9999999,
                     cursor: 'pointer',
                     point: {
                         events: {
@@ -486,18 +497,55 @@ function MetricsService($http, $rootScope, $compile) {
         this.chartOnLoad = function (isUpdated) {
             var self = MetricsService.self;
 
-            
-
+            var chart;
             if (isUpdated === true) {
-                self.baseChartOnLoad(this.chart);
-             //   self.createPathSelector(this.chart); // create new path selector on top left
+                chart = this.chart;
             } else {
-                self.baseChartOnLoad(this);
+                chart = this;
                 self.createPathSelector(this); // create new path selector on top left
-
             }
 
-            self.canLoadMore = true;
+            //self.baseChartOnLoad(chart);
+
+            if (self.controllerName.localeCompare("aum") === 0) {
+                // lighten the color of previous date bar
+                chart.series.forEach(function (x) {
+
+                    if (x.options.stackId === 1) {
+                        return;
+                    }
+                    var hex = x.color;
+                    var percent = 50;
+
+                    // increase brightness
+                    var colorCode;
+
+                    // strip the leading # if it's there
+                    hex = hex.replace(/^\s*#|\s*$/g, '');
+
+                    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+                    if (hex.length === 3) {
+                        hex = hex.replace(/(.)/g, '$1$1');
+                    }
+
+                    var r = parseInt(hex.substr(0, 2), 16),
+                        g = parseInt(hex.substr(2, 2), 16),
+                        b = parseInt(hex.substr(4, 2), 16);
+
+                    colorCode = '#' +
+                        ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+                        ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+                        ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+
+
+                    x.update({
+                        color: colorCode
+                    });
+                });
+            }
+
+            self.getDataForPage(self.level_list[self.current_level]['page'] + 1, self.current_level);
+
         }
 
         this.baseChartOnLoad = function (chart) {
@@ -511,9 +559,9 @@ function MetricsService($http, $rootScope, $compile) {
             });
         }
 
-        this.chartOnRedraw = function () {
-            MetricsService.self.scrollToLoad(this);
-        }
+        // this.chartOnRedraw = function () {
+        //     MetricsService.self.scrollToLoad(this);
+        // }
 
         // chart bar onclick event
         this.chartOnClick = function () {
@@ -541,11 +589,9 @@ function MetricsService($http, $rootScope, $compile) {
                 if (self.current_level === 0) {
                     name = x['name'];
                 } else if (self.current_level === 1) {
-                    //name = x['name'];
-                    name = x['firstName'] + " " + x['lastName'];
+                    name = self.controllerName.localeCompare("aum") === 0 ? x['name'] : x['firstName'] + " " + x['lastName'];
                 } else if (self.current_level === 2) {
-                    //name = x['name'];
-                    name = x['firstName'] + " " + x['lastName'];
+                    name = self.controllerName.localeCompare("aum") === 0 ? x['name'] : x['firstName'] + " " + x['lastName'];
                 }
                 return name;
             });
@@ -612,7 +658,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.clearDate = function () {
-            
+
             this.endDate = null;
             this.startDate = null;
 
@@ -631,7 +677,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.applyDateFilter = function (level) {
             var same = this.compareDate(level);
             if (!same) {
-                
+
                 this.getDataForPage(0, level);
 
             }
@@ -641,7 +687,7 @@ function MetricsService($http, $rootScope, $compile) {
 
 
         this.compareDate = function (level) {
-          
+
             var startDate_X = this.level_list[level]['start'];
             startDate_X = !startDate_X ? null : startDate_X.getTime();
 
@@ -746,7 +792,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.pathOnClick = function (element) {
-            
+
             var level = parseInt(element.dataset.level);
 
             //drill up

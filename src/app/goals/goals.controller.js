@@ -136,7 +136,13 @@ function GoalsController($scope, GoalsService) {
         goals.startDate = this.startDate; // bind data to service
         goals.endDate = this.endDate;
 
-        goals.checkDate();
+        try {
+            goals.checkDate();
+        }
+        catch (err) {
+            console.log("Error when checking date!");
+        }
+
 
         this.startDate = goals.startDate;
         this.endDate = goals.endDate;
@@ -144,20 +150,30 @@ function GoalsController($scope, GoalsService) {
 
 
     this.assignYTD = function () {
-        this.startDate = new Date(new Date().getFullYear(), 0, 1);
-        this.endDate = new Date();
-        goals.startDate = this.startDate; // bind data to service
-        goals.endDate = this.endDate;
-        goals.applyDateFilter();
+
+
+        try {
+            goals.assignYTD();
+        }
+        catch (err) {
+            console.log("Error when assigning YTD!");
+        }
+
+        this.startDate = goals.startDate;
+        this.endDate = goals.endDate;
     }
 
     this.clearDate = function () {
-        this.endDate = null;
-        this.startDate = null;
-        goals.startDate = this.startDate; // bind data to service
-        goals.endDate = this.endDate;
 
-        goals.applyDateFilter();
+        try {
+            goals.clearDate();
+        }
+        catch (err) {
+            console.log("Error when clearing dates!");
+        }
+
+        this.startDate = goals.startDate;
+        this.endDate = goals.endDate;
 
     }
 

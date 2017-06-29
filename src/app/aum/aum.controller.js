@@ -10,7 +10,7 @@ function AUMService($http, MetricsService) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
-        base.USE_DUMMY_DATA = false;
+        base.USE_DUMMY_DATA = true;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
@@ -223,7 +223,6 @@ function AUMService($http, MetricsService) {
 
         //aumDiffs
         base.prepareSeries = function (input) {
-            console.log(input);
             var aums = ['previous', 'current'];
             var aumMaps = Array.apply(null, Array(aums.length)).map(function () { return {}; }); // [{prev_map},{curr_map}]
             // for each of firms, advisors or clients
@@ -247,18 +246,18 @@ function AUMService($http, MetricsService) {
 
             });
 
-            //make sure both period have the same categories
+            //make sure legends are complete
             for (var key in aumMaps[0]) {
                 if (!aumMaps[1][key]) {
                     aumMaps[1][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
                 }
             }
 
-            for (var key in aumMaps[1]) {
-                if (!aumMaps[0][key]) {
-                    aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
-                }
-            }
+            // for (var key in aumMaps[1]) {
+            //     if (!aumMaps[0][key]) {
+            //         aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
+            //     }
+            // }
 
 
 
@@ -299,48 +298,48 @@ function AUMService($http, MetricsService) {
         }
 
 
-        base.mergeOption = function (options) {
-            // assume we are expanding the current chart
-            var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
+        // base.mergeOption = function (options) {
+        //     // assume we are expanding the current chart
+        //     var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
-            var originalLength = originalCategories.length;
-            var newLength = options['xAxis']['categories'].length;
+        //     var originalLength = originalCategories.length;
+        //     var newLength = options['xAxis']['categories'].length;
 
-            options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
+        //     options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
 
-            var originalSeries = this.level_list[this.current_level]['option']['series'];
-            var newSeries = options['series'];
+        //     var originalSeries = this.level_list[this.current_level]['option']['series'];
+        //     var newSeries = options['series'];
 
-            var seriesMap = Array.apply(null, Array(2)).map(function () { return {}; });;
+        //     var seriesMap = Array.apply(null, Array(2)).map(function () { return {}; });;
 
-            // 1. initialize seriesMap with originalSeries
-            originalSeries.forEach(function (element) {
-                seriesMap[element['stackId']][element['name']] = element;
-            });
+        //     // 1. initialize seriesMap with originalSeries
+        //     originalSeries.forEach(function (element) {
+        //         seriesMap[element['stackId']][element['name']] = element;
+        //     });
 
-            // 2. append newSeries
-            newSeries.forEach(function (element) {
-                if (seriesMap[element['stackId']][element['name']] == null) {
-                    var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
-                    seriesMap[element['stackId']][element['name']]['data'] = zeroPaddings.concat(element['data']);
-                } else {
-                    seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(element['data']);
+        //     // 2. append newSeries
+        //     newSeries.forEach(function (element) {
+        //         if (seriesMap[element['stackId']][element['name']] == null) {
+        //             var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
+        //             seriesMap[element['stackId']][element['name']]['data'] = zeroPaddings.concat(element['data']);
+        //         } else {
+        //             seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(element['data']);
 
-                }
-            });
+        //         }
+        //     });
 
-            // 3. fill the rest of originalSeries with zeros
-            originalSeries.forEach(function (element) {
-                if (seriesMap[element['stackId']][element['name']]['data'].length < originalLength + newLength) {
-                    var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
-                    seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(zeroPaddings);
-                }
-            });
+        //     // 3. fill the rest of originalSeries with zeros
+        //     originalSeries.forEach(function (element) {
+        //         if (seriesMap[element['stackId']][element['name']]['data'].length < originalLength + newLength) {
+        //             var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
+        //             seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(zeroPaddings);
+        //         }
+        //     });
 
 
-            options['series'] = Object.values(seriesMap[0]).concat(Object.values(seriesMap[1]));
-            return options;
-        }
+        //     options['series'] = Object.values(seriesMap[0]).concat(Object.values(seriesMap[1]));
+        //     return options;
+        // }
 
 
         return base;

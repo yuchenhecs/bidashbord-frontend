@@ -171,11 +171,11 @@ function MetricsService($http, $rootScope, $compile) {
 
             // construct url based on current drilldown level
             if (level === 0) {
-                baseUrl = domain + subdomain + "/firms?page=" + page;
+                baseUrl = domain + subdomain + "/firms?";
             } else if (level === 1) {
-                baseUrl = domain + subdomain + "/advisors?page=" + page + "&firmId=" + id;
+                baseUrl = domain + subdomain + "/advisors?firmId=" + id;
             } else if (level === 2) {
-                baseUrl = domain + subdomain + "/clients?page=" + page + "&advisorId=" + id;
+                baseUrl = domain + subdomain + "/clients?advisorId=" + id;
             } else {
                 console.log("Invalid level!");
                 MetricsService.self.hideLoading();
@@ -184,8 +184,8 @@ function MetricsService($http, $rootScope, $compile) {
 
             baseUrl = !startDate ? baseUrl : baseUrl + "&" + startName + "=" + startDate;
             baseUrl = !endDate ? baseUrl : baseUrl + "&" + endName + "=" + endDate;
+            baseUrl = baseUrl + "&page=" + page;
 
-            console.log(baseUrl);
             this.getDataFromApi(baseUrl, name, id, page, level);
         }
 
@@ -200,36 +200,58 @@ function MetricsService($http, $rootScope, $compile) {
                 } else if (level === 2) {
                     type = this.data3;
                 }
-                var last = this.controllerName.localeCompare("aum") === 0 ? true : false;
-
-                this.loadData(type, name, id, page, last);
+                
+                this.loadData(type, name, id, page);
                 return;
             }
 
+
+            var newUrl = newUrl.slice(0, newUrl.lastIndexOf("=") + 1) + page;
+
+            var type;
+            if (level === 0) {
+                type = 'firms';
+            } else if (level === 1) {
+                type = 'advisors';
+            } else if (level === 2) {
+                type = 'clients';
+            }
+            console.log(newUrl);
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = MetricsService.self;
-                var type;
-                if (level === 0) {
-                    type = 'firms';
-                } else if (level === 1) {
-                    type = 'advisors';
-                } else if (level === 2) {
-                    type = 'clients';
-                }
-
                 self.current_level = level;
-                var last = self.controllerName.localeCompare("aum") === 0 ? response.data['hasNext'] : response.data['last'];;
-                if (self.controllerName.localeCompare("goals") != 0) {
-                    // if(!data){
-                    //     data = {};
-                    //     data[type] = 
+                if (self.controllerName.localeCompare("netWorth") == 0) {
+                    var hasNext = self.controllerName.localeCompare("goals") === 0 ? response.data['last'] : response.data['hasNext'];;
+                
+
+                    // data = data ? data.concat(response.data[type]) : response.data[type];
+
+                    // if (!hasNext) {
+                    //     self.loadData(data, name, id, page, hasNext);
+                    // } else {
+                    //     self.getDataFromApi(newUrl, name, id, page + 1, level, data)
                     // }
-                    self.loadData(response.data.data, name, id, page, last);
-                } else {
-                    // if(!data){
-                    //     data = [];
-                    // }
-                    self.loadData(response.data[type], name, id, page, last);
+
+                    self.loadData(response.data.data, name, id, page);
+                } else if (self.controllerName.localeCompare("aum") == 0) {
+                    var hasNext = response.data.data['hasNext'];;
+                    data = data ? data.concat(response.data.data[type]) : response.data.data[type];
+
+                    if (!hasNext) {
+                        self.loadData(data, name, id, page);
+                    } else {
+                        self.getDataFromApi(newUrl, name, id, page + 1, level, data)
+                    }
+                }
+                else {
+                    var hasNext = response.data['last'];  
+                    data = data ? data.concat(response.data[type]) : response.data[type];
+
+                    if (hasNext) {
+                        self.loadData(data, name, id, page);
+                    } else {
+                        self.getDataFromApi(newUrl, name, id, page + 1, level, data)
+                    }
                 }
             }, function myError(response, error) {
                 console.log("Error " + response.status + ": " + response.statusText + "!");
@@ -238,7 +260,7 @@ function MetricsService($http, $rootScope, $compile) {
             });
         }
 
-        this.loadData = function (input, name, id, page, last) {
+        this.loadData = function (input, name, id, page) {
 
             var currentOptions = {
                 chart: this.chartSelector(),
@@ -254,7 +276,7 @@ function MetricsService($http, $rootScope, $compile) {
 
             currentOptions = Object.assign({}, this.optionTemplate, currentOptions);
 
-            this.createNewLevel(currentOptions, name, id, page, last); // update drilldown level and prepare chart data
+            this.createNewLevel(currentOptions, name, id, page); // update drilldown level and prepare chart data
             this.createChart(); // update drilldown level and prepare chart data
         }
 
@@ -262,43 +284,28 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.createChart = function () {
             this.hideLoading();
-
-            var last = this.level_list[this.current_level]['last'];
-
-            if (last) {
-                return;
-            }
-
-            if (!this.doUpdate) {
-                this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
-                this.doUpdate = true;
-            } else {
-                this.chart.update(this.level_list[this.current_level]['option']);
-                this.chartOnLoad(true);
-            }
-
+            this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
         }
 
 
         //------------------------------------ Pipeline helper ---------------------------------------------------------------
 
 
-        this.createNewLevel = function (options, name, id, page, last) {
+        this.createNewLevel = function (options, name, id, page) {
 
             var startDate = !this.startDate ? null : new Date(this.startDate);
             var endDate = !this.endDate ? null : new Date(this.endDate);
 
-            if (page > 0) { // need to merge with existing options
-                options = this.mergeOption(options);
-            }
+            // if (page > 0) { // need to merge with existing options
+            //     options = this.mergeOption(options);
+            // }
             var newLevel = {
                 option: options,
                 name: name,
                 id: id,
                 start: startDate,
                 end: endDate,
-                page: page,
-                last: last
+                page: page
             };
 
 
@@ -309,48 +316,48 @@ function MetricsService($http, $rootScope, $compile) {
             }
         }
 
-        this.mergeOption = function (options) {
-            // assume we are expanding the current chart
-            var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
+        // this.mergeOption = function (options) {
+        //     // assume we are expanding the current chart
+        //     var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
 
-            var originalLength = originalCategories.length;
-            var newLength = options['xAxis']['categories'].length;
+        //     var originalLength = originalCategories.length;
+        //     var newLength = options['xAxis']['categories'].length;
 
-            options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
+        //     options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
 
-            var originalSeries = this.level_list[this.current_level]['option']['series'];
-            var newSeries = options['series'];
+        //     var originalSeries = this.level_list[this.current_level]['option']['series'];
+        //     var newSeries = options['series'];
 
-            var seriesMap = {};
+        //     var seriesMap = {};
 
-            // 1. initialize seriesMap with originalSeries
-            originalSeries.forEach(function (element) {
-                seriesMap[element['name']] = element;
-            });
+        //     // 1. initialize seriesMap with originalSeries
+        //     originalSeries.forEach(function (element) {
+        //         seriesMap[element['name']] = element;
+        //     });
 
-            // 2. append newSeries
-            newSeries.forEach(function (element) {
-                if (!seriesMap[element['name']]) {
-                    var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
-                    seriesMap[element['name']]['data'] = zeroPaddings.concat(element['data']);
-                } else {
-                    seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(element['data']);
+        //     // 2. append newSeries
+        //     newSeries.forEach(function (element) {
+        //         if (!seriesMap[element['name']]) {
+        //             var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
+        //             seriesMap[element['name']]['data'] = zeroPaddings.concat(element['data']);
+        //         } else {
+        //             seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(element['data']);
 
-                }
-            });
+        //         }
+        //     });
 
-            // 3. fill the rest of originalSeries with zeros
-            originalSeries.forEach(function (element) {
-                if (seriesMap[element['name']]['data'].length < originalLength + newLength) {
-                    var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
-                    seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(zeroPaddings);
-                }
-            });
+        //     // 3. fill the rest of originalSeries with zeros
+        //     originalSeries.forEach(function (element) {
+        //         if (seriesMap[element['name']]['data'].length < originalLength + newLength) {
+        //             var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
+        //             seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(zeroPaddings);
+        //         }
+        //     });
 
-            options['series'] = Object.values(seriesMap);
+        //     options['series'] = Object.values(seriesMap);
 
-            return options;
-        }
+        //     return options;
+        // }
 
 
 
@@ -447,7 +454,7 @@ function MetricsService($http, $rootScope, $compile) {
                     }
                 },
                 series: {
-                    turboThreshold:9999999,
+                    turboThreshold: 0,
                     cursor: 'pointer',
                     point: {
                         events: {
@@ -459,6 +466,7 @@ function MetricsService($http, $rootScope, $compile) {
                     }
                 },
                 column: {
+                     animation: true,
                     stacking: 'normal',
                     dataLabels: {
                         enabled: false,
@@ -544,7 +552,7 @@ function MetricsService($http, $rootScope, $compile) {
                 });
             }
 
-            self.getDataForPage(self.level_list[self.current_level]['page'] + 1, self.current_level);
+            //self.getDataForPage(self.level_list[self.current_level]['page'] + 1, self.current_level);
 
         }
 

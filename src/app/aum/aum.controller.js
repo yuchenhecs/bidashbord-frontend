@@ -172,8 +172,6 @@ function AUMService($http, MetricsService) {
             ]
         };
 
-
-
         base.subtitleSelector = function () {
             var subtitle = {
                 text: "Note: lighter bar - previous quarter, darker bar - current quarter",
@@ -190,7 +188,7 @@ function AUMService($http, MetricsService) {
             return tooltip;
         }
 
-        this.legendSelector = function () {
+        base.legendSelector = function () {
             var legend = {
                 align: 'right',
                 verticalAlign: 'top',

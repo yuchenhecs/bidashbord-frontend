@@ -22,8 +22,6 @@ function MetricsService($http, $rootScope, $compile) {
 
         Highcharts.setOptions(colorTheme);
 
-        // init
-        //MetricsService.self = this; // singleton
         this.$http = $http;
         this.$compile = $compile;
 
@@ -42,7 +40,8 @@ function MetricsService($http, $rootScope, $compile) {
         this.optionTemplate = {
             credits: {
                 enabled: false
-            }
+            },
+            series: [{},{},{},{},{},{},{},{}]
         };
 
 
@@ -61,6 +60,7 @@ function MetricsService($http, $rootScope, $compile) {
 
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
+
             var root = 'Oranj';  // dummy root name, should be returned by Oranj API
             var rootId = -1;
 
@@ -69,18 +69,6 @@ function MetricsService($http, $rootScope, $compile) {
             if (this.showDatepicker)
                 this.createDatepicker(scope);
 
-
-            // scope.$watch(function () {
-            //     return angular.element(document.getElementById("main")).attr('class');
-            // }, function (newValue) {
-            //     var chart = MetricsService.self.chart;
-
-            //     if (chart != null) {
-            //         setTimeout(function (c) {
-            //             c.reflow();
-            //         }, 300, chart);
-            //     }
-            // });
         };
 
         this.drillDown = function (name, id) {
@@ -125,28 +113,6 @@ function MetricsService($http, $rootScope, $compile) {
             }, 10);
         }
 
-        // this.scrollToLoad = function (chart) {
-        //     var self = MetricsService.self;
-        //     if (chart.xAxis) {
-
-        //         var extremes = chart.xAxis[0].getExtremes();
-        //         if (extremes && extremes.max == extremes.dataMax) {
-        //             var current_level = self.level_list[self.current_level];
-        //             var last = current_level['last'];
-
-        //             if (self.controllerName.localeCompare("aum") === 0 ? !last : last) {
-        //                 return;
-        //             }
-
-        //             if (self.canLoadMore) {
-        //                 self.canLoadMore = false;
-        //                 self.doUpdate = true;
-        //                 self.getDataForPage(current_level['page'] + 1, self.current_level);
-        //             }
-        //         }
-        //     }
-        // }
-
         this.getDataForPage = function (page, level) {
             this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level);
         }
@@ -156,6 +122,8 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.getDataForLevel = function (name, id, page, level) {
+           
+
 
             this.showLoading();
 
@@ -212,7 +180,7 @@ function MetricsService($http, $rootScope, $compile) {
 
                 var data = response;
                 data['data'] = response[type];
-                
+
                 this.loadData(data, name, id);
                 return;
             }
@@ -292,8 +260,12 @@ function MetricsService($http, $rootScope, $compile) {
 
 
         this.createChart = function () {
+            console.time('time');
             this.hideLoading();
             this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
+            //this.chart.update(this.level_list[this.current_level]['option']);
+
+            console.timeEnd('time');
         }
 
 
@@ -386,10 +358,12 @@ function MetricsService($http, $rootScope, $compile) {
         this.chartSelector = function () {
             var chart = {
                 type: 'column',
-                zoomType: 'y',
+                zoomType: 'xy',
                 events: {
                     load: this.chartOnLoad
                 },
+                panning: true,
+                panKey: 'shift'
             }
 
             return chart;
@@ -417,10 +391,9 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.xAxisSelector = function (input) {
             var xAxis = {
-                // scrollbar: {
-                //     enabled: true
-                // },
-                categories: this.prepareCategories(input.data)
+                categories: this.prepareCategories(input.data),
+                crosshair: false
+
             };
             return xAxis;
         }
@@ -432,7 +405,6 @@ function MetricsService($http, $rootScope, $compile) {
                     text: 'Number of goals'
                 },
                 stackLabels: {
-                    enabled: true,
                     style: {
                         fontWeight: 'bold',
                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
@@ -446,7 +418,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.tooltipSelector = function () {
             var tooltip = {
                 formatter: this.formatter,
-                shared: true
+                shared: false
             }
 
             return tooltip;
@@ -468,11 +440,11 @@ function MetricsService($http, $rootScope, $compile) {
                         }
                     },
                     marker: {
-                        enabled: true
-                    }
+                        enabled: false
+                    },
+                    animation: false
                 },
                 column: {
-                    animation: true,
                     stacking: 'normal',
                     dataLabels: {
                         enabled: false,
@@ -557,25 +529,9 @@ function MetricsService($http, $rootScope, $compile) {
                     });
                 });
             }
-
-            //self.getDataForPage(self.level_list[self.current_level]['page'] + 1, self.current_level);
-
         }
 
-        this.baseChartOnLoad = function (chart) {
-            var xSetMax = this.MAX_COLUMN_NUM;
-            var xDataMax = chart.xAxis[0].getExtremes().dataMax;
-            var xMax = xDataMax < xSetMax ? xDataMax : xSetMax;
 
-            // limit max number of columns shown
-            chart.xAxis[0].update({
-                max: xMax
-            });
-        }
-
-        // this.chartOnRedraw = function () {
-        //     MetricsService.self.scrollToLoad(this);
-        // }
 
         // chart bar onclick event
         this.chartOnClick = function () {
@@ -584,14 +540,24 @@ function MetricsService($http, $rootScope, $compile) {
 
         // tooltip formatter
         this.formatter = function () {
+            // var s = '<b>' + this.x + '</b>';
+            // this.points.forEach(function (element) {
+            //     //element.hover
+            //     if (!element.y || element.y === 0) {
+            //         return;
+            //     }
+            //     s += '<br/>' + element.series.name + ': ' + element.y;
+            // });
+
             var s = '<b>' + this.x + '</b>';
-            this.points.forEach(function (element) {
-                //element.hover
-                if (!element.y || element.y === 0) {
-                    return;
+
+            this.series.chart.series.forEach(function (series) {
+                if (series.processedYData[this.point.index]) {
+                    s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
                 }
-                s += '<br/>' + element.series.name + ': ' + element.y;
-            });
+
+            }, this);
+
             return s;
         }
 

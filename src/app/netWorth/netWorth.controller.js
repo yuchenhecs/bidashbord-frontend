@@ -147,7 +147,7 @@ function NetWorthService(MetricsService) {
       var xAxis;
       xAxis = {
         categories: this.prepareCategories(input.data),
-        crosshair: false
+        crosshair: true
       };
 
       return xAxis;

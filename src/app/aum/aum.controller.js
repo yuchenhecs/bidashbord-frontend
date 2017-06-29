@@ -213,6 +213,8 @@ function AUMService($http, MetricsService) {
 
             var currentStack = this.series.userOptions['stackId'];
 
+
+            // TODO: WILL BUG OUT WHEN ZOOM IN !!!!!!!!!!
             this.series.chart.series.forEach(function (series) {
                 if (currentStack === series.userOptions['stackId'] && series.processedYData[this.point.index]) {
                     s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
@@ -225,7 +227,6 @@ function AUMService($http, MetricsService) {
         }
 
 
-        //aumDiffs
         base.prepareSeries = function (input) {
             var aums = ['previous', 'current'];
             var aumMaps = Array.apply(null, Array(aums.length)).map(function () { return {}; }); // [{prev_map},{curr_map}]

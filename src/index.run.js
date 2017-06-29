@@ -103,6 +103,10 @@ function runBlock($location, $rootScope) {
                 {
                     name: 'Net Worth',
                     state: 'netWorth'
+                },
+                {
+                    name: 'Login Stats',
+                    state: 'logins'
                 }
             ]
         },

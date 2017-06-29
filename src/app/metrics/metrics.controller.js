@@ -403,13 +403,15 @@ function MetricsService($http, $rootScope, $compile) {
                 min: 0,
                 title: {
                     text: 'Number of goals'
-                },
-                stackLabels: {
-                    style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                    }
                 }
+                // ,
+                // stackLabels: {
+                //     style: {
+                //         fontWeight: 'bold',
+                //         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                //     },
+                //     enabled: true
+                // }
             }
 
             return yAxis;
@@ -418,7 +420,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.tooltipSelector = function () {
             var tooltip = {
                 formatter: this.formatter,
-                shared: false
+                shared: true
             }
 
             return tooltip;
@@ -442,7 +444,7 @@ function MetricsService($http, $rootScope, $compile) {
                     marker: {
                         enabled: false
                     },
-                    animation: false
+                    animation: true
                 },
                 column: {
                     stacking: 'normal',
@@ -540,24 +542,14 @@ function MetricsService($http, $rootScope, $compile) {
 
         // tooltip formatter
         this.formatter = function () {
-            // var s = '<b>' + this.x + '</b>';
-            // this.points.forEach(function (element) {
-            //     //element.hover
-            //     if (!element.y || element.y === 0) {
-            //         return;
-            //     }
-            //     s += '<br/>' + element.series.name + ': ' + element.y;
-            // });
-
             var s = '<b>' + this.x + '</b>';
-
-            this.series.chart.series.forEach(function (series) {
-                if (series.processedYData[this.point.index]) {
-                    s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
+            this.points.forEach(function (element) {
+                //element.hover
+                if (!element.y || element.y === 0) {
+                    return;
                 }
-
-            }, this);
-
+                s += '<br/>' + element.series.name + ': ' + element.y;
+            });
             return s;
         }
 

@@ -6,9 +6,7 @@ angular
 function GoalsService(MetricsService) {
     return function () {
         // most code is written in MetricsController
-
         var base = new MetricsService();
-        GoalsService.self = base;
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/goals";

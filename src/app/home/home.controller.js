@@ -297,28 +297,73 @@ function HomeController($scope, $http, $log, chartData) {
 
 	// $scope.loginData = chartData.callApi(null, null, 'link tbd');
 
-	$scope.showData = {
-		total: 300,
-		unique: 100,
-		avgTime: 60
-	}
+	$scope.response = {
+		clients: {
+			total: 300,
+			unique: 100,
+			avgTime: 60,
+			totalChange: '+ 3',
+			uniqueChange: '- 10',
+			timeChange: '0'
+		},
+		prospects: {
+			total: 150,
+			unique: 120,
+			avgTime: 100,
+			totalChange: '- 20',
+			uniqueChange: '+ 1',
+			timeChange: '0'
+		}
+	};
+
+	$scope.showData = $scope.response['clients'];
 
 	var bool = true;
 
+	$scope.sign = 'pos';
+
 	$scope.changeData = function() {
 		if (bool) {
-			$scope.showData = {
-				total: 130,
-				unique: 50,
-				avgTime: 60
-			};
+			$scope.showData = $scope.response['clients'];
+			if ($scope.showData['totalChange'].charAt(0) === '-') {
+				$scope.totalSign = 'neg';
+			} else {
+				$scope.totalSign = 'pos';
+			}
+
+			if ($scope.showData['uniqueChange'].charAt(0) === '-') {
+				$scope.uniqueSign = 'neg';
+			} else {
+				$scope.uniqueSign = 'pos';
+			}
+
+			if ($scope.showData['timeChange'].charAt(0) === '-') {
+				$scope.timeSign = 'neg';
+			} else {
+				$scope.timeSign = 'pos';
+			}
+
 			bool = !bool;
 		} else {
-			$scope.showData = {
-				total: 300,
-				unique: 100,
-				avgTime: 60
-			};
+			$scope.showData = $scope.response['prospects'];
+			if ($scope.showData['totalChange'].charAt(0) === '-') {
+				$scope.totalSign = 'neg';
+			} else {
+				$scope.totalSign = 'pos';
+			}
+
+			if ($scope.showData['uniqueChange'].charAt(0) === '-') {
+				$scope.uniqueSign = 'neg';
+			} else {
+				$scope.uniqueSign = 'pos';
+			}
+
+			if ($scope.showData['timeChange'].charAt(0) === '-') {
+				$scope.timeSign = 'neg';
+			} else {
+				$scope.timeSign = 'pos';
+			}
+
 			bool = !bool;
 		}
 	}

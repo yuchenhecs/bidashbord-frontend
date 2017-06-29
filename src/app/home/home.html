@@ -85,7 +85,8 @@
                                 <div class="row loginNum">
                                     {{ showData["total"] }}
                                 </div>
-                                <div class="row">
+                                <div class="row {{ totalSign }}">
+                                    {{ showData['totalChange'] }}
                                 </div>
                                 <div class="row">
                                     Total Logins
@@ -95,7 +96,8 @@
                                 <div class="row loginNum">
                                     {{ showData["unique"] }}
                                 </div>
-                                <div class="row">
+                                <div class="row {{ uniqueSign }}">
+                                    {{ showData['uniqueChange'] }}
                                 </div>
                                 <div class="row">
                                     Unique Logins
@@ -105,10 +107,11 @@
                                 <div class="row loginNum">
                                     {{ showData["avgTime"] }} min
                                 </div>
-                                <div class="row">
+                                <div class="row {{ timeSign }}">
+                                    {{ showData['timeChange'] }}
                                 </div>
                                 <div class="row">
-                                    Average Time Spent
+                                    Average User Session
                                 </div>
                             </div>
                         </div>

@@ -200,8 +200,10 @@ function MetricsService($http, $rootScope, $compile) {
                 } else if (level === 2) {
                     type = this.data3;
                 }
-                
-                this.loadData(type, name, id, page);
+                var dummy = {
+                    data:type
+                };
+                this.loadData(dummy, name, id);
                 return;
             }
 
@@ -221,34 +223,23 @@ function MetricsService($http, $rootScope, $compile) {
                 var self = MetricsService.self;
                 self.current_level = level;
                 if (self.controllerName.localeCompare("netWorth") == 0) {
-                    var hasNext = self.controllerName.localeCompare("goals") === 0 ? response.data['last'] : response.data['hasNext'];;
-                
-
-                    // data = data ? data.concat(response.data[type]) : response.data[type];
-
-                    // if (!hasNext) {
-                    //     self.loadData(data, name, id, page, hasNext);
-                    // } else {
-                    //     self.getDataFromApi(newUrl, name, id, page + 1, level, data)
-                    // }
-
-                    self.loadData(response.data.data, name, id, page);
+                    self.PreProcessData(response, type, newUrl, name, id, page, level, data);
                 } else if (self.controllerName.localeCompare("aum") == 0) {
-                    var hasNext = response.data.data['hasNext'];;
-                    data = data ? data.concat(response.data.data[type]) : response.data.data[type];
-
-                    if (!hasNext) {
-                        self.loadData(data, name, id, page);
-                    } else {
-                        self.getDataFromApi(newUrl, name, id, page + 1, level, data)
-                    }
+                    self.PreProcessData(response, type, newUrl, name, id, page, level, data);
                 }
                 else {
-                    var hasNext = response.data['last'];  
-                    data = data ? data.concat(response.data[type]) : response.data[type];
+                    var hasNext = response.data['last'];
+                    if (data) {
+                        if (!data['data']) {
+                            data['data'] = [];
+                        }
+                        data['data'] = data['data'].concat(response.data[type]);
+                    } else {
+                        data = response.data;
+                    }
 
                     if (hasNext) {
-                        self.loadData(data, name, id, page);
+                        self.loadData(data, name, id);
                     } else {
                         self.getDataFromApi(newUrl, name, id, page + 1, level, data)
                     }
@@ -260,14 +251,33 @@ function MetricsService($http, $rootScope, $compile) {
             });
         }
 
-        this.loadData = function (input, name, id, page) {
+        this.PreProcessData = function (response, type, newUrl, name, id, page, level, data) {
+            var hasNext = response.data.data['hasNext'];
+
+            if (data) {
+                if (!data['data']) {
+                    data['data'] = [];
+                }
+                data['data'] = data['data'].concat(response.data.data[type]);
+            } else {
+                data = response.data.data;
+            }
+
+            if (!hasNext) {
+                this.loadData(data, name, id);
+            } else {
+                this.getDataFromApi(newUrl, name, id, page + 1, level, data)
+            }
+        }
+
+        this.loadData = function (input, name, id) {
 
             var currentOptions = {
                 chart: this.chartSelector(),
                 title: this.titleSelector(name),
                 subtitle: this.subtitleSelector(),
-                series: this.seriesSelector(input),
-                xAxis: this.xAxisSelector(input),
+                series: this.seriesSelector(input.data),
+                xAxis: this.xAxisSelector(input.data),
                 yAxis: this.yAxisSelector(),
                 tooltip: this.tooltipSelector(),
                 plotOptions: this.plotOptionsSelector(),
@@ -276,7 +286,7 @@ function MetricsService($http, $rootScope, $compile) {
 
             currentOptions = Object.assign({}, this.optionTemplate, currentOptions);
 
-            this.createNewLevel(currentOptions, name, id, page); // update drilldown level and prepare chart data
+            this.createNewLevel(currentOptions, name, id); // update drilldown level and prepare chart data
             this.createChart(); // update drilldown level and prepare chart data
         }
 
@@ -291,21 +301,17 @@ function MetricsService($http, $rootScope, $compile) {
         //------------------------------------ Pipeline helper ---------------------------------------------------------------
 
 
-        this.createNewLevel = function (options, name, id, page) {
+        this.createNewLevel = function (options, name, id) {
 
             var startDate = !this.startDate ? null : new Date(this.startDate);
             var endDate = !this.endDate ? null : new Date(this.endDate);
 
-            // if (page > 0) { // need to merge with existing options
-            //     options = this.mergeOption(options);
-            // }
             var newLevel = {
                 option: options,
                 name: name,
                 id: id,
                 start: startDate,
-                end: endDate,
-                page: page
+                end: endDate
             };
 
 
@@ -466,7 +472,7 @@ function MetricsService($http, $rootScope, $compile) {
                     }
                 },
                 column: {
-                     animation: true,
+                    animation: true,
                     stacking: 'normal',
                     dataLabels: {
                         enabled: false,

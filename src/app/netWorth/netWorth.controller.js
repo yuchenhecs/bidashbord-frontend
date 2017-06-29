@@ -17,7 +17,7 @@ function NetWorthService(MetricsService) {
     base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     // base.DOMAIN = "http://localhost:8080";
     base.SUB_DOMAIN = "/bi/networth";
-    base.USE_DUMMY_DATA = true;
+    base.USE_DUMMY_DATA = false;
     base.controllerName = "netWorth";
     base.showDatepicker = false;
 
@@ -103,9 +103,9 @@ function NetWorthService(MetricsService) {
     };
 
 
-    
 
-    function prepareSeries(input) {
+
+    base.prepareSeries = function (input) {
       var avgNet = [];
       var absNet = [];
       var series = [];
@@ -132,70 +132,32 @@ function NetWorthService(MetricsService) {
       return series;
     };
 
-    function createOptions(data) {
-
-      if (base.current_level === 0) {
-        data = data["firms"];
-      } else if (base.current_level === 1) {
-        data = data["advisors"];
-      } else if (base.current_level === 2) {
-        avgFirm = data['avgFirm'];
-        avgAdvsior = data['avgAdvsior'];
-        data = data["clients"];
-      }
-
-      seriesRaw = prepareSeries(data);
-
-      var currentOptions = {
-        title: titleSelector(data),
-        subtitle: subtitleSelector(data),
-        series: seriesSelector(data),
-        xAxis: xAxisSelector(data),
-        yAxis: yAxisSelector(data),
-        tooltip: tooltipSelector()
-      };
-
-
-      currentOptions = Object.assign({}, base.optionTemplate, currentOptions);
-
-      return currentOptions;
-    };
-
-
-    base.loadData = function (input, name, id, page, last) {
-      this.createNewLevel(createOptions(input), name, id, page, last); // update drilldown level and prepare chart data
-    };
-
-
-    function titleSelector(data) {
+    base.titleSelector = function (name) {
       var title;
 
       title = {
-        text: "Average and Absolute Net Worth across Firms"
+        text: "Average and Absolute Net Worth across" + name
       };
 
       return title;
     }
 
-    function subtitleSelector(data) {
-      var subtitle;
-      return subtitle;
-    }
 
-    function xAxisSelector(data) {
+    base.xAxisSelector = function (input) {
       var xAxis;
       xAxis = {
-        scrollbar: {
-          enabled: true
-        },
-        categories: prepareCategories(data),
+        categories: this.prepareCategories(input.data),
         crosshair: false
       };
 
       return xAxis;
     }
 
-    function yAxisSelector(data) {
+    base.yAxisSelector = function(input) {
+      var avgFirm = input['avgFirm'];
+      var avgAdvsior = input['avgAdvsior'];
+
+      
       var yAxis = [{
         labels: {
           format: '{value}',
@@ -208,7 +170,8 @@ function NetWorthService(MetricsService) {
           style: {
             color: Highcharts.getOptions().colors[1]
           }
-        }
+        },
+        opposite: true
       },
       { // Secondary yAxis
         title: {
@@ -222,8 +185,7 @@ function NetWorthService(MetricsService) {
           style: {
             color: Highcharts.getOptions().colors[0]
           }
-        },
-        opposite: true
+        }
       },
       {
         labels: {
@@ -269,7 +231,10 @@ function NetWorthService(MetricsService) {
       return yAxis;
     }
 
-    function seriesSelector(data) {
+    base.seriesSelector = function(input) {
+      console.log(input.data);
+      var seriesRaw = this.prepareSeries(input.data);
+
       var series = [{
         name: 'Absolute Net Worth',
         type: 'column',
@@ -314,7 +279,7 @@ function NetWorthService(MetricsService) {
       return series;
     }
 
-    this.tooltipSelector = function() {
+    this.tooltipSelector = function () {
       var tooltip;
       tooltip = {
         shared: true

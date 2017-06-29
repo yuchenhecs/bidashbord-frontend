@@ -18,155 +18,161 @@ function AUMService($http, MetricsService) {
         base.endDate = new Date();
         // base.test = 111;
 
-        base.data1 = [
-            {
-                "firmId": 283,
-                "name": "mattfirm",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 17292,
-                        "Non US Stock": 20529.6,
-                        "US Stock": 24773.06,
-                        "Cash": 28150.9,
-                        "Other": 9543.31
+        base.data1 = {
+            "firms": [
+                {
+                    "firmId": 283,
+                    "name": "mattfirm",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {
+                            "US Bond": 17292,
+                            "Non US Stock": 20529.6,
+                            "US Stock": 24773.06,
+                            "Cash": 28150.9,
+                            "Other": 9543.31
+                        }
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 304229.27,
+                        "assetClass": {
+                            "US Bond": 7292.4,
+                            "Non US Stock": 20529.6,
+                            "US Stock": 247713.06,
+                            "Cash": 18150.9,
+                            "Other": 10543.31
+                        }
                     }
                 },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 304229.27,
-                    "assetClass": {
-                        "US Bond": 7292.4,
-                        "Non US Stock": 20529.6,
-                        "US Stock": 247713.06,
-                        "Cash": 18150.9,
-                        "Other": 10543.31
+                {
+                    "firmId": 509,
+                    "name": "auto",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {}
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 133576.06,
+                        "assetClass": {
+                            "US Stock": 114459.75,
+                            "Cash": 1031.1,
+                            "Other": 18085.21
+                        }
                     }
                 }
-            },
-            {
-                "firmId": 509,
-                "name": "auto",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {}
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 133576.06,
-                    "assetClass": {
-                        "US Stock": 114459.75,
-                        "Cash": 1031.1,
-                        "Other": 18085.21
-                    }
-                }
-            }
-        ];
+            ]
+        };
 
 
-        base.data2 = [
-            {
-                "firmId": 283,
-                "name": "mattfirm",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 222.4,
-                        "Non US Stock": 33.6,
-                        "US Stock": 232.06,
-                        "Cash": 77.9,
-                        "Other": 88.31
+        base.data2 = {
+            "advisors": [
+                {
+                    "firmId": 283,
+                    "name": "mattfirm",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {
+                            "US Bond": 222.4,
+                            "Non US Stock": 33.6,
+                            "US Stock": 232.06,
+                            "Cash": 77.9,
+                            "Other": 88.31
+                        }
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 304229.27,
+                        "assetClass": {
+                            "US Bond": 123.4,
+                            "Non US Stock": 312.6,
+                            "US Stock": 411.06,
+                            "Cash": 11.9,
+                            "Other": 33.31
+                        }
                     }
                 },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 304229.27,
-                    "assetClass": {
-                        "US Bond": 123.4,
-                        "Non US Stock": 312.6,
-                        "US Stock": 411.06,
-                        "Cash": 11.9,
-                        "Other": 33.31
+                {
+                    "firmId": 509,
+                    "name": "auto",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {
+                            "US Bond": 1222.4,
+                            "Non US Stock": 233.6,
+                            "US Stock": 232.06,
+                            "Cash": 177.9,
+                            "Other": 188.31
+                        }
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 133576.06,
+                        "assetClass": {
+                            "US Stock": 233.75,
+                            "Cash": 444.1,
+                            "Other": 777.21
+                        }
                     }
                 }
-            },
-            {
-                "firmId": 509,
-                "name": "auto",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 1222.4,
-                        "Non US Stock": 233.6,
-                        "US Stock": 232.06,
-                        "Cash": 177.9,
-                        "Other": 188.31
-                    }
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 133576.06,
-                    "assetClass": {
-                        "US Stock": 233.75,
-                        "Cash": 444.1,
-                        "Other": 777.21
-                    }
-                }
-            }
-        ];
+            ]
+        };
 
-        base.data3 = [
-            {
-                "firmId": 283,
-                "name": "mattfirm",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {
-                        "US Bond": 89.4,
-                        "Non US Stock": 89.6,
-                        "US Stock": 78.06,
-                        "Cash": 99.9,
-                        "Other": 9.31
+        base.data3 = {
+            "clients": [
+                {
+                    "firmId": 283,
+                    "name": "mattfirm",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {
+                            "US Bond": 89.4,
+                            "Non US Stock": 89.6,
+                            "US Stock": 78.06,
+                            "Cash": 99.9,
+                            "Other": 9.31
+                        }
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 304229.27,
+                        "assetClass": {
+                            "US Bond": 89.4,
+                            "Non US Stock": 111.6,
+                            "US Stock": 22.06,
+                            "Cash": 33.9,
+                            "Other": 88.31
+                        }
                     }
                 },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 304229.27,
-                    "assetClass": {
-                        "US Bond": 89.4,
-                        "Non US Stock": 111.6,
-                        "US Stock": 22.06,
-                        "Cash": 33.9,
-                        "Other": 88.31
+                {
+                    "firmId": 509,
+                    "name": "auto",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {}
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 99.06,
+                        "assetClass": {
+                            "US Stock": 99.75,
+                            "Cash": 88.1,
+                            "Other": 66.21
+                        }
                     }
                 }
-            },
-            {
-                "firmId": 509,
-                "name": "auto",
-                "previous": {
-                    "date": "2017-06-12",
-                    "total": null,
-                    "assetClass": {}
-                },
-                "current": {
-                    "date": "2017-06-12",
-                    "total": 99.06,
-                    "assetClass": {
-                        "US Stock": 99.75,
-                        "Cash": 88.1,
-                        "Other": 66.21
-                    }
-                }
-            }
-        ];
+            ]
+        };
 
-        
+
 
         base.subtitleSelector = function () {
             var subtitle = {
@@ -353,7 +359,7 @@ function AUMService($http, MetricsService) {
 function AUMController($scope, AUMService) {
     var service = new AUMService();
 
-    
+
     this.startDate = service.startDate;
     this.endDate = service.endDate;
     this.today = new Date();

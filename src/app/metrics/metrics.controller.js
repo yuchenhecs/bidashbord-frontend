@@ -190,26 +190,6 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.getDataFromApi = function (newUrl, name, id, page, level, data) {
-            if (this.USE_DUMMY_DATA) {
-                this.current_level = level;
-                var type;
-                if (level === 0) {
-                    type = this.data1;
-                } else if (level === 1) {
-                    type = this.data2;
-                } else if (level === 2) {
-                    type = this.data3;
-                }
-                var dummy = {
-                    data:type
-                };
-                this.loadData(dummy, name, id);
-                return;
-            }
-
-
-            var newUrl = newUrl.slice(0, newUrl.lastIndexOf("=") + 1) + page;
-
             var type;
             if (level === 0) {
                 type = 'firms';
@@ -218,6 +198,28 @@ function MetricsService($http, $rootScope, $compile) {
             } else if (level === 2) {
                 type = 'clients';
             }
+
+            if (this.USE_DUMMY_DATA) {
+                this.current_level = level;
+                var response;
+                if (level === 0) {
+                    response = this.data1;
+                } else if (level === 1) {
+                    response = this.data2;
+                } else if (level === 2) {
+                    response = this.data3;
+                }
+
+                var data = response;
+                data['data'] = response[type];
+                
+                this.loadData(data, name, id);
+                return;
+            }
+
+
+            var newUrl = newUrl.slice(0, newUrl.lastIndexOf("=") + 1) + page;
+
             console.log(newUrl);
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = MetricsService.self;
@@ -230,12 +232,10 @@ function MetricsService($http, $rootScope, $compile) {
                 else {
                     var hasNext = response.data['last'];
                     if (data) {
-                        if (!data['data']) {
-                            data['data'] = [];
-                        }
                         data['data'] = data['data'].concat(response.data[type]);
                     } else {
                         data = response.data;
+                        data['data'] = response.data[type];
                     }
 
                     if (hasNext) {
@@ -255,15 +255,14 @@ function MetricsService($http, $rootScope, $compile) {
             var hasNext = response.data.data['hasNext'];
 
             if (data) {
-                if (!data['data']) {
-                    data['data'] = [];
-                }
                 data['data'] = data['data'].concat(response.data.data[type]);
             } else {
                 data = response.data.data;
+                data['data'] = response.data.data[type];
             }
 
             if (!hasNext) {
+                console.log(data);
                 this.loadData(data, name, id);
             } else {
                 this.getDataFromApi(newUrl, name, id, page + 1, level, data)
@@ -273,15 +272,15 @@ function MetricsService($http, $rootScope, $compile) {
         this.loadData = function (input, name, id) {
 
             var currentOptions = {
-                chart: this.chartSelector(),
+                chart: this.chartSelector(input),
                 title: this.titleSelector(name),
-                subtitle: this.subtitleSelector(),
-                series: this.seriesSelector(input.data),
-                xAxis: this.xAxisSelector(input.data),
-                yAxis: this.yAxisSelector(),
-                tooltip: this.tooltipSelector(),
-                plotOptions: this.plotOptionsSelector(),
-                legend: this.legendSelector()
+                subtitle: this.subtitleSelector(input),
+                series: this.seriesSelector(input),
+                xAxis: this.xAxisSelector(input),
+                yAxis: this.yAxisSelector(input),
+                tooltip: this.tooltipSelector(input),
+                plotOptions: this.plotOptionsSelector(input),
+                legend: this.legendSelector(input)
             };
 
             currentOptions = Object.assign({}, this.optionTemplate, currentOptions);
@@ -398,6 +397,7 @@ function MetricsService($http, $rootScope, $compile) {
 
 
         this.titleSelector = function (name) {
+
             var title = {
                 text: this.TITLE_TEMPLATE + name,
                 y: 30,
@@ -412,7 +412,7 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         this.seriesSelector = function (input) {
-            return this.prepareSeries(input);
+            return this.prepareSeries(input.data);
         }
 
         this.xAxisSelector = function (input) {
@@ -420,7 +420,7 @@ function MetricsService($http, $rootScope, $compile) {
                 // scrollbar: {
                 //     enabled: true
                 // },
-                categories: this.prepareCategories(input)
+                categories: this.prepareCategories(input.data)
             };
             return xAxis;
         }

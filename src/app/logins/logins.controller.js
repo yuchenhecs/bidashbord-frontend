@@ -97,9 +97,9 @@ function LoginsService(MetricsService) {
         //---------------------------------- Pipeline -----------------------------------------------------------------
 
         base.checkRange = function (range) {
-            if (this.isWeek === range) {
+            // if (this.isWeek === range) {
 
-            }
+            // }
             setTimeout(function () {
                 var self = LoginsService.self;
                 self.getDataForPage(0, self.current_level, range, self.isProspect);
@@ -111,6 +111,19 @@ function LoginsService(MetricsService) {
                 var self = LoginsService.self;
                 self.getDataForPage(0, self.current_level, self.isWeek, self.isProspect);
             }, 10);
+
+        }
+
+
+          
+    
+        base.OnRangeOrUserChange = function(){
+            var same = this.compareDate(level);
+            if (!same) {
+                this.getDataForPage(0, level);
+            }
+            return same;
+
 
         }
 
@@ -253,7 +266,10 @@ function LoginsService(MetricsService) {
         base.rangeOnClick = function (element) {
 
             var w = parseInt(element.dataset.isWeek) === 0 ? true : false;
+
             this.checkRange(w);
+
+
 
             // //drill up
             // MetricsService.self.drillToLevel(level);
@@ -274,20 +290,39 @@ function LoginsService(MetricsService) {
         base.createSwitch = function (scope) {
             var ctrl = this.controllerName;
             var switchHTML = `
-            <div>
-                <div layout="row"  layout-align="center center" >
-                    <md-radio-group ng-model="`+ ctrl + `.isProspect" ng-change="` + ctrl + `.checkUserType()" layout="row" style="padding:15px" >
-                        <md-radio-button ng-value="true" class="md-primary">Prospects</md-radio-button>
-                        <md-radio-button ng-value="false"> Clients </md-radio-button>
-                    </md-radio-group>
-                </div>
-            </div>
+                        <div class="row">
+                            <div class="oranj-toggle medium-one-color">
+                                <input id="user-switch" type="checkbox"  ng-model="`+ ctrl + `.isProspect" ng-change="` + ctrl + `.checkUserType()">
+                                <label for="user-switch">
+                                    <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
+                                </label>
+                            </div>
+                        </div>
             `;
-
-
 
             var chartHTML = angular.element(document.getElementById("chart-container"));
             chartHTML.append(this.$compile(switchHTML)(scope));
+        }
+
+        base.createNewLevel = function (options, name, id) {
+
+            //var startDate = !this.startDate ? null : new Date(this.startDate);
+            //var endDate = !this.endDate ? null : new Date(this.endDate);
+
+            var newLevel = {
+                option: options,
+                name: name,
+                id: id,
+                isWeek: this.isWeek,
+                isProspect: this.isProspect
+            };
+
+
+            if (this.current_level === this.level_list.length) {
+                this.level_list.push(newLevel);
+            } else {
+                this.level_list[this.current_level] = newLevel;
+            }
         }
 
         return base;
@@ -304,10 +339,8 @@ function LoginsController($scope, LoginsService) {
 
 
     this.checkUserType = function () {
-
         service.isWeek = this.isWeek;
         service.isProspect = this.isProspect;
-
 
         try {
             service.checkUserType();
@@ -318,11 +351,6 @@ function LoginsController($scope, LoginsService) {
 
         this.isWeek = service.isWeek;
         this.isProspect = service.isProspect;
-
-
-        // this.startDate = service.startDate;
-        // this.endDate = service.endDate;
-
     }
 
     service.launch($scope);

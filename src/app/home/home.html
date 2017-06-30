@@ -55,7 +55,73 @@
                             </div>
                         </div>
                         <div id="netWorthContainer">
-                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12 tile">
+                <div class="tile-outer">
+                    <div class="tile-inner">
+                        <div class="row tile-header">
+                            <div class="col-md-9">
+                                Login
+                            </div>
+                            <div class="col-md-3">
+                                <div class="more">
+                                    <a href="/#/login">More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 subtitle">
+                            Login Metrics from the Last 7 Days
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 loginText">
+                                <div class="row loginNum">
+                                    {{ showData["total"] }}
+                                </div>
+                                <div class="row {{ totalSign }}">
+                                    {{ showData['totalChange'] }}
+                                </div>
+                                <div class="row">
+                                    Total Logins
+                                </div>
+                            </div>
+                            <div class="col-md-4 loginText">
+                                <div class="row loginNum">
+                                    {{ showData["unique"] }}
+                                </div>
+                                <div class="row {{ uniqueSign }}">
+                                    {{ showData['uniqueChange'] }}
+                                </div>
+                                <div class="row">
+                                    Unique Logins
+                                </div>
+                            </div>
+                            <div class="col-md-4 loginText">
+                                <div class="row loginNum">
+                                    {{ showData["avgTime"] }} min
+                                </div>
+                                <div class="row {{ timeSign }}">
+                                    {{ showData['timeChange'] }}
+                                </div>
+                                <div class="row">
+                                    Average User Session
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="oranj-toggle medium-one-color">
+                                <input id="test" type="checkbox"  ng-model="ngModel" ng-change="changeData()">
+                                <label for="test">
+                                    <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

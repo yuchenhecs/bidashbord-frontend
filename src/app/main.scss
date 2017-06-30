@@ -30,8 +30,6 @@ $font-extended-sidebar:13px;
 $font-menu-tile:12px;
 $font-universal: 'Open Sans', sans-serif;
 
-
-
 body {
 	font-family: $font-universal;
 }
@@ -59,7 +57,7 @@ ul {
 
 .main-container {
 	padding: 64px 0 0 50px;
-    
+
 }
 
 .side-nav {
@@ -150,9 +148,21 @@ ul {
     left: $sub-sidebar-width+80px !important
 }
 
+.loginText {
+	text-align: center;
+	padding: 15px 0 15px 0;
 
+}
 
+.loginNum {
+	font-size: 65px;
+	color: #3EB6B5;
+}
 
+.subtitle {
+	text-align: center;
+	font-size: 14px;
+}
 
 .side-toggle {
         width: 20px;
@@ -232,6 +242,324 @@ ul {
 
 .curr-path-link{
     fill: red ;
+}
+
+.pos {
+	color: green;
+}
+
+.neg {
+	color: red;
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+//for toggle
+$color-green-active: #40B349;
+$color-green: #A1CB39;
+$color-blue: #11BEDF;
+
+@mixin oranj-toggle-appearance
+(
+    $oranj-toggle-off-color: $color-green,
+    $oranj-toggle-on-color: $color-blue,
+    $oranj-toggle-inactive-text: rgba(#000, 0.5),
+    $oranj-toggle-transition: cubic-bezier(0,1,0.5,1),
+    $oranj-toggle-width: 134px,
+    $oranj-toggle-height: 36px,
+    $oranj-toggle-border-radius: 4px,
+    $oranj-toggle-offset: 2px,
+    $oranj-toggle-label-font-size: 14px,
+    $oranj-toggle-switch-font-size: 12px,
+    $oranj-toggle-shadow: 0 3px 3px rgba(black, 0.2)
+) {
+    $oranj-toggle-switch-width: $oranj-toggle-width / 2;
+
+    input[type="checkbox"] {
+        ~ label {
+            .toggle-switch:after {
+                background-color: $oranj-toggle-off-color;
+            }
+        }
+
+        &:checked {
+            ~ label {
+                .toggle-switch {
+                    &:after {
+                        transform: translate3d($oranj-toggle-width - ($oranj-toggle-switch-width + $oranj-toggle-offset),0,0);
+                        background-color: $oranj-toggle-on-color;
+                    }
+                }
+            }
+        }
+    }
+
+    label {
+        font-size: $oranj-toggle-label-font-size;
+
+        .toggle-switch {
+            height: $oranj-toggle-height;
+            flex: 0 0 $oranj-toggle-width;
+            border-radius: $oranj-toggle-border-radius;
+            cursor: pointer;
+            transition: background-color 0.3s $oranj-toggle-transition;
+            background-color: #EFEFEF;
+
+
+            &:before {
+                left: $oranj-toggle-width/2;
+                font-size: $oranj-toggle-switch-font-size;
+                line-height: $oranj-toggle-height;
+                width: $oranj-toggle-width/2;
+                padding: 0 12px;
+                color: $oranj-toggle-inactive-text;
+            }
+
+            &:after {
+                top: $oranj-toggle-offset; left: $oranj-toggle-offset;
+                border-radius: $oranj-toggle-border-radius/2;
+                width: $oranj-toggle-switch-width - $oranj-toggle-offset;
+                line-height: $oranj-toggle-height - ($oranj-toggle-offset*2);
+                font-size: $oranj-toggle-switch-font-size;
+                color: #fff;
+                // Autoprefixer choked here, so making the prefixes explicit
+                -webkit-transition: -webkit-transform 0.3s $oranj-toggle-transition;
+                transition: transform 0.3s $oranj-toggle-transition;
+            }
+        }
+    }
+}
+
+.oranj-toggle {
+    position: relative;
+	width: 35%;
+	margin: auto;
+	padding-top: 20px;
+    *, *:before, *:after { box-sizing: border-box; }
+
+    input[type="checkbox"] {
+        opacity: 0;
+        position: absolute;
+        top: 0; left: 0;
+
+        &[disabled] ~ label {
+            pointer-events: none;
+
+            .toggle-switch {
+                opacity: 0.7;
+            }
+        }
+
+        &:checked {
+            ~ label {
+                .toggle-switch {
+                    &:before {
+                        content: attr(data-unchecked);
+                        left: 0;
+                    }
+
+                    &:after {
+                        content: attr(data-checked);
+                    }
+                }
+            }
+        }
+    }
+
+    label {
+        user-select: none;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .toggle-switch {
+            position: relative;
+
+            &:before {
+                content: attr(data-checked);
+                position: absolute;
+                top: 0;
+                text-transform: capitalize;
+                text-align: center;
+            }
+
+            &:after {
+                content: attr(data-unchecked);
+                position: absolute;
+                z-index: 5;
+                text-transform: capitalize;
+                text-align: center;
+                background: white;
+                transform: translate3d(0,0,0);
+            }
+        }
+    }
+
+    // Create toggles of different sizes by overriding the oranj-toggle-appearance mixin defaults
+    &.small-dual-color {
+        @include oranj-toggle-appearance (
+            #A1CB39,
+            #11BEDF,
+            rgba(#000, 0.5),
+            cubic-bezier(0,1,0.5,1),
+            140px, // Toggle width
+            26px,  // Toggle height
+            26px,   // Toggle border radius
+            0,   // Offset (distance btw switch and box)
+            14px,  // Label font size
+            12px,  // Switch font size
+            0 2px 2px rgba(black, 0.4) // Switch shadow on hover/focus
+        );
+    }
+
+    &.medium-one-color {
+        @include oranj-toggle-appearance (
+            #15325A,
+            #15325A,
+            rgba(#000, 0.5),
+            cubic-bezier(0,1,0.5,1),
+            300px, // Toggle width
+            30px,  // Toggle height
+            30px,   // Toggle border radius
+            0,   // Offset (distance btw switch and box)
+            14px,  // Label font size
+            14px,  // Switch font size
+            0 2px 2px rgba(black, 0.4) // Switch shadow on hover/focus
+        );
+
+        &.panel-footer {
+            position: absolute;
+            width: 300px;
+            left: calc(50% - 150px);
+            bottom: 25px
+        }
+
+        label {
+            font-weight: 300;
+
+            .toggle-switch:before {  padding: 0; }
+        }
+    }
+
+    &.large-dual-color {
+        @include oranj-toggle-appearance (
+            #A1CB39,
+            #11BEDF,
+            rgba(#000, 0.5),
+            cubic-bezier(0,1,0.5,1),
+            160px, // Toggle width
+            50px,  // Toggle height
+            4px,   // Toggle border radius
+            2px,   // Offset (distance btw switch and box)
+            14px,  // Label font size
+            14px,  // Switch font size
+            0 4px 4px rgba(black, 0.4) // Switch shadow on hover/focus
+        );
+    }
+}
+
+@keyframes fill-to-dark {
+    0% {
+        fill: #fff;
+    }
+    100% {
+        fill: $color-green-active;
+    }
+}
+
+.oranj-loading-ticker {
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+    height: 150px;
+    width: 350px;
+
+    #items {
+        transition: 1s ease-in-out;
+        transform: translateY(50px);
+    }
+
+    @for $i from 0 through 20 {
+        .item-#{$i} {
+            #items {
+                transform: translateY(($i * -50) + 50px);
+            }
+
+            #loadingCheck-#{$i}, #loadingCircleOutline-#{$i}{
+                animation: fill-to-dark 1s forwards;
+                animation-delay: 800ms;
+            }
+
+            // sloppy
+            #loadingCheck-#{$i - 1},
+            #loadingCircleOutline-#{$i - 1},
+            #loadingCheck-#{$i - 2},
+            #loadingCircleOutline-#{$i - 2} {
+                fill: #40B349;
+            }
+        }
+    }
+}
+
+.oranj-back-next {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #B5B7B9;
+    font-size: 16px;
+    font-weight: bold;
+
+    span {
+        &:first-child {
+            min-width: 55px;
+
+            i { padding-right: 10px; }
+        }
+        &:last-child {
+            text-align: right;
+            min-width: 55px;
+
+            i { padding-left: 10px; }
+        }
+    }
+}
+
+.progress-circle {
+    background-color: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    height: 15rem;
+    margin-right: 40px;
+    position: relative;
+    width: 15rem;
+
+    &:before {
+        align-items: center;
+        background-color: #fff;
+        border-radius: 50%;
+        content: attr(data-progress) '%';
+        display: flex;
+        font-size: 3rem;
+        justify-content: center;
+        position: absolute;
+        left: 1rem;
+        right: 1rem;
+        top: 1rem;
+        bottom: 1rem;
+        transition: transform 0.2s ease;
+    }
+
+    &:after {
+        border-radius: 50%;
+        content: '';
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+    }
+
+    &:hover:before, &:focus:before {
+        transform: scale(0.8);
+    }
 }
 
 /**

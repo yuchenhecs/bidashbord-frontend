@@ -32,29 +32,30 @@ function MetricsService($http, $rootScope, $compile) {
         this.endDate = null;
         this.isRequired = false;
         this.current_level = 0;
-
         this.doUpdate = false;
-
 
         //chart option template
         this.optionTemplate = {
             credits: {
                 enabled: false
-            },
-            series: [{},{},{},{},{},{},{},{}]
+            }
         };
 
 
 
         // 1. Initial launch pipeline 
         //      launch -> getData -> loadData -> createChart
-        // 2. Drilldown pipeline
-        //      drillDown -> getData -> loadData -> createChart
-        //      drillDown -> createChart
-        // 3. Drill-to-certain-Level pipeline
+        // 2. When-click-on-bars pipeline
+        //      drillDown -> getData -> loadData -> createChart  
+        //      drillDown -> createChart  (When previous data is available)
+        // 3. When-click-on-path-selector pipeline
         //      drillToLevel -> createChart
-        // 5. Date change pipeline
+        // 4. Date-change pipeline
         //      applyDateFilter -> getData -> loadData -> createChart
+        // 5. Week/Month and Prospects/Clients pipeline  (in LoginsController.js)
+        //      
+
+
 
 
 
@@ -66,14 +67,15 @@ function MetricsService($http, $rootScope, $compile) {
 
             this.getData(root, rootId, 0);
 
-            if (this.showDatepicker)
-                this.createDatepicker(scope);
+            this.createOffChartWidgets(scope);
 
         };
 
         this.drillDown = function (name, id) {
             if (this.current_level >= 2) {
                 alert('Cannot drilldown anymore!');
+
+
                 return; //level number overflowed, cannot drilldown anymore
             }
 
@@ -113,28 +115,30 @@ function MetricsService($http, $rootScope, $compile) {
             }, 10);
         }
 
-        this.getDataForPage = function (page, level) {
-            this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level);
+        this.applyDateFilter = function (level) {
+            var same = this.compareDate(level);
+            if (!same) {
+                this.getDataForPage(0, level);
+            }
+            return same;
+        }
+
+        this.getDataForPage = function (page, level, isWeek, isProspect) {
+            this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level, isWeek, isProspect);
         }
 
         this.getData = function (name, id, page) {
-            this.getDataForLevel(name, id, page, this.current_level);
+            this.getDataForLevel(name, id, page, this.current_level, this.isWeek, this.isProspect);
         }
 
-        this.getDataForLevel = function (name, id, page, level) {
-           
-
+        this.getDataForLevel = function (name, id, page, level, isWeek, isProspect) {
 
             this.showLoading();
 
             var domain = this.DOMAIN;
             var subdomain = this.SUB_DOMAIN;
             var baseUrl;
-            var endDate = !this.endDate ? null : this.endDate.toISOString().slice(0, 10);
-            var startDate = !this.startDate ? null : this.startDate.toISOString().slice(0, 10);
 
-            var startName = this.controllerName.localeCompare("aum") === 0 ? "previousDate" : "startDate";
-            var endName = this.controllerName.localeCompare("aum") === 0 ? "currentDate" : "endDate";
 
 
             // construct url based on current drilldown level
@@ -150,14 +154,27 @@ function MetricsService($http, $rootScope, $compile) {
                 return;
             }
 
+            var endDate = !this.endDate ? null : this.endDate.toISOString().slice(0, 10);
+            var startDate = !this.startDate ? null : this.startDate.toISOString().slice(0, 10);
+
+            var startName = this.controllerName.localeCompare("aum") === 0 ? "previousDate" : "startDate";
+            var endName = this.controllerName.localeCompare("aum") === 0 ? "currentDate" : "endDate";
+
+            // add start/end date
             baseUrl = !startDate ? baseUrl : baseUrl + "&" + startName + "=" + startDate;
             baseUrl = !endDate ? baseUrl : baseUrl + "&" + endName + "=" + endDate;
+
+            // add range and user for Logins
+            baseUrl = isWeek === undefined ? baseUrl : baseUrl + "&range=" + (isWeek ? "week" : "month");
+            baseUrl = isProspect === undefined ? baseUrl : baseUrl + "&user=" + (isProspect ? "prospect" : "client");
+
+            // add page number
             baseUrl = baseUrl + "&page=" + page;
 
-            this.getDataFromApi(baseUrl, name, id, page, level);
+            this.getDataFromApi(baseUrl, name, id, page, level, isWeek, isProspect);
         }
 
-        this.getDataFromApi = function (newUrl, name, id, page, level, data) {
+        this.getDataFromApi = function (newUrl, name, id, page, level, isWeek, isProspect, data) {
             var type;
             if (level === 0) {
                 type = 'firms';
@@ -167,8 +184,10 @@ function MetricsService($http, $rootScope, $compile) {
                 type = 'clients';
             }
 
+            var newUrl = newUrl.slice(0, newUrl.lastIndexOf("=") + 1) + page;
+            console.log(newUrl);
+
             if (this.USE_DUMMY_DATA) {
-                this.current_level = level;
                 var response;
                 if (level === 0) {
                     response = this.data1;
@@ -181,35 +200,36 @@ function MetricsService($http, $rootScope, $compile) {
                 var data = response;
                 data['data'] = response[type];
 
+                this.current_level = level;
+                this.isWeek = isWeek;
+                this.isProspect = isProspect;
                 this.loadData(data, name, id);
                 return;
             }
 
 
-            var newUrl = newUrl.slice(0, newUrl.lastIndexOf("=") + 1) + page;
-
-            console.log(newUrl);
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = MetricsService.self;
-                self.current_level = level;
                 if (self.controllerName.localeCompare("netWorth") == 0) {
-                    self.PreProcessData(response, type, newUrl, name, id, page, level, data);
+                    self.PreProcessData(response, type, newUrl, name, id, page, level, isWeek, isProspect, data);
                 } else if (self.controllerName.localeCompare("aum") == 0) {
-                    self.PreProcessData(response, type, newUrl, name, id, page, level, data);
+                    self.PreProcessData(response, type, newUrl, name, id, page, level, isWeek, isProspect, data);
                 }
                 else {
                     var hasNext = response.data['last'];
+
                     if (data) {
                         data['data'] = data['data'].concat(response.data[type]);
                     } else {
                         data = response.data;
                         data['data'] = response.data[type];
                     }
-
                     if (hasNext) {
+
+                        self.current_level = level;
                         self.loadData(data, name, id);
                     } else {
-                        self.getDataFromApi(newUrl, name, id, page + 1, level, data)
+                        self.getDataFromApi(newUrl, name, id, page + 1, level, isWeek, isProspect, data)
                     }
                 }
             }, function myError(response, error) {
@@ -219,7 +239,7 @@ function MetricsService($http, $rootScope, $compile) {
             });
         }
 
-        this.PreProcessData = function (response, type, newUrl, name, id, page, level, data) {
+        this.PreProcessData = function (response, type, newUrl, name, id, page, level, isWeek, isProspect, data) {
             var hasNext = response.data.data['hasNext'];
 
             if (data) {
@@ -231,6 +251,10 @@ function MetricsService($http, $rootScope, $compile) {
 
             if (!hasNext) {
                 console.log(data);
+
+                this.current_level = level;
+                this.isWeek = isWeek;
+                this.isProspect = isProspect;
                 this.loadData(data, name, id);
             } else {
                 this.getDataFromApi(newUrl, name, id, page + 1, level, data)
@@ -490,7 +514,7 @@ function MetricsService($http, $rootScope, $compile) {
                 chart = this.chart;
             } else {
                 chart = this;
-                self.createPathSelector(this); // create new path selector on top left
+                self.createWidgets(this);
             }
 
             //self.baseChartOnLoad(chart);
@@ -621,65 +645,93 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
 
-        //------------------------------------datepicker---------------------------------------------------------------
 
-        this.assignYTD = function () {
-            this.startDate = new Date(new Date().getFullYear(), 0, 1);
-            this.endDate = new Date();
-            this.applyDateFilter(this.current_level);
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //---------------------------------- Widgets -----------------------------------------------------------------
+
+        this.createWidgets = function (chart) {
+            this.createPathSelector(chart);
         }
 
-        this.clearDate = function () {
 
-            this.endDate = null;
-            this.startDate = null;
 
-            this.applyDateFilter(this.current_level);
+        //path selector
+        this.createPathSelector = function (chart) {
 
-        }
+            var note = chart.renderer.text("Zoom in by drag & select ").css({ fontSize: '10px' }).add();
+            var noteBBox = note.getBBox();
+            var x = chart.plotLeft * 0.3;
+            var y = noteBBox.height * 3;
+            note.attr({ x: x, y: y });
 
-        this.checkDate = function () {
-            if (this.endDate != null) {
-                this.endDate = this.startDate > this.endDate ? this.startDate : this.endDate;
+
+
+
+            var pathHTML = this.generatePathSelectorHTML();
+            var text = chart.renderer.text(pathHTML).css({ fontSize: '13px' }).add();
+            var textBBox = text.getBBox();
+            var x = chart.plotLeft * 0.25;
+            var y = textBBox.height;
+            text.attr({ x: x, y: y });
+
+            var pathBlocks = text.element.children;
+
+            for (var i = 1; i < pathBlocks.length; i = i + 2) {
+                pathBlocks[i].setAttribute('data-level', (i - 1) / 2);
+                pathBlocks[i].classList.add("path-link");
+                pathBlocks[i].onclick = function () {
+                    MetricsService.self.pathOnClick(this);
+                };
             }
 
-            this.applyDateFilter(this.current_level);
+            pathBlocks[MetricsService.self.current_level * 2 + 1].classList.add("curr-path-link");
         }
 
-        this.applyDateFilter = function (level) {
-            var same = this.compareDate(level);
-            if (!same) {
+        this.pathOnClick = function (element) {
 
-                this.getDataForPage(0, level);
+            var level = parseInt(element.dataset.level);
 
-            }
+            //drill up
+            MetricsService.self.drillToLevel(level);
 
-            return same;
         }
 
+        this.generatePathSelectorHTML = function () {
+            var output = "Path:";
 
-        this.compareDate = function (level) {
+            this.level_list.forEach(function (element) {
+                output += '<a>' + element['name'] + '</a>' + '>';
+            });
 
-            var startDate_X = this.level_list[level]['start'];
-            startDate_X = !startDate_X ? null : startDate_X.getTime();
-
-            var startDate_Y = this.startDate;
-            startDate_Y = !startDate_Y ? null : startDate_Y.getTime();
-
-            var endDate_X = this.level_list[level]['end'];
-            endDate_X = !endDate_X ? null : endDate_X.getTime();
-
-            var endDate_Y = this.endDate;
-            endDate_Y = !endDate_Y ? null : endDate_Y.getTime();
-
-            return (startDate_X == startDate_Y && endDate_X == endDate_Y)
+            return output.slice(0, -1);
         }
 
+        //---------------------------------- Offchart Widgets -----------------------------------------------------------------
+
+
+        this.createOffChartWidgets = function (scope) {
+
+            if (this.showDatepicker)
+                this.createDatepicker(scope);
+        }
+
+        //datepicker
         this.createDatepicker = function (scope) {
 
             var ctrl = this.controllerName;
             var datePickerHTML = `
-            <div>
                  <div layout="row"  layout-align="center center">
                     <form name="startForm">
                     <md-input-container style="margin-bottom: 0px !important;">
@@ -714,81 +766,54 @@ function MetricsService($http, $rootScope, $compile) {
                     <md-button class=" md-raised" ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
                     <md-button class="md-primary md-raised" ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
                 </div>
-            </div>
-      		`;
+            `;
 
             var chartHTML = angular.element(document.getElementById("chart-container"));
             chartHTML.append(this.$compile(datePickerHTML)(scope));
         }
 
-
-
-
-
-
-
-
-
-
-        //---------------------------------- Path Selector -----------------------------------------------------------------
-        //path selector
-        this.createPathSelector = function (chart) {
-            chart.renderer.text("Zoom in by drag & select ", 20, 40).css({ fontSize: '10px' }).add();
-
-
-            var pathHTML = this.generatePathSelectorHTML();
-
-            //TODO: remove hardcoded data
-            chart.renderer.text(pathHTML, 12, 15).attr({ id: 'path-selector' }).css({ fontSize: '13px' }).add();
-
-            var pathBlocks = document.querySelectorAll('#path-selector tspan');
-
-            var flag = false;
-            var i = 0;
-
-            pathBlocks.forEach(function (element) {
-                if (flag) {
-                    if (i === MetricsService.self.current_level) {
-                        element.classList.add("curr-path-link");
-                    }
-                    element.setAttribute('data-level', i);
-                    element.classList.add("path-link");
-                    element.onclick = function () {
-                        MetricsService.self.pathOnClick(this);
-                    };
-                    i++;
-                }
-
-                flag = !flag;
-            });
+        this.assignYTD = function () {
+            this.startDate = new Date(new Date().getFullYear(), 0, 1);
+            this.endDate = new Date();
+            this.applyDateFilter(this.current_level);
         }
 
-        this.pathOnClick = function (element) {
+        this.clearDate = function () {
 
-            var level = parseInt(element.dataset.level);
+            this.endDate = null;
+            this.startDate = null;
 
-            //drill up
-            MetricsService.self.drillToLevel(level);
+            this.applyDateFilter(this.current_level);
 
         }
 
-        //TODO: only show levels that the user is authorized to see
-        this.generatePathSelectorHTML = function () {
-            var output = "Path:";
+        this.checkDate = function () {
+            if (this.endDate != null) {
+                this.endDate = this.startDate > this.endDate ? this.startDate : this.endDate;
+            }
 
-            this.level_list.forEach(function (element) {
-                output += '<a>' + element['name'] + '</a>' + '>';
-            });
-
-            return output.slice(0, -1);
+            this.applyDateFilter(this.current_level);
         }
 
 
+        this.compareDate = function (level) {
 
+            var startDate_X = this.level_list[level]['start'];
+            startDate_X = !startDate_X ? null : startDate_X.getTime();
 
+            var startDate_Y = this.startDate;
+            startDate_Y = !startDate_Y ? null : startDate_Y.getTime();
 
+            var endDate_X = this.level_list[level]['end'];
+            endDate_X = !endDate_X ? null : endDate_X.getTime();
 
+            var endDate_Y = this.endDate;
+            endDate_Y = !endDate_Y ? null : endDate_Y.getTime();
 
+            return (startDate_X == startDate_Y && endDate_X == endDate_Y)
+        }
+
+        
 
 
 

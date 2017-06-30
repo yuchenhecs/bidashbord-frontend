@@ -14,6 +14,13 @@ function LoginsService(MetricsService) {
         base.SUB_DOMAIN = "/bi/logins";
         base.USE_DUMMY_DATA = true;
         base.controllerName = "logins";
+        base.showDatepicker = false;
+        base.startDate = null;
+        base.endDate = null;
+
+        base.isWeek = true;
+        base.isProspect = true;
+
 
         base.data1 = {
             "totalFirms": 599,
@@ -33,7 +40,7 @@ function LoginsService(MetricsService) {
                     "name": "Yuchen Firm",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
-                    "avgSessionTime": 2,
+                    "avgSessionTime": 3.4,
                 }
             ]
         };
@@ -87,7 +94,78 @@ function LoginsService(MetricsService) {
         };
 
 
+        //---------------------------------- Pipeline -----------------------------------------------------------------
+
+        base.checkRange = function (range) {
+            if (this.isWeek === range) {
+
+            }
+            setTimeout(function () {
+                var self = LoginsService.self;
+                self.getDataForPage(0, self.current_level, range, self.isProspect);
+            }, 10);
+        }
+
+        base.checkUserType = function () {
+            setTimeout(function () {
+                var self = LoginsService.self;
+                self.getDataForPage(0, self.current_level, self.isWeek, self.isProspect);
+            }, 10);
+
+        }
+
+
+        //---------------------------------- Pipeline helper ---------------------------------------------------------------
+
+        base.yAxisSelector = function () {
+            var yAxis = [{
+                min: 0,
+                title: {
+                    text: 'Number of logins',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                labels: {
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                }
+                // ,
+                // stackLabels: {
+                //     style: {
+                //         fontWeight: 'bold',
+                //         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                //     },
+                //     enabled: true
+                // }
+            },
+            {
+                min: 0,
+                title: {
+                    text: 'Session time',
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                },
+                labels: {
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                },
+                opposite: true
+
+            }];
+
+
+
+
+            return yAxis;
+        }
+
+
         base.prepareSeries = function (input) {
+
             // combine all points for each series into lists
             var totalLogins = [];
             var uniqueLogins = [];
@@ -129,13 +207,87 @@ function LoginsService(MetricsService) {
             var avgSessionPoints = {
                 name: 'Avg Session Time',
                 data: avgSessionTime,
-                type: 'spline'
+                type: 'spline',
+                yAxis: 1
             };
             series.push(totalPoints);
             series.push(uniquePoints);
             series.push(avgSessionPoints);
 
             return series;
+        }
+
+
+        //---------------------------------- Widgets -----------------------------------------------------------------
+        base.createWidgets = function (chart) {
+            this.createPathSelector(chart);
+            this.createRangeSelector(chart);
+        }
+
+        //path selector
+        base.createRangeSelector = function (chart) {
+            var rangeHTML = this.generateRangeSelector();
+
+            var text = chart.renderer.text(rangeHTML).css({ fontSize: '13px' }).add();
+            var textBBox = text.getBBox();
+
+
+            var x = chart.plotLeft + (chart.plotWidth) - (textBBox.width * 0.75);
+            var y = textBBox.height;
+            text.attr({ x: "99%", y: y, "text-anchor": "end" });
+
+            var rangeBlocks = text.element.children;
+
+            for (var i = 0; i < rangeBlocks.length; i = i + 2) {
+                rangeBlocks[i].setAttribute('data-isWeek', i);
+                rangeBlocks[i].classList.add("path-link");
+                rangeBlocks[i].onclick = function () {
+                    LoginsService.self.rangeOnClick(this);
+                };
+            };
+
+            var tmp = LoginsService.self.isWeek ? 0 : 2;
+            rangeBlocks[tmp].classList.add("curr-path-link");
+        }
+
+        base.rangeOnClick = function (element) {
+
+            var w = parseInt(element.dataset.isWeek) === 0 ? true : false;
+            this.checkRange(w);
+
+            // //drill up
+            // MetricsService.self.drillToLevel(level);
+
+        }
+
+        base.generateRangeSelector = function () {
+            var output = '<a>Last Week</a> | <a>Last Month</a>';
+            return output;
+        }
+
+        base.createOffChartWidgets = function (scope) {
+            this.createSwitch(scope);
+        }
+
+
+        // prospect/client switch
+        base.createSwitch = function (scope) {
+            var ctrl = this.controllerName;
+            var switchHTML = `
+            <div>
+                <div layout="row"  layout-align="center center" >
+                    <md-radio-group ng-model="`+ ctrl + `.isProspect" ng-change="` + ctrl + `.checkUserType()" layout="row" style="padding:15px" >
+                        <md-radio-button ng-value="true" class="md-primary">Prospects</md-radio-button>
+                        <md-radio-button ng-value="false"> Clients </md-radio-button>
+                    </md-radio-group>
+                </div>
+            </div>
+            `;
+
+
+
+            var chartHTML = angular.element(document.getElementById("chart-container"));
+            chartHTML.append(this.$compile(switchHTML)(scope));
         }
 
         return base;
@@ -146,53 +298,30 @@ function LoginsService(MetricsService) {
 function LoginsController($scope, LoginsService) {
     var service = new LoginsService();
 
-    this.startDate = service.startDate;
-    this.endDate = service.endDate;
-    this.today = new Date();
-    this.isRequired = service.isRequired;
-
-    this.checkDate = function () {
-        service.startDate = this.startDate; // bind data to service
-        service.endDate = this.endDate;
-
-        try {
-            service.checkDate();
-        }
-        catch (err) {
-            console.log("Error when checking date!");
-        }
+    this.isWeek = service.isWeek;
+    this.isProspect = service.isProspect;
 
 
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    };
 
+    this.checkUserType = function () {
 
-    this.assignYTD = function () {
+        service.isWeek = this.isWeek;
+        service.isProspect = this.isProspect;
 
 
         try {
-            service.assignYTD();
-        }
-        catch (err) {
-            console.log("Error when assigning YTD!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
-
-    this.clearDate = function () {
-
-        try {
-            service.clearDate();
+            service.checkUserType();
         }
         catch (err) {
             console.log("Error when clearing dates!");
         }
 
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
+        this.isWeek = service.isWeek;
+        this.isProspect = service.isProspect;
+
+
+        // this.startDate = service.startDate;
+        // this.endDate = service.endDate;
 
     }
 

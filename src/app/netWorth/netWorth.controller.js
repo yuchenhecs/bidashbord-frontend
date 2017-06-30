@@ -20,6 +20,8 @@ function NetWorthService(MetricsService) {
     base.USE_DUMMY_DATA = false;
     base.controllerName = "netWorth";
     base.showDatepicker = false;
+    base.startDate = null;
+    base.endDate = null;
 
     base.data1 = {
       "avgAdvsior": 123,
@@ -160,7 +162,6 @@ function NetWorthService(MetricsService) {
       
       var yAxis = [{
         labels: {
-          format: '{value}',
           style: {
             color: Highcharts.getOptions().colors[1]
           }
@@ -181,7 +182,6 @@ function NetWorthService(MetricsService) {
           }
         },
         labels: {
-          format: '{value}',
           style: {
             color: Highcharts.getOptions().colors[0]
           }

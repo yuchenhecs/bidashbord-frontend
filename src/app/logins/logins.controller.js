@@ -33,15 +33,29 @@ function LoginsService(MetricsService) {
                     "firmId": 801,
                     "name": "Yuchen Firm",
                     "totalLogins": 100,
-                    "uniqueLogins": 38,
+                    "uniqueLogins": 11,
                     "avgSessionTime": 2,
                 },
                 {
                     "firmId": 801,
                     "name": "Yuchen Firm2",
                     "totalLogins": 100,
-                    "uniqueLogins": 38,
+                    "uniqueLogins": 20,
                     "avgSessionTime": 3.4,
+                },
+                {
+                    "firmId": 801,
+                    "name": "Yuchen Firm3",
+                    "totalLogins": 50,
+                    "uniqueLogins": 18,
+                    "avgSessionTime": 1.4,
+                },
+                {
+                    "firmId": 801,
+                    "name": "Yuchen Firm4",
+                    "totalLogins": 70,
+                    "uniqueLogins": 58,
+                    "avgSessionTime": 3,
                 }
             ]
         };
@@ -63,9 +77,16 @@ function LoginsService(MetricsService) {
                 {
                     "advisorId": 801,
                     "name": "Robert2",
-                    "totalLogins": 100,
-                    "uniqueLogins": 38,
-                    "avgSessionTime": 2,
+                    "totalLogins": 30,
+                    "uniqueLogins": 30,
+                    "avgSessionTime":0.4,
+                },
+                {
+                    "advisorId": 801,
+                    "name": "Robert3",
+                    "totalLogins": 50,
+                    "uniqueLogins": 20,
+                    "avgSessionTime":1,
                 }
             ]
         };
@@ -79,17 +100,17 @@ function LoginsService(MetricsService) {
             "clients": [
                 {
                     "clientId": 801,
-                    "name": "Robert3",
+                    "name": "Robert4",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
                     "avgSessionTime": 2
                 },
                 {
                     "clientId": 801,
-                    "name": "Robert4",
+                    "name": "Robert5",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
-                    "avgSessionTime": 2
+                    "avgSessionTime": 1
                 }
             ]
         };
@@ -265,7 +286,7 @@ function LoginsService(MetricsService) {
         base.createRangeSelector = function (chart) {
             var rangeHTML = this.generateRangeSelector();
 
-            var text = chart.renderer.text(rangeHTML).css({ fontSize: '13px' }).add();
+            var text = chart.renderer.text(rangeHTML).add();
             var textBBox = text.getBBox();
 
 
@@ -278,6 +299,7 @@ function LoginsService(MetricsService) {
             for (var i = 0; i < rangeBlocks.length; i = i + 2) {
                 rangeBlocks[i].setAttribute('data-isWeek', i);
                 rangeBlocks[i].classList.add("path-link");
+                rangeBlocks[i].classList.add("chart-legend");
                 rangeBlocks[i].onclick = function () {
                     LoginsService.self.rangeOnClick(this);
                 };

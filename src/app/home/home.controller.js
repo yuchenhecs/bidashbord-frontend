@@ -293,7 +293,7 @@ function HomeController($scope, $http, $log, chartData) {
 	this.chart = Highcharts.setOptions(colorTheme);
 	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
 	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', 'http://10.1.10.28:8080/bi/networth');
+	chartData.callApi('line', 'netWorthContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/networth');
 
 	// $scope.loginData = chartData.callApi(null, null, 'link tbd');
 

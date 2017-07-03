@@ -10,7 +10,7 @@ function AUMService($http, MetricsService) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
-        base.USE_DUMMY_DATA = true;
+        base.USE_DUMMY_DATA = false;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required

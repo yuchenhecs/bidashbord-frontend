@@ -11,8 +11,8 @@ function LoginsService(MetricsService) {
         LoginsService.self = base;
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-        base.SUB_DOMAIN = "/bi/logins";
-        base.USE_DUMMY_DATA = true;
+        base.SUB_DOMAIN = "/bi/stats";
+        base.USE_DUMMY_DATA = false;
         base.controllerName = "logins";
         base.showDatepicker = false;
         base.startDate = null;

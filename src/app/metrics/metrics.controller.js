@@ -238,19 +238,17 @@ function MetricsService($http, $rootScope, $compile) {
 
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = MetricsService.self;
-                if (self.controllerName.localeCompare("netWorth") == 0) {
-                    self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
-                } else if (self.controllerName.localeCompare("aum") == 0) {
+                if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                 }
                 else {
-                    var hasNext = response.data['last'];
+                    var hasNext = response.data.data['last'];
 
                     if (data) {
-                        data['data'] = data['data'].concat(response.data[type]);
+                        data['data'] = data['data'].concat(response.data.data[type]);
                     } else {
-                        data = response.data;
-                        data['data'] = response.data[type];
+                        data = response.data.data;
+                        data['data'] = response.data.data[type];
                     }
                     if (hasNext) {
 

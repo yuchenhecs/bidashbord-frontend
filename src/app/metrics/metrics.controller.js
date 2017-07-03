@@ -33,6 +33,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.isRequired = false;
         this.current_level = 0;
         this.doUpdate = false;
+        this.lastInitial = '';
 
         //chart option template
         this.optionTemplate = {
@@ -135,10 +136,10 @@ function MetricsService($http, $rootScope, $compile) {
         this.getData = function (name, id, page) {
             if (this.controllerName.localeCompare("logins") === 0) {
                 this.getDataForLevel(name, id, page, this.current_level, [this.isWeek, this.isProspect]);
-            }else{
+            } else {
                 this.getDataForLevel(name, id, page, this.current_level);
             }
-            
+
         }
 
         this.getDataForLevel = function (name, id, page, level, args) {
@@ -173,7 +174,7 @@ function MetricsService($http, $rootScope, $compile) {
             baseUrl = !endDate ? baseUrl : baseUrl + "&" + endName + "=" + endDate;
 
             // add page number
-            
+
             if (this.controllerName.localeCompare("logins") === 0) {
                 if (!args) {
                     args = [this.isWeek, this.isProspect];
@@ -183,7 +184,7 @@ function MetricsService($http, $rootScope, $compile) {
                 // add range and user for Logins
                 baseUrl = isWeek === undefined ? baseUrl : baseUrl + "&range=" + (isWeek ? "week" : "month");
                 baseUrl = isProspect === undefined ? baseUrl : baseUrl + "&user=" + (isProspect ? "prospect" : "client");
-                
+
                 baseUrl = baseUrl + "&page=" + page;
 
                 this.getDataFromApi(baseUrl, name, id, page, level, [isWeek, isProspect]);
@@ -315,6 +316,7 @@ function MetricsService($http, $rootScope, $compile) {
 
         this.createChart = function () {
             console.time('time');
+            this.lastInitial = '';
             this.hideLoading();
             this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
             //this.chart.update(this.level_list[this.current_level]['option']);
@@ -446,10 +448,39 @@ function MetricsService($http, $rootScope, $compile) {
         this.xAxisSelector = function (input) {
             var xAxis = {
                 categories: this.prepareCategories(input.data),
-                crosshair: false
+                crosshair: false,
+                labels: {
+                    formatter: this.xAxisFormatter
+                }
 
             };
             return xAxis;
+        }
+
+        this.xAxisFormatter = function () {
+
+            var label = this.axis.defaultLabelFormatter.call(this);
+
+            this.axis.autoRotation = null;
+console.log("zz");
+
+            if (this.axis.tickInterval > 1) {
+
+                var initial = label.charAt(0).toUpperCase();
+                var self = MetricsService.self;
+
+
+                if (initial === self.lastInitial) {
+
+                    return '';
+                }
+
+                self.lastInitial = initial;
+
+                return initial;
+            }
+
+            return label;
         }
 
         this.yAxisSelector = function () {
@@ -536,18 +567,11 @@ function MetricsService($http, $rootScope, $compile) {
         }
 
         // chart onload event
-        this.chartOnLoad = function (isUpdated) {
+        this.chartOnLoad = function () {
             var self = MetricsService.self;
 
-            var chart;
-            if (isUpdated === true) {
-                chart = this.chart;
-            } else {
-                chart = this;
-                self.createWidgets(this);
-            }
-
-            //self.baseChartOnLoad(chart);
+            var chart = this;
+            self.createWidgets(this);
 
             if (self.controllerName.localeCompare("aum") === 0) {
                 // lighten the color of previous date bar
@@ -597,10 +621,9 @@ function MetricsService($http, $rootScope, $compile) {
 
         // tooltip formatter
         this.formatter = function () {
-
             var s = '<b>' + this.x + '</b>';
             var allSeries = this.series.chart.series;
-            
+
             allSeries.forEach(function (series) {
                 if (series.data[this.point.index].y) {
                     s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
@@ -610,7 +633,7 @@ function MetricsService($http, $rootScope, $compile) {
 
             return s;
 
-            
+
         }
 
         //construct categories data for chart template

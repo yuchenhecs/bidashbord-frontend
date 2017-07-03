@@ -474,7 +474,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.tooltipSelector = function () {
             var tooltip = {
                 formatter: this.formatter,
-                shared: true
+                shared: false
             }
 
             return tooltip;
@@ -597,15 +597,20 @@ function MetricsService($http, $rootScope, $compile) {
 
         // tooltip formatter
         this.formatter = function () {
+
             var s = '<b>' + this.x + '</b>';
-            this.points.forEach(function (element) {
-                //element.hover
-                if (!element.y || element.y === 0) {
-                    return;
+            var allSeries = this.series.chart.series;
+            
+            allSeries.forEach(function (series) {
+                if (series.data[this.point.index].y) {
+                    s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
                 }
-                s += '<br/>' + element.series.name + ': ' + element.y;
-            });
+
+            }, this);
+
             return s;
+
+            
         }
 
         //construct categories data for chart template

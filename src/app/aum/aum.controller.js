@@ -63,6 +63,42 @@ function AUMService($http, MetricsService) {
                             "Other": 18085.21
                         }
                     }
+                },
+                {
+                    "firmId": 509,
+                    "name": "auto",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {}
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 133576.06,
+                        "assetClass": {
+                            "US Stock": 114459.75,
+                            "Cash": 1031.1,
+                            "Other": 18085.21
+                        }
+                    }
+                },
+                {
+                    "firmId": 509,
+                    "name": "auto",
+                    "previous": {
+                        "date": "2017-06-12",
+                        "total": null,
+                        "assetClass": {}
+                    },
+                    "current": {
+                        "date": "2017-06-12",
+                        "total": 133576.06,
+                        "assetClass": {
+                            "US Stock": 114459.75,
+                            "Cash": 1031.1,
+                            "Other": 18085.21
+                        }
+                    }
                 }
             ]
         };
@@ -213,11 +249,9 @@ function AUMService($http, MetricsService) {
 
             var currentStack = this.series.userOptions['stackId'];
 
-
-            // TODO: WILL BUG OUT WHEN ZOOM IN !!!!!!!!!!
             this.series.chart.series.forEach(function (series) {
-                if (currentStack === series.userOptions['stackId'] && series.processedYData[this.point.index]) {
-                    s += '<br/>' + series.name + ': ' + series.processedYData[this.point.index];
+                if (currentStack === series.userOptions['stackId'] && series.data[this.point.index].y) {
+                    s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
                 }
 
             }, this);
@@ -382,8 +416,6 @@ function AUMController($scope, AUMService) {
 
 
     this.assignYTD = function () {
-
-
         try {
             service.assignYTD();
         }
@@ -396,7 +428,6 @@ function AUMController($scope, AUMService) {
     }
 
     this.clearDate = function () {
-
         try {
             service.clearDate();
         }

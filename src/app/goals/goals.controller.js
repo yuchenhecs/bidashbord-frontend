@@ -178,7 +178,6 @@ function GoalsController($scope, GoalsService) {
 
         this.startDate = service.startDate;
         this.endDate = service.endDate;
-
     }
 
     service.launch($scope);

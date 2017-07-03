@@ -15,7 +15,6 @@ function NetWorthService(MetricsService) {
     NetWorthService.self = base;
     // constants
     base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-    // base.DOMAIN = "http://localhost:8080";
     base.SUB_DOMAIN = "/bi/networth";
     base.USE_DUMMY_DATA = false;
     base.controllerName = "netWorth";

@@ -605,7 +605,7 @@ function MetricsService($http, $rootScope, $compile) {
             var allSeries = this.series.chart.series;
 
             allSeries.forEach(function (series) {
-                if (series.data[this.point.index].y) {
+                if (series.data[this.point.index] && series.data[this.point.index].y) {
                     s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
                 }
 
@@ -624,9 +624,9 @@ function MetricsService($http, $rootScope, $compile) {
                 if (self.current_level === 0) {
                     name = x['name'];
                 } else if (self.current_level === 1) {
-                    name = self.controllerName.localeCompare("goals") === 0 ? x['firstName'] + " " + x['lastName'] : x['name'];
+                    name = self.controllerName.localeCompare("goals") === 0 || (self.controllerName.localeCompare("netWorth") === 0) ? x['firstName'] + " " + x['lastName'] : x['name'];
                 } else if (self.current_level === 2) {
-                    name = self.controllerName.localeCompare("goals") === 0 ? x['firstName'] + " " + x['lastName'] : x['name'];
+                    name = self.controllerName.localeCompare("goals") === 0 || (self.controllerName.localeCompare("netWorth") === 0) ? x['firstName'] + " " + x['lastName'] : x['name'];
                 }
                 return name;
             });

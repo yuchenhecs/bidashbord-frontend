@@ -17,14 +17,14 @@ function NetWorthService(MetricsService) {
     base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     // base.DOMAIN = "http://localhost:8080";
     base.SUB_DOMAIN = "/bi/networth";
-    base.USE_DUMMY_DATA = false;
+    base.USE_DUMMY_DATA = true;
     base.controllerName = "netWorth";
     base.showDatepicker = false;
     base.startDate = null;
     base.endDate = null;
 
     base.data1 = {
-      "avgAdvsior": 123,
+      "avgAdvisor": 123,
       "avgFirm": 123,
       "hasNext": true,
       "page": 0,
@@ -51,7 +51,7 @@ function NetWorthService(MetricsService) {
 
     base.data2 =
       {
-        "avgAdvsior": 123,
+        "avgAdvisor": 123,
         "avgFirm": 123,
         "hasNext": true,
         "page": 0,
@@ -80,7 +80,7 @@ function NetWorthService(MetricsService) {
 
 
     base.data3 = {
-      "avgAdvsior": 50,
+      "avgAdvisor": 50,
       "avgFirm": 70,
       "hasNext": true,
       "page": 0,
@@ -157,8 +157,7 @@ function NetWorthService(MetricsService) {
 
     base.yAxisSelector = function(input) {
       var avgFirm = input['avgFirm'];
-      var avgAdvsior = input['avgAdvsior'];
-
+      var avgAdvsior = input['avgAdvisor'];
       
       var yAxis = [{
         labels: {
@@ -185,14 +184,6 @@ function NetWorthService(MetricsService) {
           style: {
             color: Highcharts.getOptions().colors[0]
           }
-        }
-      },
-      {
-        labels: {
-          enabled: false
-        },
-        title: {
-          text: null
         }
       }
       ];
@@ -232,7 +223,6 @@ function NetWorthService(MetricsService) {
     }
 
     base.seriesSelector = function(input) {
-      console.log(input.data);
       var seriesRaw = this.prepareSeries(input.data);
 
       var series = [{
@@ -258,19 +248,21 @@ function NetWorthService(MetricsService) {
         series.push(
           {
             name: 'Avg Advisor',
+            type: 'spline',
             color: 'green',
-            yAxis: 2,
+            yAxis: 1,
             marker: {
-              enabled: true
+              enabled: false
             }
           },
           {
             name: 'Avg Firm',
+            type: 'spline',
             dashStyle: 'shortdash',
             color: 'red',
-            yAxis: 2,
+            yAxis: 1,
             marker: {
-              enabled: true
+              enabled: false
             }
           }
         );
@@ -279,27 +271,27 @@ function NetWorthService(MetricsService) {
       return series;
     }
 
-    this.tooltipSelector = function () {
-      var tooltip;
-      tooltip = {
-        shared: true
-      }
+    // base.tooltipSelector = function () {
+    //   var tooltip;
+    //   tooltip = {
+    //     shared: true
+    //   }
 
-      return tooltip;
-    }
+    //   return tooltip;
+    // }
 
-    this.legendSelector = function () {
-      var legend = {
-        layout: 'vertical',
-        align: 'left',
-        x: 120,
-        verticalAlign: 'top',
-        y: 100,
-        floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-      };
-      return legend;
-    };
+    // base.legendSelector = function () {
+    //   var legend = {
+    //     layout: 'vertical',
+    //     align: 'left',
+    //     x: 120,
+    //     verticalAlign: 'top',
+    //     y: 100,
+    //     floating: true,
+    //     backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+    //   };
+    //   return legend;
+    // };
 
     // var colorTheme = {
     //   colors: ['#64B5F6']

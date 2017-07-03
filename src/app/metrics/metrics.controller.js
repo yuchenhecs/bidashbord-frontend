@@ -53,7 +53,7 @@ function MetricsService($http, $rootScope, $compile) {
         // 4. Date-change pipeline
         //      validateLevel -> getData -> loadData -> createChart
         // 5. Week/Month and Prospects/Clients pipeline  (in LoginsController.js)
-        //      
+        //      validateLevel -> getData -> loadData -> createChart
 
 
 
@@ -591,8 +591,7 @@ function MetricsService($http, $rootScope, $compile) {
 
         // chart bar onclick event
         this.chartOnClick = function () {
-           console.log(this.category);
-           console.log(this.id);
+
             MetricsService.self.drillDown(this.category, this.id);
         }
 

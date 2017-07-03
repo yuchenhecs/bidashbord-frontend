@@ -37,7 +37,7 @@ function LoginsService(MetricsService) {
                 },
                 {
                     "firmId": 801,
-                    "name": "Yuchen Firm",
+                    "name": "Yuchen Firm2",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
                     "avgSessionTime": 3.4,
@@ -61,7 +61,7 @@ function LoginsService(MetricsService) {
                 },
                 {
                     "advisorId": 801,
-                    "name": "Robert",
+                    "name": "Robert2",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
                     "avgSessionTime": 2,
@@ -78,14 +78,14 @@ function LoginsService(MetricsService) {
             "clients": [
                 {
                     "clientId": 801,
-                    "name": "Robert",
+                    "name": "Robert3",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
                     "avgSessionTime": 2
                 },
                 {
                     "clientId": 801,
-                    "name": "Robert",
+                    "name": "Robert4",
                     "totalLogins": 100,
                     "uniqueLogins": 38,
                     "avgSessionTime": 2

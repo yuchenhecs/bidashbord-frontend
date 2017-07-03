@@ -22,6 +22,7 @@ function NetWorthService(MetricsService) {
     base.showDatepicker = false;
     base.startDate = null;
     base.endDate = null;
+    base.TITLE_TEMPLATE = "Average and Absolute Net Worth across ";
 
     base.data1 = {
       "avgAdvisor": 123,
@@ -133,27 +134,6 @@ function NetWorthService(MetricsService) {
 
       return series;
     };
-
-    base.titleSelector = function (name) {
-      var title;
-
-      title = {
-        text: "Average and Absolute Net Worth across" + name
-      };
-
-      return title;
-    }
-
-
-    base.xAxisSelector = function (input) {
-      var xAxis;
-      xAxis = {
-        categories: this.prepareCategories(input.data),
-        crosshair: true
-      };
-
-      return xAxis;
-    }
 
     base.yAxisSelector = function(input) {
       var avgFirm = input['avgFirm'];
@@ -270,34 +250,6 @@ function NetWorthService(MetricsService) {
 
       return series;
     }
-
-    // base.tooltipSelector = function () {
-    //   var tooltip;
-    //   tooltip = {
-    //     shared: true
-    //   }
-
-    //   return tooltip;
-    // }
-
-    // base.legendSelector = function () {
-    //   var legend = {
-    //     layout: 'vertical',
-    //     align: 'left',
-    //     x: 120,
-    //     verticalAlign: 'top',
-    //     y: 100,
-    //     floating: true,
-    //     backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-    //   };
-    //   return legend;
-    // };
-
-    // var colorTheme = {
-    //   colors: ['#64B5F6']
-    // };
-    //
-    // base.Highcharts.setOptions(colorTheme);
 
     return base;
   };

@@ -11,7 +11,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
         this.SUB_DOMAIN = "/bi/goals";
-        this.TITLE_TEMPLATE = "Total goals created by ";
+        this.TITLE_TEMPLATE = "Total Goals Created by ";
         this.USE_DUMMY_DATA = true;
         this.controllerName = null;
         this.showDatepicker = true;
@@ -429,9 +429,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.titleSelector = function (name) {
 
             var title = {
-                text: this.TITLE_TEMPLATE + name,
-                y: 30,
-                margin: 30
+                text: this.TITLE_TEMPLATE + name
             };
 
             return title;
@@ -462,7 +460,6 @@ function MetricsService($http, $rootScope, $compile) {
             var label = this.axis.defaultLabelFormatter.call(this);
 
             this.axis.autoRotation = null;
-console.log("zz");
 
             if (this.axis.tickInterval > 1) {
 
@@ -489,14 +486,6 @@ console.log("zz");
                 title: {
                     text: 'Number of goals'
                 }
-                // ,
-                // stackLabels: {
-                //     style: {
-                //         fontWeight: 'bold',
-                //         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                //     },
-                //     enabled: true
-                // }
             }
 
             return yAxis;
@@ -550,14 +539,7 @@ console.log("zz");
 
         this.legendSelector = function () {
             var legend = {
-                align: 'right',
-                verticalAlign: 'top',
-                x: -30,
-                y: 40,
-                floating: true,
                 backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
                 shadow: false,
                 itemHoverStyle: {
                     cursor: 'auto'
@@ -731,15 +713,16 @@ console.log("zz");
 
             var note = chart.renderer.text("Zoom in by drag & select ").css({ fontSize: '10px' }).add();
             var noteBBox = note.getBBox();
-            var x = chart.plotLeft * 0.3;
-            var y = noteBBox.height * 3;
+            var x = chart.plotLeft * 0.5;
+            var y = noteBBox.height * 3.3;
             note.attr({ x: x, y: y });
+            //note.element.classList.add("chart-legend");
 
 
 
 
             var pathHTML = this.generatePathSelectorHTML();
-            var text = chart.renderer.text(pathHTML).css({ fontSize: '13px' }).add();
+            var text = chart.renderer.text(pathHTML).add();
             var textBBox = text.getBBox();
             var x = chart.plotLeft * 0.25;
             var y = textBBox.height;
@@ -750,6 +733,10 @@ console.log("zz");
             for (var i = 1; i < pathBlocks.length; i = i + 2) {
                 pathBlocks[i].setAttribute('data-level', (i - 1) / 2);
                 pathBlocks[i].classList.add("path-link");
+                
+                pathBlocks[i-1].classList.add("chart-legend");
+                pathBlocks[i].classList.add("chart-legend");
+
                 pathBlocks[i].onclick = function () {
                     MetricsService.self.pathOnClick(this);
                 };

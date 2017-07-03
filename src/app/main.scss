@@ -241,7 +241,7 @@ ul {
 }
 
 .curr-path-link{
-    fill: red ;
+    fill: 	#F68A1D ;
 }
 
 .pos {
@@ -585,4 +585,23 @@ $color-blue: #11BEDF;
   float:left;
   font-size:35px;
   font-weight:bold;
+}
+
+.chart-legend{
+    font-family: $font-universal;
+    font-size: 13px;
+    color: #464646;
+}
+
+.highcharts-title {
+    font-family: $font-universal;
+    font-size: 18px;
+    color: #2A303D;
+    font-weight: 600;
+}
+
+.highcharts-legend{
+    font-family: $font-universal;
+    font-size: 13px;
+    color: #464646;
 }

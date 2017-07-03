@@ -17,6 +17,7 @@ function LoginsService(MetricsService) {
         base.showDatepicker = false;
         base.startDate = null;
         base.endDate = null;
+        base.TITLE_TEMPLATE = "Login Statistics for ";
 
         base.isWeek = true;
         base.isProspect = true;
@@ -287,16 +288,9 @@ function LoginsService(MetricsService) {
         }
 
         base.rangeOnClick = function (element) {
-
             var w = parseInt(element.dataset.isWeek) === 0 ? true : false;
 
             this.checkRange(w);
-
-
-
-            // //drill up
-            // MetricsService.self.drillToLevel(level);
-
         }
 
         base.generateRangeSelector = function () {

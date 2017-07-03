@@ -10,13 +10,13 @@ function AUMService($http, MetricsService) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
-        base.USE_DUMMY_DATA = false;
+        base.USE_DUMMY_DATA = true;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
         base.startDate = new Date(new Date().getFullYear(), 0, 1);
         base.endDate = new Date();
-        // base.test = 111;
+        base.TITLE_TEMPLATE = "Asset Under Management by ";
 
         base.data1 = {
             "firms": [
@@ -210,36 +210,9 @@ function AUMService($http, MetricsService) {
 
         base.subtitleSelector = function () {
             var subtitle = {
-                text: "Note: lighter bar - previous quarter, darker bar - current quarter",
-                y: 50
+                text: "Note: lighter bar - previous quarter, darker bar - current quarter"
             };
             return subtitle;
-        }
-
-        base.tooltipSelector = function () {
-            var tooltip = {
-                formatter: this.formatter,
-                shared: false
-            }
-            return tooltip;
-        }
-
-        base.legendSelector = function () {
-            var legend = {
-                align: 'right',
-                verticalAlign: 'top',
-                x: -30,
-                y: 60,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                borderColor: '#CCC',
-                borderWidth: 1,
-                shadow: false,
-                itemHoverStyle: {
-                    cursor: 'auto'
-                }
-            }
-            return legend;
         }
 
 
@@ -292,14 +265,6 @@ function AUMService($http, MetricsService) {
                 }
             }
 
-            // for (var key in aumMaps[1]) {
-            //     if (!aumMaps[0][key]) {
-            //         aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
-            //     }
-            // }
-
-
-
             // combine all points for each series into lists
             var series = [];
 
@@ -335,51 +300,6 @@ function AUMService($http, MetricsService) {
 
             return series;
         }
-
-
-        // base.mergeOption = function (options) {
-        //     // assume we are expanding the current chart
-        //     var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
-
-        //     var originalLength = originalCategories.length;
-        //     var newLength = options['xAxis']['categories'].length;
-
-        //     options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
-
-        //     var originalSeries = this.level_list[this.current_level]['option']['series'];
-        //     var newSeries = options['series'];
-
-        //     var seriesMap = Array.apply(null, Array(2)).map(function () { return {}; });;
-
-        //     // 1. initialize seriesMap with originalSeries
-        //     originalSeries.forEach(function (element) {
-        //         seriesMap[element['stackId']][element['name']] = element;
-        //     });
-
-        //     // 2. append newSeries
-        //     newSeries.forEach(function (element) {
-        //         if (seriesMap[element['stackId']][element['name']] == null) {
-        //             var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
-        //             seriesMap[element['stackId']][element['name']]['data'] = zeroPaddings.concat(element['data']);
-        //         } else {
-        //             seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(element['data']);
-
-        //         }
-        //     });
-
-        //     // 3. fill the rest of originalSeries with zeros
-        //     originalSeries.forEach(function (element) {
-        //         if (seriesMap[element['stackId']][element['name']]['data'].length < originalLength + newLength) {
-        //             var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
-        //             seriesMap[element['stackId']][element['name']]['data'] = seriesMap[element['stackId']][element['name']]['data'].concat(zeroPaddings);
-        //         }
-        //     });
-
-
-        //     options['series'] = Object.values(seriesMap[0]).concat(Object.values(seriesMap[1]));
-        //     return options;
-        // }
-
 
         return base;
 

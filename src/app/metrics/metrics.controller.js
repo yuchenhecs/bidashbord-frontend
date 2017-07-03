@@ -51,7 +51,7 @@ function MetricsService($http, $rootScope, $compile) {
         // 3. When-click-on-path-selector pipeline
         //      drillToLevel -> createChart
         // 4. Date-change pipeline
-        //      applyDateFilter -> getData -> loadData -> createChart
+        //      validateLevel -> getData -> loadData -> createChart
         // 5. Week/Month and Prospects/Clients pipeline  (in LoginsController.js)
         //      
 
@@ -74,15 +74,12 @@ function MetricsService($http, $rootScope, $compile) {
         this.drillDown = function (name, id) {
             if (this.current_level >= 2) {
                 alert('Cannot drilldown anymore!');
-
-
                 return; //level number overflowed, cannot drilldown anymore
             }
 
             var new_level = this.current_level + 1;
 
-
-            if (new_level == this.level_list.length) {
+            if (new_level === this.level_list.length) {
                 this.getDataForLevel(name, id, 0, new_level);
                 return;
             }
@@ -93,8 +90,8 @@ function MetricsService($http, $rootScope, $compile) {
                 return;
             }
 
-            if (!this.compareDate(new_level)) {
-                this.getDataForLevel(name, id, 0, new_level);
+
+            if (!this.validateLevel(new_level)) {
                 return;
             }
 
@@ -107,39 +104,50 @@ function MetricsService($http, $rootScope, $compile) {
             // shouldn't replace the chart until this onClick function terminates
             // it seems that Promise is too faster and still causes error compared to setTimeOut
             // could fix later
+
             setTimeout(function () {
-                if (MetricsService.self.applyDateFilter(level)) {
-                    MetricsService.self.current_level = level;
-                    MetricsService.self.createChart();
+                var self = MetricsService.self;
+
+                if (!self.validateLevel(level)) {
+                    return;
                 }
+                self.current_level = level;
+                self.createChart();
             }, 10);
         }
 
-        this.applyDateFilter = function (level) {
-            var same = this.compareDate(level);
-            if (!same) {
-                this.getDataForPage(0, level);
+        this.validateLevel = function (level) {
+            if (!this.compareDate(level)) {
+                var name = this.level_list[level]['name'];
+                var id = this.level_list[level]['id'];
+
+                this.getDataForLevel(name, id, 0, level);
+                return false;
             }
-            return same;
+
+            return true;
         }
 
-        this.getDataForPage = function (page, level, isWeek, isProspect) {
-            this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level, isWeek, isProspect);
-        }
+        // this.getDataForPage = function (page, level, isWeek, isProspect) {
+        //     this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level, isWeek, isProspect);
+        // }
 
         this.getData = function (name, id, page) {
-            this.getDataForLevel(name, id, page, this.current_level, this.isWeek, this.isProspect);
+            if (this.controllerName.localeCompare("logins") === 0) {
+                this.getDataForLevel(name, id, page, this.current_level, [this.isWeek, this.isProspect]);
+            }else{
+                this.getDataForLevel(name, id, page, this.current_level);
+            }
+            
         }
 
-        this.getDataForLevel = function (name, id, page, level, isWeek, isProspect) {
+        this.getDataForLevel = function (name, id, page, level, args) {
 
             this.showLoading();
 
             var domain = this.DOMAIN;
             var subdomain = this.SUB_DOMAIN;
             var baseUrl;
-
-
 
             // construct url based on current drilldown level
             if (level === 0) {
@@ -164,17 +172,32 @@ function MetricsService($http, $rootScope, $compile) {
             baseUrl = !startDate ? baseUrl : baseUrl + "&" + startName + "=" + startDate;
             baseUrl = !endDate ? baseUrl : baseUrl + "&" + endName + "=" + endDate;
 
-            // add range and user for Logins
-            baseUrl = isWeek === undefined ? baseUrl : baseUrl + "&range=" + (isWeek ? "week" : "month");
-            baseUrl = isProspect === undefined ? baseUrl : baseUrl + "&user=" + (isProspect ? "prospect" : "client");
-
             // add page number
-            baseUrl = baseUrl + "&page=" + page;
+            
+            if (this.controllerName.localeCompare("logins") === 0) {
+                if (!args) {
+                    args = [this.isWeek, this.isProspect];
+                }
+                var isWeek = args[0];
+                var isProspect = args[1];
+                // add range and user for Logins
+                baseUrl = isWeek === undefined ? baseUrl : baseUrl + "&range=" + (isWeek ? "week" : "month");
+                baseUrl = isProspect === undefined ? baseUrl : baseUrl + "&user=" + (isProspect ? "prospect" : "client");
+                
+                baseUrl = baseUrl + "&page=" + page;
 
-            this.getDataFromApi(baseUrl, name, id, page, level, isWeek, isProspect);
+                this.getDataFromApi(baseUrl, name, id, page, level, [isWeek, isProspect]);
+            } else {
+                baseUrl = baseUrl + "&page=" + page;
+
+                this.getDataFromApi(baseUrl, name, id, page, level);
+            }
+
+
+
         }
 
-        this.getDataFromApi = function (newUrl, name, id, page, level, isWeek, isProspect, data) {
+        this.getDataFromApi = function (newUrl, name, id, page, level, args, data) {
             var type;
             if (level === 0) {
                 type = 'firms';
@@ -199,10 +222,14 @@ function MetricsService($http, $rootScope, $compile) {
 
                 var data = response;
                 data['data'] = response[type];
-
                 this.current_level = level;
-                this.isWeek = isWeek;
-                this.isProspect = isProspect;
+
+
+                if (this.controllerName.localeCompare("logins") === 0) {
+                    this.isWeek = args[0];
+                    this.isProspect = args[1];
+                }
+
                 this.loadData(data, name, id);
                 return;
             }
@@ -211,9 +238,9 @@ function MetricsService($http, $rootScope, $compile) {
             this.$http.get(newUrl).then(function mySuccess(response) {
                 var self = MetricsService.self;
                 if (self.controllerName.localeCompare("netWorth") == 0) {
-                    self.PreProcessData(response, type, newUrl, name, id, page, level, isWeek, isProspect, data);
+                    self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                 } else if (self.controllerName.localeCompare("aum") == 0) {
-                    self.PreProcessData(response, type, newUrl, name, id, page, level, isWeek, isProspect, data);
+                    self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                 }
                 else {
                     var hasNext = response.data['last'];
@@ -229,7 +256,7 @@ function MetricsService($http, $rootScope, $compile) {
                         self.current_level = level;
                         self.loadData(data, name, id);
                     } else {
-                        self.getDataFromApi(newUrl, name, id, page + 1, level, isWeek, isProspect, data)
+                        self.getDataFromApi(newUrl, name, id, page + 1, level, args, data)
                     }
                 }
             }, function myError(response, error) {
@@ -239,7 +266,7 @@ function MetricsService($http, $rootScope, $compile) {
             });
         }
 
-        this.PreProcessData = function (response, type, newUrl, name, id, page, level, isWeek, isProspect, data) {
+        this.PreProcessData = function (response, type, newUrl, name, id, page, level, args, data) {
             var hasNext = response.data.data['hasNext'];
 
             if (data) {
@@ -250,14 +277,17 @@ function MetricsService($http, $rootScope, $compile) {
             }
 
             if (!hasNext) {
-                console.log(data);
+
+                if (this.controllerName.localeCompare("logins") === 0) {
+                    this.isWeek = args[0];
+                    this.isProspect = args[1];
+                }
+
 
                 this.current_level = level;
-                this.isWeek = isWeek;
-                this.isProspect = isProspect;
                 this.loadData(data, name, id);
             } else {
-                this.getDataFromApi(newUrl, name, id, page + 1, level, data)
+                this.getDataFromApi(newUrl, name, id, page + 1, level, args, data)
             }
         }
 
@@ -561,6 +591,8 @@ function MetricsService($http, $rootScope, $compile) {
 
         // chart bar onclick event
         this.chartOnClick = function () {
+           console.log(this.category);
+           console.log(this.id);
             MetricsService.self.drillDown(this.category, this.id);
         }
 
@@ -585,9 +617,9 @@ function MetricsService($http, $rootScope, $compile) {
                 if (self.current_level === 0) {
                     name = x['name'];
                 } else if (self.current_level === 1) {
-                    name = self.controllerName.localeCompare("aum") === 0 ? x['name'] : x['firstName'] + " " + x['lastName'];
+                    name = self.controllerName.localeCompare("goals") === 0 ? x['firstName'] + " " + x['lastName'] : x['name'];
                 } else if (self.current_level === 2) {
-                    name = self.controllerName.localeCompare("aum") === 0 ? x['name'] : x['firstName'] + " " + x['lastName'];
+                    name = self.controllerName.localeCompare("goals") === 0 ? x['firstName'] + " " + x['lastName'] : x['name'];
                 }
                 return name;
             });
@@ -775,7 +807,7 @@ function MetricsService($http, $rootScope, $compile) {
         this.assignYTD = function () {
             this.startDate = new Date(new Date().getFullYear(), 0, 1);
             this.endDate = new Date();
-            this.applyDateFilter(this.current_level);
+            this.validateLevel(this.current_level);
         }
 
         this.clearDate = function () {
@@ -783,7 +815,7 @@ function MetricsService($http, $rootScope, $compile) {
             this.endDate = null;
             this.startDate = null;
 
-            this.applyDateFilter(this.current_level);
+            this.validateLevel(this.current_level);
 
         }
 
@@ -792,7 +824,7 @@ function MetricsService($http, $rootScope, $compile) {
                 this.endDate = this.startDate > this.endDate ? this.startDate : this.endDate;
             }
 
-            this.applyDateFilter(this.current_level);
+            this.validateLevel(this.current_level);
         }
 
 
@@ -813,7 +845,7 @@ function MetricsService($http, $rootScope, $compile) {
             return (startDate_X == startDate_Y && endDate_X == endDate_Y)
         }
 
-        
+
 
 
 

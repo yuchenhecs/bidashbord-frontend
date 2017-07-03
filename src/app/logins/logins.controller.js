@@ -97,36 +97,58 @@ function LoginsService(MetricsService) {
         //---------------------------------- Pipeline -----------------------------------------------------------------
 
         base.checkRange = function (range) {
-            // if (this.isWeek === range) {
-
-            // }
-            setTimeout(function () {
-                var self = LoginsService.self;
-                self.getDataForPage(0, self.current_level, range, self.isProspect);
-            }, 10);
+            if (this.isWeek != range) {
+                setTimeout(function () {
+                    var self = LoginsService.self;
+                    var name = self.level_list[self.current_level]['name'];
+                    var id = self.level_list[self.current_level]['id'];
+                    self.getDataForLevel(name, id, 0, self.current_level, [range, self.isProspect]);
+                }, 10);
+            }
         }
 
         base.checkUserType = function () {
             setTimeout(function () {
                 var self = LoginsService.self;
-                self.getDataForPage(0, self.current_level, self.isWeek, self.isProspect);
+                var name = self.level_list[self.current_level]['name'];
+                var id = self.level_list[self.current_level]['id'];
+                self.getDataForLevel(name, id, 0, self.current_level, [self.isWeek, self.isProspect]);
             }, 10);
-
         }
 
 
-          
-    
-        base.OnRangeOrUserChange = function(){
-            var same = this.compareDate(level);
-            if (!same) {
-                this.getDataForPage(0, level);
+
+
+
+
+        base.validateLevel = function (level) {
+            if (!this.compareUserType(level) || !this.compareRange(level)) {
+
+                var name = this.level_list[level]['name'];
+                var id = this.level_list[level]['id'];
+               
+
+                this.getDataForLevel(name, id, 0, level);
+                return false;
             }
-            return same;
 
-
+            return true;
         }
 
+        base.compareRange = function (level) {
+            var range_X = this.level_list[level]['isWeek'];
+            var range_Y = this.isWeek;
+
+            return (range_X === range_Y)
+        }
+
+        base.compareUserType = function (level) {
+            var user_X = this.level_list[level]['isProspect'];
+            var user_Y = this.isProspect;
+
+            return (user_X === user_Y)
+
+        }
 
         //---------------------------------- Pipeline helper ---------------------------------------------------------------
 
@@ -186,6 +208,7 @@ function LoginsService(MetricsService) {
 
             var series = [];
 
+            var self = LoginsService.self;
             input.forEach(function (obj, p) {
                 var name = 'firmId';
                 if (self.current_level === 0) {

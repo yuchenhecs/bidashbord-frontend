@@ -280,6 +280,7 @@ function MetricsService($http, $rootScope, $compile) {
                 if (this.controllerName.localeCompare("logins") === 0) {
                     this.isWeek = args[0];
                     this.isProspect = args[1];
+                    this.unit = data['unit'];
                 }
 
 

@@ -22,10 +22,12 @@ function LoginsService(MetricsService) {
         base.isWeek = true;
         base.isProspect = true;
 
+        base.unit = 'minute';
+
 
         base.data1 = {
             "totalFirms": 599,
-            "unit": "minute/hour",
+            "unit": "minute",
             "Page": 0,
             "hasNext": true,
             "firms": [
@@ -63,7 +65,7 @@ function LoginsService(MetricsService) {
 
         base.data2 = {
             "totalAdvisors": 599,
-            "unit": "minute/hour",
+            "unit": "minute",
             "Page": 0,
             "hasNext": true,
             "advisors": [
@@ -94,7 +96,7 @@ function LoginsService(MetricsService) {
 
         base.data3 = {
             "totalClients": 599,
-            "unit": "minute/hour",
+            "unit": "minute",
             "Page": 0,
             "hasNext": true,
             "clients": [
@@ -208,7 +210,8 @@ function LoginsService(MetricsService) {
                 labels: {
                     style: {
                         color: Highcharts.getOptions().colors[2]
-                    }
+                    },
+                    format: '{value} '+ this.unit
                 },
                 opposite: true
 

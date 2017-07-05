@@ -9,8 +9,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
         var self = this;
         this.canceller = $q.defer();
 
-        if(MetricsService.curr){ // cancel previous pending api calls
-            MetricsService.curr.canceller.resolve(); 
+        if (MetricsService.curr) { // cancel previous pending api calls
+            MetricsService.curr.canceller.resolve();
         }
 
         MetricsService.curr = this;
@@ -141,6 +141,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
         // }
 
         this.getData = function (name, id, page) {
+            
+
             if (this.controllerName.localeCompare("logins") === 0) {
                 this.getDataForLevel(name, id, page, this.current_level, [this.isWeek, this.isProspect]);
             } else {
@@ -150,7 +152,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
         }
 
         this.getDataForLevel = function (name, id, page, level, args) {
-
+            console.time('API');
             this.showLoading();
 
             var domain = this.DOMAIN;
@@ -243,7 +245,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             }
 
 
-            this.$http.get(newUrl, { timeout: this.canceller.promise} ).then(function mySuccess(response) {
+            this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
                 if (MetricsService.curr != self) { // abort future api calls
                     return;
                 }
@@ -303,6 +305,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         this.loadData = function (input, name, id) {
 
+            console.timeEnd('API');
             var currentOptions = {
                 chart: this.chartSelector(input),
                 title: this.titleSelector(name),
@@ -324,15 +327,14 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
 
         this.createChart = function () {
-            console.time('time');
+            console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
             this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
             //this.chart.update(this.level_list[this.current_level]['option']);
+            console.timeEnd('Chart');
 
-            console.timeEnd('time');
         }
-
 
         //------------------------------------ Pipeline helper ---------------------------------------------------------------
 
@@ -509,8 +511,12 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         this.plotOptionsSelector = function () {
             var plotOptions = {
+
                 line: {
                     marker: {
+                        enabled: false
+                    },
+                    dataLabels: {
                         enabled: false
                     }
                 },

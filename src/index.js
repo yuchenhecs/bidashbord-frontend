@@ -6,5 +6,5 @@ const requiredModules = [
 	'ngMaterial'
 ];
 
-angular
-	.module('app', requiredModules);
+//angular.module('app', requiredModules);
+angular.module('app', []);

@@ -28,9 +28,14 @@ module.exports = function(config) {
         //app
 
         './src/app/home/home.controller.js',
-
         './src/app/home/home.controller.spec.js',
-        './src/app/home/home.html'
+        './src/app/home/home.html',
+
+        './src/app/metrics/metrics.controller.js',
+        
+        './src/app/goals/goals.controller.js',
+        './src/app/goals/goals.controller.spec.js',
+        './src/app/goals/goals.html'
     ],
 
 

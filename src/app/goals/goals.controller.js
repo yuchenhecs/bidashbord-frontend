@@ -4,7 +4,7 @@ angular
     .factory('GoalsService', GoalsService);
 
 function GoalsService(MetricsService) {
-    return function () {
+    //return function () {
         // most code is written in MetricsController
         var base = new MetricsService();
         // constants
@@ -124,12 +124,12 @@ function GoalsService(MetricsService) {
         };
 
         return base;
-    }
+    //}
 }
 
 
 function GoalsController($scope, GoalsService) {
-    var service = new GoalsService();
+    var service = GoalsService;
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;

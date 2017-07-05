@@ -28,5 +28,11 @@ function routesConfig($stateProvider) {
 			templateUrl: 'app/netWorth/netWorth.html',
 			controller: 'NetWorthController',
 			controllerAs: 'netWorth'
+		})
+		.state('logins', {
+			url: '/logins',
+			templateUrl: 'app/logins/logins.html',
+			controller: 'LoginsController',
+			controllerAs: 'logins'
 		});
 };

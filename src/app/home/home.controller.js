@@ -1,20 +1,27 @@
 angular
 	.module('app')
 	.controller('HomeController', HomeController)
-	.factory('chartData', foo);
+	.factory('chartData', chartData);
 
 //factory object with methods
-function foo($http) {
+function chartData($http, $log) {
 	var chartData = {};
 
+
 	chartData.callApi = function(chartType, chartId, url) {
-		return $http.get(url).then(function mySuccess(response) {
-			var apiData = response["data"]["data"];
-			chartData.createOptions(chartType, chartId, apiData);
-			return response.data;
-		}, function myError(response) {
-			$log.error("Error " + response.status + ": " + response.statusText + "!");
-		});
+		if (url === null) {
+			chartData.createOptions(chartType, chartId, '');
+		} else {
+				return $http.get(url).then(function mySuccess(response) {
+				var apiData = response["data"];
+				if (chartId !== null) {
+					chartData.createOptions(chartType, chartId, apiData["data"]);
+				}
+				return apiData;
+			}, function myError(response) {
+				$log.error("Error " + response.status + ": " + response.statusText + "!");
+			});
+		}
 	};
 
 	chartData.titleSelector = function(chartId, apiData) {
@@ -73,8 +80,12 @@ function foo($http) {
 				categories: dates
 			};
 		} else if (chartId === "netWorthContainer") {
+			var categories = [];
+			apiData.summary.forEach(function(x){
+				categories.push(x.date);
+			});
 			xAxis = {
-				categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+				categories: categories
 			};
 		}
 
@@ -114,9 +125,6 @@ function foo($http) {
 					}
 				},
 				labels: {
-					// formatter: function() {
-					// 	return '$' + this.axis.defaultLabelFormatter.call(this);
-					// },
 					style: {
 						color: Highcharts.getOptions().colors[0]
 					}
@@ -137,7 +145,7 @@ function foo($http) {
 			tooltip = {
 				split: true
 			};
-		} else if (chartId === "netWorthContainer") {
+		} else if (chartId ==="netWorthContainer") {
 			tooltip = {
 				split: true
 			};
@@ -171,8 +179,10 @@ function foo($http) {
 					}
 				}
 			};
-		} else if (chartId === "netWorthContainer") {
-			options = {};
+		} else if (chartId ==="netWorthContainer") {
+			options = {
+
+			};
 		}
 
 		return options;
@@ -226,20 +236,28 @@ function foo($http) {
 
 				series.push(points);
 			}
-		} else if (chartId === "netWorthContainer") {
+		} else if (chartId ==="netWorthContainer") {
+			apiData = apiData.summary;
+			var data = [];
+			var clientsDiff = [];
+			apiData.forEach(function(x){
+					data.push(x.absNet);
+					clientsDiff.push(x.clientsDiff);
+			});
+
+
 			series = [{
 				name: 'Net Worth',
-				data: [5000, 5400, 3900, 6700, 10000, 8090],
+				data: data,
 				yAxis: 1
 			}, {
 				name: 'Clients',
-				data: [0, 1, 3, -5, 10, -3]
+				data: clientsDiff
 			}];
 		}
 
 		return series;
 	};
-
 
 	chartData.createOptions = function(chartType, chartId, apiData) {
 		var currentOptions = {
@@ -255,7 +273,6 @@ function foo($http) {
 			series: chartData.seriesSelector(chartId, apiData)
 		}
 
-		//return currentOptions;
 		this.chart = Highcharts.chart(chartId, currentOptions);
 	};
 
@@ -276,78 +293,78 @@ function HomeController($scope, $http, $log, chartData) {
 	this.chart = Highcharts.setOptions(colorTheme);
 	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
 	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	//chartData.callApi('pie', 'goalsContainer', '');
+	chartData.callApi('line', 'netWorthContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/networth');
 
-	//console.log(apiData.$$state);
-	//chartData.createOptions('pie', 'aumContainer', apiData);
+	// $scope.loginData = chartData.callApi(null, null, 'link tbd');
 
-	// getGoalsFromApi("pie", "goalsContainer");
-	// getAUMFromApi("area", "aumContainer");
-	// getNetWorthFromApi(null, "netWorthContainer");
+	$scope.response = {
+		clients: {
+			total: 300,
+			unique: 100,
+			avgTime: 60,
+			totalChange: '+ 3',
+			uniqueChange: '- 10',
+			timeChange: '0'
+		},
+		prospects: {
+			total: 150,
+			unique: 120,
+			avgTime: 100,
+			totalChange: '- 20',
+			uniqueChange: '+ 1',
+			timeChange: '0'
+		}
+	};
 
-	// function getGoalsFromApi(chartType, chartId) {
-	// 	//var url = this.DOMAIN + "/goals";
-	// 	var url = "http://10.1.10.247:8080/goals";
-	//
-	//
-	// 	$http.get(url).then(function mySuccess(response) {
-	// 		var apiData = response["data"]["data"];
-	// 		createOptions(chartType, chartId, apiData);
-	// 	}, function myError(response) {
-	// 		$log.error("Error " + response.status + ": " + response.statusText + "!");
-	// 	});
-	// };
-	//
-	// function getAUMFromApi(chartType, chartId) {
-	// 	var response = {
-	// 		"aumDiff": [{
-	// 			"date": "2016-01-01",
-	// 			"types": {
-	// 				"US Bond": 1000,
-	// 				"US Stocks": 2500,
-	// 				"Cash": 700
-	// 			}
-	// 		},{
-	// 			"date": "2016-04-01",
-	// 			"types": {
-	// 				"US Bond": 5000,
-	// 				"US Stocks": 3000,
-	// 				"Cash": 900
-	// 			}
-	// 		},{
-	// 			"date": "2016-07-01",
-	// 			"types": {
-	// 				"US Bond": 6000,
-	// 				"US Stocks": 2000,
-	// 				"Cash": 1400
-	// 			}
-	// 		},{
-	// 			"date": "2016-10-06",
-	// 			"types": {
-	// 				"US Bond": 9000,
-	// 				"US Stocks": 1000,
-	// 				"Cash": 300
-	// 			}
-	// 		}
-	// 	]};
-	//
-	// 	//return dummyData["aumDiff"];
-	//
-	// 	var apiData = response["aumDiff"];
-	// 	createOptions(chartType, chartId, apiData);
-	// 	// var url = "http://10.1.10.247:8080/aum";
-	// 	//
-	// 	// this.$http.get(url).then(function mySuccess(response) {
-	// 	// 	var apiData = response["data"]["data"];
-	// 	// 	var self = HomeController.self;
-	// 	// 	HomeController.self.createOptions(chartType, chartId, apiData);
-	// 	// }, function myError(response) {
-	// 	// 	console.log("Error " + response.status + ": " + response.data.error + "!");
-	// 	// });
-	// };
-	//
-	// function getNetWorthFromApi(chartType, chartId) {
-	// 	createOptions(chartType, chartId);
-	// };
+	$scope.showData = $scope.response['clients'];
 
+	var bool = true;
+
+	$scope.sign = 'pos';
+
+	$scope.changeData = function() {
+		if (bool) {
+			$scope.showData = $scope.response['clients'];
+			if ($scope.showData['totalChange'].charAt(0) === '-') {
+				$scope.totalSign = 'neg';
+			} else {
+				$scope.totalSign = 'pos';
+			}
+
+			if ($scope.showData['uniqueChange'].charAt(0) === '-') {
+				$scope.uniqueSign = 'neg';
+			} else {
+				$scope.uniqueSign = 'pos';
+			}
+
+			if ($scope.showData['timeChange'].charAt(0) === '-') {
+				$scope.timeSign = 'neg';
+			} else {
+				$scope.timeSign = 'pos';
+			}
+
+			bool = !bool;
+		} else {
+			$scope.showData = $scope.response['prospects'];
+			if ($scope.showData['totalChange'].charAt(0) === '-') {
+				$scope.totalSign = 'neg';
+			} else {
+				$scope.totalSign = 'pos';
+			}
+
+			if ($scope.showData['uniqueChange'].charAt(0) === '-') {
+				$scope.uniqueSign = 'neg';
+			} else {
+				$scope.uniqueSign = 'pos';
+			}
+
+			if ($scope.showData['timeChange'].charAt(0) === '-') {
+				$scope.timeSign = 'neg';
+			} else {
+				$scope.timeSign = 'pos';
+			}
+
+			bool = !bool;
+		}
+	}
 };

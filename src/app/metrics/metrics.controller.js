@@ -3,9 +3,18 @@ angular
     .factory('MetricsService', MetricsService);
 
 
-function MetricsService($http, $rootScope, $compile) {
+function MetricsService($http, $rootScope, $compile, $q) {
     return function () {
+
         var self = this;
+        this.canceller = $q.defer();
+
+        if(MetricsService.curr){ // cancel previous pending api calls
+            MetricsService.curr.canceller.resolve(); 
+        }
+
+        MetricsService.curr = this;
+
         // constants
         this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
@@ -234,7 +243,11 @@ function MetricsService($http, $rootScope, $compile) {
             }
 
 
-            this.$http.get(newUrl).then(function mySuccess(response) {
+            this.$http.get(newUrl, { timeout: this.canceller.promise} ).then(function mySuccess(response) {
+                if (MetricsService.curr != self) { // abort future api calls
+                    return;
+                }
+
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                 }
@@ -725,8 +738,8 @@ function MetricsService($http, $rootScope, $compile) {
             for (var i = 1; i < pathBlocks.length; i = i + 2) {
                 pathBlocks[i].setAttribute('data-level', (i - 1) / 2);
                 pathBlocks[i].classList.add("path-link");
-                
-                pathBlocks[i-1].classList.add("chart-legend");
+
+                pathBlocks[i - 1].classList.add("chart-legend");
                 pathBlocks[i].classList.add("chart-legend");
 
                 pathBlocks[i].onclick = function () {

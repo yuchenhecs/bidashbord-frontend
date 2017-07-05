@@ -808,7 +808,7 @@ function MetricsService($http, $rootScope, $compile) {
                     </md-input-container>
                     </form>
 
-                    <md-button class=" md-raised" ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
+                    <md-button class="md-secondary md-raised" ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
                     <md-button class="md-primary md-raised" ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
                 </div>
             `;

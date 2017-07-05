@@ -606,3 +606,26 @@ $color-blue: #11BEDF;
     font-size: 13px;
     color: #464646;
 }
+
+
+
+.md-button {
+    color: #fff !important;
+    border-radius: 25px;
+    padding: 0 20px;
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 600;
+
+    &.md-primary, &.md-primary-btn-head {
+        background-color: #3eb6b5 !important;
+    }
+
+    &.md-secondary, &.md-secondary-btn-head, &.btn-grey-m {
+        background-color: #9F9F9F !important;
+    }
+
+    p, span {
+        margin: 0;
+    }
+}

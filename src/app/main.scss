@@ -608,6 +608,45 @@ $color-blue: #11BEDF;
 }
 
 
+////// Oranj UI
+
+$color_persian_green_approx: #00a69c;
+$color_persian_green_58_approx: rgba(0, 166, 156, 0.58);
+
+md-switch {
+    &.md-checked {
+        .md-thumb {
+            background-color: $color_persian_green_approx !important;
+        }
+        .md-bar {
+            background-color: $color_persian_green_58_approx !important;
+        }
+    }
+    &.md-default-theme.md-checked {
+        .md-thumb {
+            background-color: $color_persian_green_approx !important;
+        }
+        .md-bar {
+            background-color: $color_persian_green_58_approx !important;
+        }
+    }
+}
+
+md-sidenav {
+  z-index: 99;
+  max-width: 250px;
+}
+
+.md-open-menu-container {
+  font-size: 14px;
+}
+
+.md-open-menu-container md-menu-item .limit-one-line {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .md-button {
     color: #fff !important;
@@ -627,5 +666,32 @@ $color-blue: #11BEDF;
 
     p, span {
         margin: 0;
+    }
+}
+
+md-input-container {
+    margin: 5px 0;
+
+    input {
+        color: #fff;
+    }
+}
+
+md-autocomplete.oranj-default {
+    border-radius: 26px;
+    border: 1px solid #CBD5DD;
+
+    md-autocomplete-wrap {
+        box-shadow: none;
+    }
+}
+
+md-sidenav {
+    z-index: 10000;
+}
+
+md-tooltip {
+    &.multiline {
+        height: auto;
     }
 }

@@ -5,8 +5,7 @@ angular
 
 function MetricsService($http, $rootScope, $compile) {
     return function () {
-        MetricsService.self = this;
-
+        var self = this;
         // constants
         this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
@@ -107,7 +106,6 @@ function MetricsService($http, $rootScope, $compile) {
             // could fix later
 
             setTimeout(function () {
-                var self = MetricsService.self;
 
                 if (!self.validateLevel(level)) {
                     return;
@@ -159,7 +157,7 @@ function MetricsService($http, $rootScope, $compile) {
                 baseUrl = domain + subdomain + "/clients?advisorId=" + id;
             } else {
                 console.log("Invalid level!");
-                MetricsService.self.hideLoading();
+                self.hideLoading();
                 return;
             }
 
@@ -237,7 +235,6 @@ function MetricsService($http, $rootScope, $compile) {
 
 
             this.$http.get(newUrl).then(function mySuccess(response) {
-                var self = MetricsService.self;
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                 }
@@ -261,7 +258,7 @@ function MetricsService($http, $rootScope, $compile) {
             }, function myError(response, error) {
                 console.log("Error " + response.status + ": " + response.statusText + "!");
 
-                MetricsService.self.hideLoading();
+                self.hideLoading();
             });
         }
 
@@ -463,8 +460,6 @@ function MetricsService($http, $rootScope, $compile) {
             if (this.axis.tickInterval > 1) {
 
                 var initial = label.charAt(0).toUpperCase();
-                var self = MetricsService.self;
-
 
                 if (initial === self.lastInitial) {
 
@@ -549,7 +544,6 @@ function MetricsService($http, $rootScope, $compile) {
 
         // chart onload event
         this.chartOnLoad = function () {
-            var self = MetricsService.self;
 
             var chart = this;
             self.createWidgets(this);
@@ -597,7 +591,7 @@ function MetricsService($http, $rootScope, $compile) {
         // chart bar onclick event
         this.chartOnClick = function () {
 
-            MetricsService.self.drillDown(this.category, this.id);
+            self.drillDown(this.category, this.id);
         }
 
         // tooltip formatter
@@ -620,7 +614,6 @@ function MetricsService($http, $rootScope, $compile) {
         //construct categories data for chart template
         this.prepareCategories = function (input) {
             var categories = input.map(function (x) {
-                var self = MetricsService.self;
                 var name = x['name'];
                 if (self.current_level === 0) {
                     name = x['name'];
@@ -661,7 +654,7 @@ function MetricsService($http, $rootScope, $compile) {
             var series = [];
             for (var key in goalMap) {
                 var dataDrillDown = goalMap[key].map(function (x, i) {
-                    var self = MetricsService.self;
+
                     var name = 'firmId';
                     if (self.current_level === 0) {
                         name = 'firmId';
@@ -737,11 +730,11 @@ function MetricsService($http, $rootScope, $compile) {
                 pathBlocks[i].classList.add("chart-legend");
 
                 pathBlocks[i].onclick = function () {
-                    MetricsService.self.pathOnClick(this);
+                    self.pathOnClick(this);
                 };
             }
 
-            pathBlocks[MetricsService.self.current_level * 2 + 1].classList.add("curr-path-link");
+            pathBlocks[self.current_level * 2 + 1].classList.add("curr-path-link");
         }
 
         this.pathOnClick = function (element) {
@@ -749,7 +742,7 @@ function MetricsService($http, $rootScope, $compile) {
             var level = parseInt(element.dataset.level);
 
             //drill up
-            MetricsService.self.drillToLevel(level);
+            self.drillToLevel(level);
 
         }
 
@@ -808,8 +801,8 @@ function MetricsService($http, $rootScope, $compile) {
                     </md-input-container>
                     </form>
 
-                    <md-button class="md-secondary md-raised" ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-                    <md-button class="md-primary md-raised" ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+                    <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
+                    <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
                 </div>
             `;
 

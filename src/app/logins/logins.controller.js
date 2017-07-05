@@ -11,6 +11,7 @@ function LoginsService(MetricsService) {
         LoginsService.self = base;
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        //base.DOMAIN = "http://10.1.10.11:8080";
         base.SUB_DOMAIN = "/bi/stats";
         base.USE_DUMMY_DATA = false;
         base.controllerName = "logins";
@@ -381,7 +382,7 @@ function LoginsController($scope, LoginsService) {
 
 
     this.checkUserType = function () {
-        service.isWeek = this.isWeek;
+        this.isWeek = service.isWeek;
         service.isProspect = this.isProspect;
 
         try {
@@ -390,9 +391,6 @@ function LoginsController($scope, LoginsService) {
         catch (err) {
             console.log("Error when clearing dates!");
         }
-
-        this.isWeek = service.isWeek;
-        this.isProspect = service.isProspect;
     }
 
     service.launch($scope);

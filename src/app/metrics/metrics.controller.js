@@ -521,6 +521,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     }
                 },
                 series: {
+                    stickyTracking: false,
                     turboThreshold: 0,
                     cursor: 'pointer',
                     point: {

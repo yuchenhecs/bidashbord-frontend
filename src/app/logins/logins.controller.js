@@ -369,7 +369,7 @@ function LoginsService(MetricsService) {
         }
 
         return base;
-    }
+    };
 }
 
 

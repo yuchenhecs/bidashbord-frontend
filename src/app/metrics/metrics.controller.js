@@ -228,7 +228,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 data['data'] = response[type];
                 this.current_level = level;
 
-
                 if (this.controllerName.localeCompare("logins") === 0) {
                     this.isWeek = args[0];
                     this.isProspect = args[1];
@@ -238,13 +237,11 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 this.loadData(data, name, id);
                 return;
             }
-
-
-            this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
+            
+            return this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
                 if (MetricsService.curr != self) { // abort future api calls
                     return;
                 }
-
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                 }
@@ -267,7 +264,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 }
             }, function myError(response, error) {
                 console.log("Error " + response.status + ": " + response.statusText + "!");
-
                 self.hideLoading();
             });
         }
@@ -322,6 +318,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
 
         this.createChart = function () {
+            
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();

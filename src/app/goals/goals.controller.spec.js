@@ -13,8 +13,19 @@ describe('Goals Controller:', function() {
         $q = _$q_;
         $httpBackend = _$httpBackend_;
         $scope = $rootScope.$new();
+        
+        GoalsService.init = function(){
+            var base = {};
+            base.launch = function(){
 
-        spyOn(GoalsService, "launch");
+            };
+
+            return base;
+        };
+// console.log(GoalsService);
+// console.log(GoalsService._prototype);
+
+//         spyOn(GoalsService, "launch");
         //spyOn(GoalsService, "createOptions");
         GoalsController = function() {
             return $controller('GoalsController', {

@@ -16,7 +16,14 @@ function chartData($http, $log) {
 				var apiData = response["data"];
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData["data"]);
+				} else if (chartType === 'client') {
+					console.log(apiData["data"]);
+					chartData.clientData = apiData["data"];
+				} else if (chartType === 'prospect') {
+					console.log(apiData["data"]);
+					chartData.prospectData = apiData["data"];
 				}
+				//returning for unit testing purposes
 				return apiData;
 			}, function myError(response) {
 				$log.error("Error " + response.status + ": " + response.statusText + "!");
@@ -277,6 +284,7 @@ function chartData($http, $log) {
 	};
 
 	return chartData;
+
 }
 
 function HomeController($scope, $http, $log, chartData) {
@@ -290,81 +298,45 @@ function HomeController($scope, $http, $log, chartData) {
 		colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
 	};
 
+	var toggle = true;
+
+	$scope.toggleLoginData = function() {
+		$scope.showData = toggle ? $scope.clientData : $scope.prospectData;
+
+		$scope.totalSign = $scope.showData['changeInTotalLogins'] < 0 ? 'neg' : 'pos';
+		$scope.uniqueSign = $scope.showData['changeInUniqueLogins'] < 0 ? 'neg' : 'pos';
+		$scope.timeSign = $scope.showData['changeInAvgSessionTime'] < 0 ? 'neg' : 'pos';
+
+		toggle = !toggle;
+	};
+
+	$scope.loginApi = function(type, url) {
+		if (url === null) {
+			return null;
+		} else {
+				return $http.get(url).then(function mySuccess(response) {
+				var apiData = response["data"];
+				if (type === 'client') {
+					$scope.clientData = apiData["data"]["client"];
+				} else if (type === 'prospect') {
+					$scope.prospectData = apiData["data"]["prospect"];
+				}
+			}, function myError(response) {
+				$log.error("Error " + response.status + ": " + response.statusText + "!");
+			});
+		}
+	};
+
 	this.chart = Highcharts.setOptions(colorTheme);
 	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
 	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
 	chartData.callApi('line', 'netWorthContainer', 'http://10.1.10.28:8080/bi/networth');
+	$scope.loginApi('client', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=client');
+	$scope.loginApi('prospect', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=prospect');
+	setTimeout($scope.toggleLoginData, 50);
+	// $scope.sign = 'pos';
+	// $scope.totalSign = $scope.showData['changeInTotalLogins'].charAt(0) === '-' ? 'neg' : 'pos';
+	// $scope.uniqueSign = $scope.showData['changeInUniqueLogins'].charAt(0) === '-' ? 'neg' : 'pos';
+	// $scope.timeSign = $scope.showData['changeInAvgSessionTime'].charAt(0) === '-' ? 'neg' : 'pos';
 
-	// $scope.loginData = chartData.callApi(null, null, 'link tbd');
-
-	$scope.response = {
-		clients: {
-			total: 300,
-			unique: 100,
-			avgTime: 60,
-			totalChange: '+ 3',
-			uniqueChange: '- 10',
-			timeChange: '0'
-		},
-		prospects: {
-			total: 150,
-			unique: 120,
-			avgTime: 100,
-			totalChange: '- 20',
-			uniqueChange: '+ 1',
-			timeChange: '0'
-		}
-	};
-
-	$scope.showData = $scope.response['clients'];
-
-	var bool = true;
-
-	$scope.sign = 'pos';
-
-	$scope.changeData = function() {
-		if (bool) {
-			$scope.showData = $scope.response['clients'];
-			if ($scope.showData['totalChange'].charAt(0) === '-') {
-				$scope.totalSign = 'neg';
-			} else {
-				$scope.totalSign = 'pos';
-			}
-
-			if ($scope.showData['uniqueChange'].charAt(0) === '-') {
-				$scope.uniqueSign = 'neg';
-			} else {
-				$scope.uniqueSign = 'pos';
-			}
-
-			if ($scope.showData['timeChange'].charAt(0) === '-') {
-				$scope.timeSign = 'neg';
-			} else {
-				$scope.timeSign = 'pos';
-			}
-
-			bool = !bool;
-		} else {
-			$scope.showData = $scope.response['prospects'];
-			if ($scope.showData['totalChange'].charAt(0) === '-') {
-				$scope.totalSign = 'neg';
-			} else {
-				$scope.totalSign = 'pos';
-			}
-
-			if ($scope.showData['uniqueChange'].charAt(0) === '-') {
-				$scope.uniqueSign = 'neg';
-			} else {
-				$scope.uniqueSign = 'pos';
-			}
-
-			if ($scope.showData['timeChange'].charAt(0) === '-') {
-				$scope.timeSign = 'neg';
-			} else {
-				$scope.timeSign = 'pos';
-			}
-
-			bool = !bool;
-		}
-	}
 };

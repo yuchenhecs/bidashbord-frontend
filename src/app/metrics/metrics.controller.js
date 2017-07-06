@@ -135,12 +135,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             return true;
         }
 
-        // this.getDataForPage = function (page, level, isWeek, isProspect) {
-        //     this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level, isWeek, isProspect);
-        // }
-
         this.getData = function (name, id, page) {
-            
 
             if (this.controllerName.localeCompare("logins") === 0) {
                 this.getDataForLevel(name, id, page, this.current_level, [this.isWeek, this.isProspect]);
@@ -361,51 +356,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
             }
         }
 
-        // this.mergeOption = function (options) {
-        //     // assume we are expanding the current chart
-        //     var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
-
-        //     var originalLength = originalCategories.length;
-        //     var newLength = options['xAxis']['categories'].length;
-
-        //     options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
-
-        //     var originalSeries = this.level_list[this.current_level]['option']['series'];
-        //     var newSeries = options['series'];
-
-        //     var seriesMap = {};
-
-        //     // 1. initialize seriesMap with originalSeries
-        //     originalSeries.forEach(function (element) {
-        //         seriesMap[element['name']] = element;
-        //     });
-
-        //     // 2. append newSeries
-        //     newSeries.forEach(function (element) {
-        //         if (!seriesMap[element['name']]) {
-        //             var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
-        //             seriesMap[element['name']]['data'] = zeroPaddings.concat(element['data']);
-        //         } else {
-        //             seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(element['data']);
-
-        //         }
-        //     });
-
-        //     // 3. fill the rest of originalSeries with zeros
-        //     originalSeries.forEach(function (element) {
-        //         if (seriesMap[element['name']]['data'].length < originalLength + newLength) {
-        //             var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
-        //             seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(zeroPaddings);
-        //         }
-        //     });
-
-        //     options['series'] = Object.values(seriesMap);
-
-        //     return options;
-        // }
-
-
-
         this.showLoading = function () {
             if (this.chart != null) {
                 this.chart.showLoading('Loading...');
@@ -567,54 +517,13 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         // chart onload event
         this.chartOnLoad = function () {
-
-            var chart = this;
-            self.createWidgets(this);
-
-            return;
-            if (self.controllerName.localeCompare("aum") === 0) {
-                // lighten the color of previous date bar
-                chart.series.forEach(function (x) {
-
-                    if (x.options.stackId === 1) {
-                        return;
-                    }
-                    var hex = x.color;
-                    var percent = 50;
-
-                    // increase brightness
-                    var colorCode;
-
-                    // strip the leading # if it's there
-                    hex = hex.replace(/^\s*#|\s*$/g, '');
-
-                    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-                    if (hex.length === 3) {
-                        hex = hex.replace(/(.)/g, '$1$1');
-                    }
-
-                    var r = parseInt(hex.substr(0, 2), 16),
-                        g = parseInt(hex.substr(2, 2), 16),
-                        b = parseInt(hex.substr(4, 2), 16);
-
-                    colorCode = '#' +
-                        ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
-                        ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
-                        ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
-
-
-                    x.update({
-                        color: colorCode
-                    });
-                });
-            }
+            self.createWidgets(this);            
         }
 
 
 
         // chart bar onclick event
         this.chartOnClick = function () {
-
             self.drillDown(this.category, this.id);
         }
 
@@ -687,7 +596,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     } else if (self.current_level === 2) {
                         name = 'clientId'
                     }
-                    return { id: input[i][name], y: x+200 };
+                    return { id: input[i][name], y: x };
                 });
 
                 var points =

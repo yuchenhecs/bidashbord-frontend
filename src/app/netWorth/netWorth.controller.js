@@ -1,10 +1,10 @@
 angular
   .module('app')
   .controller('NetWorthController', NetWorthController)
-  .factory('NetWorthService', NetWorthService);
+  .service('NetWorthService', NetWorthService);
 
 function NetWorthService(MetricsService) {
-  return function () {
+  this.init = function(){
     // most code is written in MetricsController
 
     var base = new MetricsService();
@@ -251,11 +251,11 @@ function NetWorthService(MetricsService) {
     }
 
     return base;
-  };
+  }
 }
 
 
 function NetWorthController($scope, NetWorthService) {
-  var netWorth = new NetWorthService();
+  var netWorth = NetWorthService.init();
   netWorth.launch($scope);
 }

@@ -1,10 +1,10 @@
 angular
     .module('app')
     .controller('LoginsController', LoginsController)
-    .factory('LoginsService', LoginsService);
+    .service('LoginsService', LoginsService);
 
 function LoginsService(MetricsService) {
-    return function () {
+    this.init = function(){
         // most code is written in MetricsController
 
         var base = new MetricsService();
@@ -369,12 +369,12 @@ function LoginsService(MetricsService) {
         }
 
         return base;
-    };
+    }
 }
 
 
 function LoginsController($scope, LoginsService) {
-    var service = new LoginsService();
+    var service = LoginsService.init();
 
     this.isWeek = service.isWeek;
     this.isProspect = service.isProspect;

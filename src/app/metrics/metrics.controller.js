@@ -8,10 +8,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         var self = this;
         this.canceller = $q.defer();
-console.log("New Metrics!!");
         if (MetricsService.curr) { // cancel previous pending api calls     
             MetricsService.curr.canceller.resolve();
-            console.log(MetricsService.curr.canceller);
         }
 
         MetricsService.curr = this;

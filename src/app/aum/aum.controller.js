@@ -1,10 +1,10 @@
 angular
     .module('app')
     .controller('AUMController', AUMController)
-    .factory('AUMService', AUMService);
+    .service('AUMService', AUMService);
 
 function AUMService($http, MetricsService) {
-    return function () {
+    this.init = function(){
         var base = new MetricsService();
         AUMService.self = base;
         // constants
@@ -304,13 +304,13 @@ function AUMService($http, MetricsService) {
         return base;
 
 
-    };
+    }
 
 }
 
 
 function AUMController($scope, AUMService) {
-    var service = new AUMService();
+    var service = AUMService.init();
 
 
     this.startDate = service.startDate;

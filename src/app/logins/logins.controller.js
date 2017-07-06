@@ -8,7 +8,6 @@ function LoginsService(MetricsService) {
         // most code is written in MetricsController
 
         var base = new MetricsService();
-        LoginsService.self = base;
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         //base.DOMAIN = "http://10.1.10.11:8080";
@@ -124,7 +123,7 @@ function LoginsService(MetricsService) {
         base.checkRange = function (range) {
             if (this.isWeek != range) {
                 setTimeout(function () {
-                    var self = LoginsService.self;
+                    var self = base;
                     var name = self.level_list[self.current_level]['name'];
                     var id = self.level_list[self.current_level]['id'];
                     self.getDataForLevel(name, id, 0, self.current_level, [range, self.isProspect]);
@@ -134,7 +133,7 @@ function LoginsService(MetricsService) {
 
         base.checkUserType = function () {
             setTimeout(function () {
-                var self = LoginsService.self;
+                var self = base;
                 var name = self.level_list[self.current_level]['name'];
                 var id = self.level_list[self.current_level]['id'];
                 self.getDataForLevel(name, id, 0, self.current_level, [self.isWeek, self.isProspect]);
@@ -234,7 +233,7 @@ function LoginsService(MetricsService) {
 
             var series = [];
 
-            var self = LoginsService.self;
+            var self = base;
             input.forEach(function (obj, p) {
                 var name = 'firmId';
                 if (self.current_level === 0) {
@@ -305,11 +304,11 @@ function LoginsService(MetricsService) {
                 rangeBlocks[i].classList.add("path-link");
                 rangeBlocks[i].classList.add("chart-legend");
                 rangeBlocks[i].onclick = function () {
-                    LoginsService.self.rangeOnClick(this);
+                    base.rangeOnClick(this);
                 };
             };
 
-            var tmp = LoginsService.self.isWeek ? 0 : 2;
+            var tmp = base.isWeek ? 0 : 2;
             rangeBlocks[tmp].classList.add("curr-path-link");
         }
 

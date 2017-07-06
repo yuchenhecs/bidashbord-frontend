@@ -331,7 +331,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
             this.lastInitial = '';
             this.hideLoading();
             this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
-            //this.chart.update(this.level_list[this.current_level]['option']);
+
+            console.log(this.level_list[this.current_level]['option']['series']);
             console.timeEnd('Chart');
 
         }
@@ -532,18 +533,20 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     marker: {
                         enabled: false
                     },
+                    events: {
+                        legendItemClick: function () {
+                            return false;
+                        }
+                    },
                     animation: true
                 },
                 column: {
                     stacking: 'normal',
                     dataLabels: {
-                        enabled: false,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        enabled: false
                     },
-                    events: {
-                        legendItemClick: function () {
-                            return false;
-                        }
+                    marker: {
+                        enabled: false
                     }
                 }
             };
@@ -568,6 +571,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             var chart = this;
             self.createWidgets(this);
 
+            return;
             if (self.controllerName.localeCompare("aum") === 0) {
                 // lighten the color of previous date bar
                 chart.series.forEach(function (x) {
@@ -683,7 +687,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     } else if (self.current_level === 2) {
                         name = 'clientId'
                     }
-                    return { id: input[i][name], y: x };
+                    return { id: input[i][name], y: x+200 };
                 });
 
                 var points =
@@ -870,20 +874,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
             return (startDate_X == startDate_Y && endDate_X == endDate_Y)
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     };

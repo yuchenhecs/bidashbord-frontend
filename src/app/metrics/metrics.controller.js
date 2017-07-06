@@ -70,7 +70,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
-console.log("launch!!!!");
+
             var root = 'Oranj';  // dummy root name, should be returned by Oranj API
             var rootId = -1;
 

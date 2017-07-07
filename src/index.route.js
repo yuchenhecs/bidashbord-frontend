@@ -34,5 +34,11 @@ function routesConfig($stateProvider) {
 			templateUrl: 'app/logins/logins.html',
 			controller: 'LoginsController',
 			controllerAs: 'logins'
+		})
+		.state('leaderBoard', {
+			url: '/leaderBoard',
+			templateUrl: 'app/leaderBoard/leaderBoard.html',
+			controller: 'LeaderBoardController',
+			controllerAs: 'leaderBoard'
 		});
 };

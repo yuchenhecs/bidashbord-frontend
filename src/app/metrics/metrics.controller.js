@@ -46,6 +46,16 @@ function MetricsService($http, $rootScope, $compile, $q) {
         this.optionTemplate = {
             credits: {
                 enabled: false
+            },
+            lang: {
+                noData: "No data to display"
+            },
+            noData: {
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: '#303030'
+                }
             }
         };
 
@@ -269,7 +279,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             });
         }
 
-        
+
 
         this.PreProcessData = function (response, type, newUrl, name, id, page, level, args, data) {
             var hasNext = response.data.data['hasNext'];
@@ -298,7 +308,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
         }
 
         this.loadData = function (input, name, id) {
-           
+
             console.timeEnd('API');
             var currentOptions = {
                 chart: this.chartSelector(input),
@@ -321,7 +331,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
 
         this.createChart = function () {
-            
+
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
@@ -517,7 +527,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         // chart onload event
         this.chartOnLoad = function () {
-            self.createWidgets(this);            
+            self.createWidgets(this);
         }
 
 

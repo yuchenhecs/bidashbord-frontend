@@ -197,6 +197,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 this.getDataFromApi(baseUrl, name, id, page, level);
             }
 
+            return baseUrl;
+
 
 
         }
@@ -237,13 +239,11 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 this.loadData(data, name, id);
                 return;
             }
-            
+
             return this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
-                if (MetricsService.curr != self) { // abort future api calls
-                    return;
-                }
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
+                    return data;
                 }
                 else {
                     var hasNext = response.data.data['last'];
@@ -258,6 +258,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
                         self.current_level = level;
                         self.loadData(data, name, id);
+                        return data;
                     } else {
                         self.getDataFromApi(newUrl, name, id, page + 1, level, args, data)
                     }
@@ -267,6 +268,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 self.hideLoading();
             });
         }
+
+        
 
         this.PreProcessData = function (response, type, newUrl, name, id, page, level, args, data) {
             var hasNext = response.data.data['hasNext'];
@@ -295,7 +298,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
         }
 
         this.loadData = function (input, name, id) {
-
+           
             console.timeEnd('API');
             var currentOptions = {
                 chart: this.chartSelector(input),

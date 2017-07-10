@@ -99,24 +99,35 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
     this.showChart = function (ev) {
         var dialogHTML = `
-            <md-dialog style="width:800px">
+            <md-dialog style="width:700px">
                 <div>
-                    <div layout="column">
-                        <div layout="row" layout-align="center center">
-                            <h3>title</h3>
-
-                        </div>
-                        <div layout="row" layout-align="space-around stretch" style="max-height:200px">
-                            <div id="chart-sm" flex="33">adasdasd</div>
-
-                            <div flex="33" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>ssddfsdf</h3>
+                    <div layout="column" >
+                        
+                        <div layout="row" layout-align="space-around stretch"  layout-padding>
+                            <div id="chart-sm" flex="40">
+                                
                             </div>
 
-                            <div flex="33">adasdasd</div>
+                            <div flex="60" layout="column">
+                                <h3>title</h3>
+
+                                 <div layout="row" layout-align="space-around stretch" >
+                                     <div flex="50" style="text-align: center;margin:auto">
+                                        <h1>777 <small>k</small></h1>
+                                        <h3>least in state</h3>
+                                    </div>
+
+                                    <div flex="50" style="text-align: center;margin:auto">
+                                        <h1>777 <small>k</small></h1>
+                                        <h3>least in state</h3>
+                                    </div>
+                                </div>
+                            
+                             </div>
+
+                            
                         </div>
-                        <div id="chart-lg" layout="row" layout-align="center center" style="max-height:200px">
+                        <div id="chart-lg" layout="row" layout-align="center center" style="max-height:300px"  layout-padding>
                             <div class="loader no-animate primary-loader loader--style3">
                                 <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                     width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;" xml:space="preserve">
@@ -128,17 +139,19 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                         </div>
 
-                        <md-tabs>
+                        <md-tabs md-stretch-tabs='always' md-no-pagination="'true'">
+                            
                             <md-tab label="Tab #1"></md-tab>
                             <md-tab label="Tab #2"></md-tab>
                             <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #1"></md-tab>
-                            <md-tab label="Tab #2"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #1"></md-tab>
-                            <md-tab label="Tab #2"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
+                            <md-tab label="Tab #4"></md-tab>
+                            <md-tab label="Tab #5"></md-tab>
+                            <md-tab label="Tab #6"></md-tab>
+                            <md-tab label="Tab #7"></md-tab>
+                            <md-tab label="Tab #8"></md-tab>
+                            <md-tab label="Tab #9"></md-tab>
+                            <md-tab label="Tab #10"></md-tab>
+                            
                         </md-tabs>
                     </div>
                 </div>
@@ -146,7 +159,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         `;
 
         var service = this.init();
-       
+
 
         $mdDialog.show({
             controller: LeaderBoardDialogController,
@@ -161,16 +174,13 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             }
         });
 
-       
-       
-
-
-
-
     };
 
     this.createRingChart = function () {
         var chart_sm = Highcharts.chart('chart-sm', {
+            credits: {
+                enabled: false
+            },
             chart: {
                 type: 'solidgauge'
             },
@@ -178,7 +188,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 text: null
             },
             tooltip: {
-
                 enabled: false
             },
             pane: {
@@ -188,20 +197,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     outerRadius: '112%',
                     innerRadius: '88%',
                     backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
-                        .setOpacity(0.3)
-                        .get(),
-                    borderWidth: 0
-                }, { // Track for Exercise
-                    outerRadius: '87%',
-                    innerRadius: '63%',
-                    backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[1])
-                        .setOpacity(0.3)
-                        .get(),
-                    borderWidth: 0
-                }, { // Track for Stand
-                    outerRadius: '62%',
-                    innerRadius: '38%',
-                    backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[2])
                         .setOpacity(0.3)
                         .get(),
                     borderWidth: 0
@@ -242,26 +237,10 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     innerRadius: '88%',
                     y: 80
                 }]
-            }, {
-                name: 'Exercise',
-                data: [{
-                    color: Highcharts.getOptions().colors[1],
-                    radius: '87%',
-                    innerRadius: '63%',
-                    y: 65
-                }]
-            }, {
-                name: 'Stand',
-                data: [{
-                    color: Highcharts.getOptions().colors[2],
-                    radius: '62%',
-                    innerRadius: '38%',
-                    y: 50
-                }]
             }]
         });
 
-        chart_sm.reflow();
+        //      chart_sm.reflow();
 
     }
 }

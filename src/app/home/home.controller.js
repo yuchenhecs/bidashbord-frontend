@@ -16,12 +16,6 @@ function chartData($http, $log) {
 				var apiData = response["data"];
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData["data"]);
-				} else if (chartType === 'client') {
-					console.log(apiData["data"]);
-					chartData.clientData = apiData["data"];
-				} else if (chartType === 'prospect') {
-					console.log(apiData["data"]);
-					chartData.prospectData = apiData["data"];
 				}
 				//returning for unit testing purposes
 				return apiData;
@@ -310,33 +304,27 @@ function HomeController($scope, $http, $log, chartData) {
 		toggle = !toggle;
 	};
 
-	$scope.loginApi = function(type, url) {
-		if (url === null) {
-			return null;
-		} else {
-				return $http.get(url).then(function mySuccess(response) {
-				var apiData = response["data"];
-				if (type === 'client') {
-					$scope.clientData = apiData["data"]["client"];
-				} else if (type === 'prospect') {
-					$scope.prospectData = apiData["data"]["prospect"];
-				}
-			}, function myError(response) {
-				$log.error("Error " + response.status + ": " + response.statusText + "!");
-			});
-		}
+	$scope.loginApi = function() {
+		return $http.get(clientUrl).then(function mySuccess(clientResponse) {
+			$scope.clientData = clientResponse["data"]["data"]["client"];
+		}).then(function () {
+			return $http.get(prospectUrl).then(function mySuccess1(prospectResponse) {
+				$scope.prospectData = prospectResponse["data"]["data"]["prospect"];
+			}).then(function wakeup() {
+				$scope.toggleLoginData();
+			})
+		}, function myError(response) {
+			$log.error("Error " + response.status + ": " + response.statusText + "!");
+		});
 	};
+
+	var clientUrl = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=client';
+	var prospectUrl = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=prospect';
 
 	this.chart = Highcharts.setOptions(colorTheme);
 	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
 	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', 'http://10.1.10.28:8080/bi/networth');
-	$scope.loginApi('client', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=client');
-	$scope.loginApi('prospect', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=prospect');
-	setTimeout($scope.toggleLoginData, 50);
-	// $scope.sign = 'pos';
-	// $scope.totalSign = $scope.showData['changeInTotalLogins'].charAt(0) === '-' ? 'neg' : 'pos';
-	// $scope.uniqueSign = $scope.showData['changeInUniqueLogins'].charAt(0) === '-' ? 'neg' : 'pos';
-	// $scope.timeSign = $scope.showData['changeInAvgSessionTime'].charAt(0) === '-' ? 'neg' : 'pos';
+	chartData.callApi('line', 'netWorthContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/networth');
+	$scope.loginApi();
 
 };

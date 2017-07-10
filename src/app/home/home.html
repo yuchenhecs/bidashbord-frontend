@@ -83,10 +83,10 @@
                         <div class="row">
                             <div class="col-md-4 loginText">
                                 <div class="row loginNum">
-                                    {{ showData["total"] }}
+                                    {{ showData['totalLogins'] }}
                                 </div>
                                 <div class="row {{ totalSign }}">
-                                    {{ showData['totalChange'] }}
+                                    {{ showData['changeInTotalLogins'] }}
                                 </div>
                                 <div class="row">
                                     Total Logins
@@ -94,10 +94,10 @@
                             </div>
                             <div class="col-md-4 loginText">
                                 <div class="row loginNum">
-                                    {{ showData["unique"] }}
+                                    {{ showData['uniqueLogins'] }}
                                 </div>
                                 <div class="row {{ uniqueSign }}">
-                                    {{ showData['uniqueChange'] }}
+                                    {{ showData['changeInUniqueLogins'] }}
                                 </div>
                                 <div class="row">
                                     Unique Logins
@@ -105,20 +105,20 @@
                             </div>
                             <div class="col-md-4 loginText">
                                 <div class="row loginNum">
-                                    {{ showData["avgTime"] }} min
+                                    {{ showData['avgSessionTime'] }}
                                 </div>
                                 <div class="row {{ timeSign }}">
-                                    {{ showData['timeChange'] }}
+                                    {{ showData['changeInAvgSessionTime'] }}
                                 </div>
                                 <div class="row">
-                                    Average User Session
+                                    Average User Session (min)
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="oranj-toggle medium-one-color">
-                                <input id="test" type="checkbox"  ng-model="ngModel" ng-change="changeData()">
-                                <label for="test">
+                                <input id="login" type="checkbox"  ng-model="ngModel" ng-change="toggleLoginData()">
+                                <label for="login">
                                     <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
                                 </label>
                             </div>

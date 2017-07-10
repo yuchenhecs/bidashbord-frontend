@@ -13,6 +13,7 @@ function LeaderBoardService(MetricsService) {
         base.USE_DUMMY_DATA = true;
         base.controllerName = "leaderBoard";
         base.showDatepicker = false;
+        base.chart_id = 'chart-lg';
 
         base.data1 = {
             "firms": [{
@@ -98,33 +99,18 @@ function LeaderBoardService(MetricsService) {
 function LeaderBoardController($scope, $mdDialog, LeaderBoardService) {
     var service = LeaderBoardService.init();
 
-    this.showChart = function (ev) {
-        $mdDialog.show({
-            contentElement: '#myDialog',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose: true
-        });
-    };
-
-    service.launch($scope);
+   
 
 
 
-
-
-    Highcharts.chart('chart-sm', {
+    var chart_sm = Highcharts.chart('chart-sm', {
 
         chart: {
-            type: 'solidgauge',
-            marginTop: 50
+            type: 'solidgauge'
         },
 
         title: {
-            text: 'Activity',
-            style: {
-                fontSize: '24px'
-            }
+            text: null
         },
 
         tooltip: {
@@ -215,4 +201,26 @@ function LeaderBoardController($scope, $mdDialog, LeaderBoardService) {
             }]
         }]
     });
+
+
+     this.showChart = function (ev) {
+
+
+        $mdDialog.show({
+            contentElement: '#myDialog',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        });
+
+
+ service.launch($scope);
+       
+
+        service.chart.reflow();
+
+
+
+        chart_sm.reflow();
+    };
 }

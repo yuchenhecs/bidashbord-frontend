@@ -22,6 +22,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
         this.USE_DUMMY_DATA = true;
         this.controllerName = null;
         this.showDatepicker = true;
+        this.chart_id = 'chart';
 
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
@@ -335,7 +336,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
-            this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
+            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level]['option']);
 
             console.log(this.level_list[this.current_level]['option']['series']);
             console.timeEnd('Chart');

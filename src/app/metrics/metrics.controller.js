@@ -562,9 +562,9 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 if (self.current_level === 0) {
                     name = x['name'];
                 } else if (self.current_level === 1) {
-                    name = self.controllerName.localeCompare("goals") === 0 || (self.controllerName.localeCompare("netWorth") === 0) ? x['firstName'] + " " + x['lastName'] : x['name'];
+                    name = x['name'];
                 } else if (self.current_level === 2) {
-                    name = self.controllerName.localeCompare("goals") === 0 || (self.controllerName.localeCompare("netWorth") === 0) ? x['firstName'] + " " + x['lastName'] : x['name'];
+                    name = x['name'];
                 }
                 return name;
             });

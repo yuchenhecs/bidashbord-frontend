@@ -165,7 +165,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         $mdDialog.show({
             controller: LeaderBoardDialogController,
             template: dialogHTML,
-            parent: angular.element(document.body),
+            parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {

@@ -58,7 +58,7 @@ ul {
 
 .main-container {
 	padding: 64px 0 0 50px;
-
+    height: 2000px;
 }
 
 .side-nav {
@@ -95,6 +95,7 @@ ul {
 .page {
 	padding: $padding-page;
 	background-color: $app-main-bg;
+    height: 100%;
 }
 
 // .row {

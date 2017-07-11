@@ -98,6 +98,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
     this.showChart = function (ev) {
+       
+
+
         var dialogHTML = `
             <md-dialog style="width:700px">
                 <div>
@@ -127,7 +130,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
                             
                         </div>
-                        <div id="chart-lg" layout="row" layout-align="center center" style="max-height:300px"  layout-padding>
+                        <div id="chart-lg" layout="row" layout-align="center center" style="max-height:300px;margin:auto"  layout-padding>
                             <div class="loader no-animate primary-loader loader--style3">
                                 <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                     width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;" xml:space="preserve">
@@ -139,8 +142,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                         </div>
 
-                        <md-tabs md-stretch-tabs='always' md-no-pagination="'true'">
-                            
+                        <md-tabs md-stretch-tabs='always' md-no-pagination="'true'"> 
                             <md-tab label="Tab #1"></md-tab>
                             <md-tab label="Tab #2"></md-tab>
                             <md-tab label="Tab #3"></md-tab>
@@ -151,7 +153,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             <md-tab label="Tab #8"></md-tab>
                             <md-tab label="Tab #9"></md-tab>
                             <md-tab label="Tab #10"></md-tab>
-                            
                         </md-tabs>
                     </div>
                 </div>
@@ -173,6 +174,12 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 service.chart.reflow();
             }
         });
+
+         var colorTheme = {
+            colors: ["#007E6A"]
+        };
+
+        Highcharts.setOptions(colorTheme);
 
     };
 

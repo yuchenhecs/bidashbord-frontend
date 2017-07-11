@@ -12,6 +12,7 @@ $dark-blue: #10223F;
 $gray-blue: #8294A4;
 $main-font: #3D4051;
 $sidebar-background:#294763;
+$light-green:#007E6A;
 
 $sub-sidebar-width:150px;
 
@@ -697,7 +698,13 @@ md-tooltip {
 }
 
 md-tab-item {
-    padding: 0 !important;
-    margin:auto
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 
+.md-dialog-container {
+    //color:$light-green !important;
+    background-color: rgba(0, 126, 106, 0.3) !important;
+  
+   
 }

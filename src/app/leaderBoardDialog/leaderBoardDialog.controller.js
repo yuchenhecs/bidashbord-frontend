@@ -142,7 +142,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                         </div>
 
-                        <md-tabs md-stretch-tabs='always' md-no-pagination="'true'"> 
+                        <md-tabs md-stretch-tabs='always' md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
                             <md-tab label="Tab #1"></md-tab>
                             <md-tab label="Tab #2"></md-tab>
                             <md-tab label="Tab #3"></md-tab>
@@ -169,15 +169,32 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
+                document.getElementsByTagName("md-tabs")[0].style['visibility'] = "";
+                document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");
+                document.querySelector("md-tab-item:nth-child(2)").classList.add("tab-one");
+                document.querySelector("md-tab-item:nth-child(3)").classList.add("tab-one");
+
+                document.querySelector("md-tab-item:nth-child(4)").classList.add("tab-two");
+                document.querySelector("md-tab-item:nth-child(5)").classList.add("tab-two");
+                document.querySelector("md-tab-item:nth-child(6)").classList.add("tab-two");
+                document.querySelector("md-tab-item:nth-child(7)").classList.add("tab-two");
+
+                document.querySelector("md-tab-item:nth-child(8)").classList.add("tab-three");
+                document.querySelector("md-tab-item:nth-child(9)").classList.add("tab-three");
+                document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
+                
                 LeaderBoardDialogService.self.createRingChart();
                 service.launch();
                 service.chart.reflow();
+                
             }
         });
 
-         var colorTheme = {
+        var colorTheme = {
             colors: ["#007E6A"]
         };
+
+        
 
         Highcharts.setOptions(colorTheme);
 

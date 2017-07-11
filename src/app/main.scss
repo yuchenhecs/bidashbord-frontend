@@ -698,14 +698,53 @@ md-tooltip {
     }
 }
 
-md-tab-item {
+.md-tab {
+    padding: 10px !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    background-color: #DCDCDC;
+    color: black !important;
+    margin: 2px;
 }
+
+md-tabs .md-tab.md-active{
+    border-top-style:  hidden !important;
+    border-bottom-style:  solid !important;
+    
+    background-color: white !important;
+}
+
+
 
 .md-scroll-mask {
     //color:$light-green !important;
     background-color: rgba(0, 126, 106, 0.3) !important;
-  
-   
+}
+
+
+.tab-one{
+    border-top-color: #91e4fb;
+    border-bottom-color: #91e4fb;
+
+    border-top-style:  solid !important;
+    border-bottom-style:  hidden !important;
+}
+
+.tab-two {
+    border-top-color: #aedd94;
+    border-bottom-color: #aedd94;
+
+    border-top-style:  solid !important;
+    border-bottom-style:  hidden !important;
+}
+
+.tab-three {
+    border-top-color: #fef8a0;
+    border-bottom-color: #fef8a0;
+
+    border-top-style:  solid !important;
+    border-bottom-style:  hidden !important;
+    
 }

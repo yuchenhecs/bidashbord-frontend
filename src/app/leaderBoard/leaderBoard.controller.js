@@ -99,10 +99,6 @@ function LeaderBoardService(MetricsService) {
 function LeaderBoardController($scope, $mdDialog, LeaderBoardService) {
     var service = LeaderBoardService.init();
 
-   
-
-
-
     var chart_sm = Highcharts.chart('chart-sm', {
 
         chart: {
@@ -215,7 +211,7 @@ function LeaderBoardController($scope, $mdDialog, LeaderBoardService) {
 
 
  service.launch($scope);
-       
+
 
         service.chart.reflow();
 

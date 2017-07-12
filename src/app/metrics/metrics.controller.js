@@ -8,8 +8,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         var self = this;
         this.canceller = $q.defer();
-
-        if (MetricsService.curr) { // cancel previous pending api calls
+        if (MetricsService.curr) { // cancel previous pending api calls     
             MetricsService.curr.canceller.resolve();
         }
 
@@ -23,6 +22,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
         this.USE_DUMMY_DATA = true;
         this.controllerName = null;
         this.showDatepicker = true;
+        this.chart_id = 'chart';
 
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
@@ -47,6 +47,16 @@ function MetricsService($http, $rootScope, $compile, $q) {
         this.optionTemplate = {
             credits: {
                 enabled: false
+            },
+            lang: {
+                noData: "No data to display"
+            },
+            noData: {
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: '#303030'
+                }
             }
         };
 
@@ -136,12 +146,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             return true;
         }
 
-        // this.getDataForPage = function (page, level, isWeek, isProspect) {
-        //     this.getDataForLevel(this.level_list[this.current_level]['name'], this.level_list[this.current_level]['id'], page, level, isWeek, isProspect);
-        // }
-
         this.getData = function (name, id, page) {
-            
 
             if (this.controllerName.localeCompare("logins") === 0) {
                 this.getDataForLevel(name, id, page, this.current_level, [this.isWeek, this.isProspect]);
@@ -203,6 +208,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 this.getDataFromApi(baseUrl, name, id, page, level);
             }
 
+            return baseUrl;
+
 
 
         }
@@ -234,7 +241,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 data['data'] = response[type];
                 this.current_level = level;
 
-
                 if (this.controllerName.localeCompare("logins") === 0) {
                     this.isWeek = args[0];
                     this.isProspect = args[1];
@@ -245,14 +251,10 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 return;
             }
 
-
-            this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
-                if (MetricsService.curr != self) { // abort future api calls
-                    return;
-                }
-
+            return this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
+                    return data;
                 }
                 else {
                     var hasNext = response.data.data['last'];
@@ -267,16 +269,18 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
                         self.current_level = level;
                         self.loadData(data, name, id);
+                        return data;
                     } else {
                         self.getDataFromApi(newUrl, name, id, page + 1, level, args, data)
                     }
                 }
             }, function myError(response, error) {
                 console.log("Error " + response.status + ": " + response.statusText + "!");
-
                 self.hideLoading();
             });
         }
+
+
 
         this.PreProcessData = function (response, type, newUrl, name, id, page, level, args, data) {
             var hasNext = response.data.data['hasNext'];
@@ -328,11 +332,13 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
 
         this.createChart = function () {
+
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
-            this.chart = Highcharts.chart('chart', this.level_list[this.current_level]['option']);
-            //this.chart.update(this.level_list[this.current_level]['option']);
+            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level]['option']);
+
+            console.log(this.level_list[this.current_level]['option']['series']);
             console.timeEnd('Chart');
 
         }
@@ -360,51 +366,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 this.level_list[this.current_level] = newLevel;
             }
         }
-
-        // this.mergeOption = function (options) {
-        //     // assume we are expanding the current chart
-        //     var originalCategories = this.level_list[this.current_level]['option']['xAxis']['categories'];
-
-        //     var originalLength = originalCategories.length;
-        //     var newLength = options['xAxis']['categories'].length;
-
-        //     options['xAxis']['categories'] = originalCategories.concat(options['xAxis']['categories']);
-
-        //     var originalSeries = this.level_list[this.current_level]['option']['series'];
-        //     var newSeries = options['series'];
-
-        //     var seriesMap = {};
-
-        //     // 1. initialize seriesMap with originalSeries
-        //     originalSeries.forEach(function (element) {
-        //         seriesMap[element['name']] = element;
-        //     });
-
-        //     // 2. append newSeries
-        //     newSeries.forEach(function (element) {
-        //         if (!seriesMap[element['name']]) {
-        //             var zeroPaddings = Array.apply(null, Array(originalLength)).map(Number.prototype.valueOf, 0);
-        //             seriesMap[element['name']]['data'] = zeroPaddings.concat(element['data']);
-        //         } else {
-        //             seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(element['data']);
-
-        //         }
-        //     });
-
-        //     // 3. fill the rest of originalSeries with zeros
-        //     originalSeries.forEach(function (element) {
-        //         if (seriesMap[element['name']]['data'].length < originalLength + newLength) {
-        //             var zeroPaddings = Array.apply(null, Array(newLength)).map(Number.prototype.valueOf, 0);
-        //             seriesMap[element['name']]['data'] = seriesMap[element['name']]['data'].concat(zeroPaddings);
-        //         }
-        //     });
-
-        //     options['series'] = Object.values(seriesMap);
-
-        //     return options;
-        // }
-
-
 
         this.showLoading = function () {
             if (this.chart != null) {
@@ -522,6 +483,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     }
                 },
                 series: {
+                    stickyTracking: false,
                     turboThreshold: 0,
                     cursor: 'pointer',
                     point: {
@@ -532,18 +494,20 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     marker: {
                         enabled: false
                     },
+                    events: {
+                        legendItemClick: function () {
+                            return false;
+                        }
+                    },
                     animation: true
                 },
                 column: {
                     stacking: 'normal',
                     dataLabels: {
-                        enabled: false,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        enabled: false
                     },
-                    events: {
-                        legendItemClick: function () {
-                            return false;
-                        }
+                    marker: {
+                        enabled: false
                     }
                 }
             };
@@ -564,53 +528,13 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         // chart onload event
         this.chartOnLoad = function () {
-
-            var chart = this;
             self.createWidgets(this);
-
-            if (self.controllerName.localeCompare("aum") === 0) {
-                // lighten the color of previous date bar
-                chart.series.forEach(function (x) {
-
-                    if (x.options.stackId === 1) {
-                        return;
-                    }
-                    var hex = x.color;
-                    var percent = 50;
-
-                    // increase brightness
-                    var colorCode;
-
-                    // strip the leading # if it's there
-                    hex = hex.replace(/^\s*#|\s*$/g, '');
-
-                    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-                    if (hex.length === 3) {
-                        hex = hex.replace(/(.)/g, '$1$1');
-                    }
-
-                    var r = parseInt(hex.substr(0, 2), 16),
-                        g = parseInt(hex.substr(2, 2), 16),
-                        b = parseInt(hex.substr(4, 2), 16);
-
-                    colorCode = '#' +
-                        ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
-                        ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
-                        ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
-
-
-                    x.update({
-                        color: colorCode
-                    });
-                });
-            }
         }
 
 
 
         // chart bar onclick event
         this.chartOnClick = function () {
-
             self.drillDown(this.category, this.id);
         }
 
@@ -638,9 +562,9 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 if (self.current_level === 0) {
                     name = x['name'];
                 } else if (self.current_level === 1) {
-                    name = self.controllerName.localeCompare("goals") === 0 || (self.controllerName.localeCompare("netWorth") === 0) ? x['firstName'] + " " + x['lastName'] : x['name'];
+                    name = x['name'];
                 } else if (self.current_level === 2) {
-                    name = self.controllerName.localeCompare("goals") === 0 || (self.controllerName.localeCompare("netWorth") === 0) ? x['firstName'] + " " + x['lastName'] : x['name'];
+                    name = x['name'];
                 }
                 return name;
             });
@@ -870,20 +794,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
             return (startDate_X == startDate_Y && endDate_X == endDate_Y)
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     };

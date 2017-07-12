@@ -111,6 +111,11 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
+            name: 'Leader Board',
+            iconClass: 'fa fa-trophy',
+            state: 'leaderBoard'
+        },
+        {
             name: 'Contacts',
             iconClass: 'fa fa-users',
             state: 'advisor',

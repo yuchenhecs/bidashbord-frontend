@@ -1,12 +1,11 @@
 angular
     .module('app')
     .controller('AUMController', AUMController)
-    .factory('AUMService', AUMService);
+    .service('AUMService', AUMService);
 
 function AUMService($http, MetricsService) {
-    return function () {
+    this.init = function () {
         var base = new MetricsService();
-        AUMService.self = base;
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
@@ -272,7 +271,7 @@ function AUMService($http, MetricsService) {
                 var counter = 0;
                 for (var key in aumMap) {
                     var dataDrillDown = aumMap[key].map(function (x, i) {
-                        var self = AUMService.self;
+                        var self = base;
                         var name = 'firmId';
                         if (self.current_level === 0) {
                             name = 'firmId';
@@ -284,33 +283,62 @@ function AUMService($http, MetricsService) {
 
                         return { id: input[i][name], y: x };
                     });
-                    var points =
-                        {
-                            name: key,
-                            data: dataDrillDown,
-                            stack: "stack" + p,
-                            color: AUMService.self.COLOR_ARRAY[counter],
-                            stackId: p,
-                            showInLegend: (p === 0 ? false : true)
-                        };
+                    var points = {
+                        name: key,
+                        data: dataDrillDown,
+                        stack: "stack" + p,
+                        color: p === 0 ? lighten(base.COLOR_ARRAY[counter]) : base.COLOR_ARRAY[counter],
+                        stackId: p,
+                        showInLegend: p === 0 ? false : true
+                    };
                     series.push(points);
                     counter++;
                 }
             });
 
+
             return series;
         }
 
+        var lighten = function (hex) {
+            // lighten the color of previous date bar
+
+            var percent = 50;
+
+            // increase brightness
+            var colorCode;
+
+            // strip the leading # if it's there
+            hex = hex.replace(/^\s*#|\s*$/g, '');
+
+            // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+            if (hex.length === 3) {
+                hex = hex.replace(/(.)/g, '$1$1');
+            }
+
+            var r = parseInt(hex.substr(0, 2), 16),
+                g = parseInt(hex.substr(2, 2), 16),
+                b = parseInt(hex.substr(4, 2), 16);
+
+            colorCode = '#' +
+                ((0 | (1 << 8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+                ((0 | (1 << 8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+                ((0 | (1 << 8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+
+            return colorCode;
+
+
+        }
+
+
         return base;
-
-
-    };
+    }
 
 }
 
 
 function AUMController($scope, AUMService) {
-    var service = new AUMService();
+    var service = AUMService.init();
 
 
     this.startDate = service.startDate;

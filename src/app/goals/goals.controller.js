@@ -1,16 +1,16 @@
 angular
     .module('app')
     .controller('GoalsController', GoalsController)
-    .factory('GoalsService', GoalsService);
+    .service('GoalsService', GoalsService);
 
 function GoalsService(MetricsService) {
-    return function () {
+    this.init = function(){
         // most code is written in MetricsController
         var base = new MetricsService();
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/goals";
-        base.USE_DUMMY_DATA = true;
+        base.USE_DUMMY_DATA = false;
         base.controllerName = "goals";
 
         base.data1 = {
@@ -129,7 +129,7 @@ function GoalsService(MetricsService) {
 
 
 function GoalsController($scope, GoalsService) {
-    var service = new GoalsService();
+    var service = GoalsService.init();
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
@@ -179,6 +179,5 @@ function GoalsController($scope, GoalsService) {
         this.startDate = service.startDate;
         this.endDate = service.endDate;
     }
-
     service.launch($scope);
 }

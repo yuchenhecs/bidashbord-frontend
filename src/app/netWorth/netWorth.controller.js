@@ -1,10 +1,10 @@
 angular
   .module('app')
   .controller('NetWorthController', NetWorthController)
-  .factory('NetWorthService', NetWorthService);
+  .service('NetWorthService', NetWorthService);
 
 function NetWorthService(MetricsService) {
-  return function () {
+  this.init = function(){
     // most code is written in MetricsController
 
     var base = new MetricsService();
@@ -12,7 +12,6 @@ function NetWorthService(MetricsService) {
     var avgFirm = 100;
     var avgAdvsior = 120;
 
-    NetWorthService.self = base;
     // constants
     base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     base.SUB_DOMAIN = "/bi/networth";
@@ -113,7 +112,7 @@ function NetWorthService(MetricsService) {
       var series = [];
 
       input.forEach(function (x, i) {
-        var self = NetWorthService.self;
+        var self = base;
         var name = '';
         if (self.current_level === 0) {
           name = 'firmId';
@@ -251,11 +250,11 @@ function NetWorthService(MetricsService) {
     }
 
     return base;
-  };
+  }
 }
 
 
 function NetWorthController($scope, NetWorthService) {
-  var netWorth = new NetWorthService();
+  var netWorth = NetWorthService.init();
   netWorth.launch($scope);
 }

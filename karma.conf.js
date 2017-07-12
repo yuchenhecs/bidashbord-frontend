@@ -19,7 +19,13 @@ module.exports = function(config) {
         './bower_components/angular/angular.js',
         './bower_components/angular-mocks/angular-mocks.js',
         './bower_components/angular-ui-router/release/angular-ui-router.js',
-        './bower_components/oranj-navigation/navigation.directive.js',
+        './bower_components/angular-material/angular-material.js',
+        './bower_components/angular-animate/angular-animate.js',
+        './bower_components/angular-aria/angular-aria.js',
+        './bower_components/angular-sanitize/angular-sanitize.js',
+        './bower_components/angular-messages/angular-messages.js',
+
+        './bower_components/oranj-navigation/bower_dist/main.js',
         './bower_components/highcharts/highcharts.js',
         './bower_components/oranj-highcharts/oranjHighcharts.js',
         //module (this should be before your app)
@@ -28,9 +34,14 @@ module.exports = function(config) {
         //app
 
         './src/app/home/home.controller.js',
-
         './src/app/home/home.controller.spec.js',
-        './src/app/home/home.html'
+        './src/app/home/home.html',
+
+        './src/app/metrics/metrics.controller.js',
+        
+        './src/app/goals/goals.controller.js',
+        './src/app/goals/goals.controller.spec.js',
+        './src/app/goals/goals.html'
     ],
 
 

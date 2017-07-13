@@ -3,12 +3,12 @@
         <div class="row" id="top-row">
             <div class="col-md-12" style="overflow:auto">
                 <div class="tile-outer">
-                    <div class="tile-inner">
+                    <div class="lb-tile-inner">
 
-                        <div class="row" style="margin-left:20px;margin-right:20px;">
+                        <div class="row lb-header">
                             <div class="col-sm-1">
-                                <div class="avatar-image">
-                                    <img ng-src="{{ logo }}" alt="avatar image" style="height:100%;width:100%;">
+                                <div class="avatar-wrapper">
+                                    <img class="avatar-image" ng-src="{{ logo }}" alt="avatar image">
                                 </div>
                             </div>
                             <div class="col-sm-9">
@@ -38,119 +38,120 @@
                             </div>
                         </div>
 
-                        <hr>
-
-                        <div class="row" style="margin-right:0px;">
+                        <div class="row scope-wrapper" id="button-group">
                             <div class="btn-group scope md-whiteframe-2dp">
-                                <button type="button" class="btn btn-secondary lb-btn">Overall</button>
-                                <button type="button" class="btn btn-secondary lb-btn">State</button>
-                                <button type="button" class="btn btn-secondary lb-btn">Firm</button>
+                                <button type="button" class="btn btn-secondary lb-btn {{ lbOverall }}" ng-click="changeScope('overall')">Overall</button>
+                                <button type="button" class="btn btn-secondary lb-btn {{ lbState }}" ng-click="changeScope('state')">State</button>
+                                <button type="button" class="btn btn-secondary lb-btn {{ lbFirm }}" ng-click="changeScope('firm')">Firm</button>
                             </div>
                         </div>
 
                         <div class="row lb-body">
-                            <div class="col-sm-4">
-                                <div class="row sup-cat-icon" style="text-align:center;">
+                            <div class="col-sm-4 lb-one-third">
+                                <div class="row sup-cat-icon">
                                     <i class="fa fa-usd lb-icon1"></i>
+                                    <i class="fa fa-circle icon-background1"></i>
                                 </div>
                                 <p class="sup-cat-text">
                                     <strong>Financials</strong> - TEXT GOES HERE
                                 </p>
                                 <md-button class="kpi financials md-whiteframe-4dp">
                                     <div class="row">
-                                        <div class="col-sm-9" style="color:black;">
+                                        <div class="col-sm-9 kpi-text">
                                             Assets Under Management
                                         </div>
-                                        <div class="col-sm-3" style="color:black;">
+                                        <div class="col-sm-3 kpi-text">
                                             1.1 m
                                         </div>
                                     </div>
                                 </md-button>
                                 <md-button class="kpi financials md-whiteframe-4dp">
-                                     <div class="col-sm-9" style="color:black;">
+                                     <div class="col-sm-9 kpi-text">
                                          Net Worth
                                      </div>
-                                     <div class="col-sm-3" style="color:black;">
+                                     <div class="col-sm-3 kpi-text">
                                          12.1 m
                                      </div>
                                  </md-button>
                                 <md-button class="kpi financials md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         Number of HNIs
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         9
                                     </div>
                                  </md-button>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="row sup-cat-icon" style="text-align:center;">
+                            <div class="col-sm-4 lb-one-third">
+                                <div class="row sup-cat-icon">
                                     <i class="fa fa-handshake-o lb-icon2"></i>
+                                    <i class="fa fa-circle icon-background2"></i>
                                 </div>
                                 <p class="sup-cat-text">
                                     <strong>Client Management</strong> - TEXT GOES HERE
                                 </p>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         Conversion Rate
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         56%
                                     </div>
                                 </md-button>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         Average Conversion Time
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         17 Days
                                     </div>
                                 </md-button>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         Retention Rate
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         95%
                                     </div>
                                 </md-button>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         Weekly Client Logins
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         45
                                     </div>
                                 </md-button>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="row sup-cat-icon" style="text-align:center;">
-                                    <i class="fa fa-star lb-icon3"></i>
+                            <div class="col-sm-4 lb-one-third">
+                                <div class="row sup-cat-icon">
+                                    <i class="fa fa-line-chart lb-icon3"></i>
+                                    <i class="fa fa-circle icon-background3"></i>
                                 </div>
                                 <p class="sup-cat-text">
                                     <strong>Growth</strong> - TEXT GOES HERE
                                 </p>
                                 <md-button class="kpi growth md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         QoQ AUM Growth
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         4.8%
                                     </div>
                                 </md-button>
                                 <md-button class="kpi growth md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         Goals On Track
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         5%
                                     </div>
                                 </md-button>
                                 <md-button class="kpi growth md-whiteframe-4dp">
-                                    <div class="col-sm-9" style="color:black;">
+                                    <div class="col-sm-9 kpi-text">
                                         QoQ Net Worth Growth
                                     </div>
-                                    <div class="col-sm-3" style="color:black;">
+                                    <div class="col-sm-3 kpi-text">
                                         15%
                                     </div>
                                 </md-button>

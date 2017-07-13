@@ -97,7 +97,6 @@ ul {
 }
 
 //leaderboard
-
 .avatar-image {
 	height: 80px;
 	width: 68.5px;
@@ -154,8 +153,8 @@ ul {
 
 hr {
 	position: absolute;
-	top: 107px;
-	left: 50px;
+	top: 137px;
+	left: 46px;
 	right: 50px;
 	height: 1px;
 	background-color: grey;
@@ -170,16 +169,26 @@ hr {
 	margin-top: 50px;
 }
 
-.md-button.md-companyX-theme.btn1 {
-	height: 100px;
-	width: 100%;
-	border-radius: 0px;
+.scope {
+	float: right;
+	margin-top: 30px;
+}
+
+.sup-cat-icon {
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+.sup-cat-text {
+	padding: 25px 0px;
+	margin: 0px;
 }
 
 .kpi {
 	height: 100px;
-	width: 100%;
+	width: 80%;
 	border-radius: 5px !important;
+	margin-left: 0px;
 }
 
 .financials {
@@ -217,6 +226,8 @@ hr {
 	color: #FEF8A0;
 	font-size: 50px;
 }
+//end leaderboard
+
 #top-row {
 	padding-top: 0px;
 }

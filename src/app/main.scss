@@ -98,9 +98,137 @@ ul {
     height: 100%;
 }
 
-// .row {
-// 	padding: $padding-tiles-out 0px;
-// }
+//leaderboard
+.avatar-image {
+	height: 80px;
+	width: 68.5px;
+}
+
+.lb-header {
+	height: 80px;
+	margin: 20px 0;
+}
+
+.lb-upper-row {
+	font-size: 28px;
+	padding: 5px 0;
+}
+
+.lb-lower-row {
+	font-size: 14px;
+	padding: 5px 0;
+}
+
+.lb-right-text {
+	margin-left: 15px;
+	float: right;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 105%;
+	left:7.4%;
+    margin-left: -60px;
+	opacity: 0.6;
+	font-family: $font-universal;
+}
+
+//tooltip top arrow
+.tooltip-text::after {
+	content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+hr {
+	position: absolute;
+	top: 137px;
+	left: 46px;
+	right: 50px;
+	height: 1px;
+	background-color: grey;
+}
+
+.lb-btn {
+	width: 125px;
+	border-color: black;
+}
+
+.lb-body {
+	margin-top: 50px;
+}
+
+.scope {
+	float: right;
+	margin-top: 30px;
+}
+
+.sup-cat-icon {
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+.sup-cat-text {
+	padding: 25px 0px;
+	margin: 0px;
+}
+
+.kpi {
+	height: 100px;
+	width: 80%;
+	border-radius: 5px !important;
+	margin-left: 0px;
+}
+
+.financials {
+	background-color: #91E4FB;
+}
+
+.client-management {
+	background-color: #AEDD94;
+}
+
+.growth {
+	background-color: #FEF8A0;
+}
+
+.fa-info-circle:hover .tooltip-text {
+    visibility: visible;
+}
+
+.fa-info-circle {
+	color: #D6D6D6;
+	margin-left: 10px;
+}
+
+.lb-icon1 {
+	color: #91E4FB;
+	font-size: 50px;
+}
+
+.lb-icon2 {
+	color: #AEDD94;
+	font-size: 50px;
+}
+
+.lb-icon3 {
+	color: #FEF8A0;
+	font-size: 50px;
+}
+//end leaderboard
 
 #top-row {
 	padding-top: 0px;
@@ -253,12 +381,8 @@ ul {
 .neg {
 	color: red;
 }
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 
-
-//for toggle
+//for client/prospect toggle
 $color-green-active: #40B349;
 $color-green: #A1CB39;
 $color-blue: #11BEDF;

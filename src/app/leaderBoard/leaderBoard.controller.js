@@ -11,7 +11,7 @@ function LeaderBoardService(LeaderBoardDialogService) {
 
 
 function LeaderBoardController($scope, $mdDialog, LeaderBoardService, LeaderBoardDialogService) {
-    this.showChart = function (ev) {
+    $scope.showChart = function (ev) {
         LeaderBoardDialogService.showChart(ev);
     };
 

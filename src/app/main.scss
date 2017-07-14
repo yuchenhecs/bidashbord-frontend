@@ -42,7 +42,8 @@ $lb-yellow: #FEF8A0;
 $lb-light-yellow: #FEFCD9;
 
 body {
-	font-family: $font-universal;
+    font-family: $font-universal;
+    min-height: 0px !important;
 }
 
 ul {
@@ -67,8 +68,7 @@ ul {
 }
 
 #main-container {
-	padding: 64px 0 0 50px;
-    height: 2000px;
+    padding: 64px 0 0 50px;
 }
 
 .side-nav {
@@ -105,7 +105,6 @@ ul {
 .page {
 	padding: $padding-page;
 	background-color: $app-main-bg;
-    height: 100%;
 }
 
 //leaderboard
@@ -426,7 +425,7 @@ div#button-group {
 }
 
 #main {
-		transition: margin-left .5s;
+        transition: margin-left .5s;
 }
 
 #toggle {
@@ -935,8 +934,7 @@ md-tabs .md-tab.md-active{
 
 
 
-.md-scroll-mask {
-    //color:$light-green !important;
+.md-dialog-container {
     background-color: rgba(0, 126, 106, 0.3) !important;
 }
 

@@ -120,7 +120,8 @@ ul {
 
 .avatar-wrapper {
 	height: 80px;
-	width: 68.5px;
+    width: 68.5px;
+    margin-right: 10px;
 }
 
 .avatar-image {
@@ -135,12 +136,14 @@ ul {
 
 .lb-upper-row {
 	font-size: 28px;
-	padding: 5px 0;
+    padding: 5px 0;
+    margin: 0;
 }
 
 .lb-lower-row {
 	font-size: 14px;
-	padding: 5px 0;
+    padding: 5px 0;
+     margin: 0;
 }
 
 .lb-right-text {
@@ -173,7 +176,7 @@ div#button-group {
         margin: 0 auto;
         position: absolute;
         top: 50%; left: 0; right: 0; bottom: 0;
-        width: 95%;
+        width: 100%;
     }
 }
 
@@ -227,7 +230,11 @@ div#button-group {
 }
 
 .kpi-text {
-	color: black;
+    color: black;
+}
+
+.kpi-name {
+    white-space: normal;
 }
 
 .financials {

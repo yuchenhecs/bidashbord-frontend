@@ -5,17 +5,16 @@
                 <div class="tile-outer">
                     <div class="lb-tile-inner">
 
-                        <div class="row lb-header">
-                            <div class="col-sm-1">
+                        <div layout="row" layout-align="space-between center" class="lb-header">
+                            <div layout="row">
                                 <div class="avatar-wrapper">
                                     <img class="avatar-image" ng-src="{{ logo }}" alt="avatar image">
                                 </div>
-                            </div>
-                            <div class="col-sm-9">
-                                    <div class="row lb-upper-row">
+                                <div layout="column">
+                                    <div class="lb-upper-row">
                                         NAME
                                     </div>
-                                    <div class="row lb-lower-row">
+                                    <div class="lb-lower-row">
                                         POINTS
                                         <i class="fa fa-info-circle">
                                             <span class="tooltip-text">
@@ -23,14 +22,16 @@
                                             </span>
                                         </i>
                                     </div>
+                                </div>
                             </div>
-                            <div class="col-sm-2">
-                                <div class="row lb-upper-row">
+
+                            <div>
+                                <div class=" lb-upper-row">
                                     <div class="lb-right-text">
                                         RANK
                                     </div>
                                 </div>
-                                <div class="row lb-lower-row">
+                                <div class=" lb-lower-row">
                                     <div class="lb-right-text">
                                         PERCENTILE IN SCOPE
                                     </div>
@@ -38,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="row scope-wrapper" id="button-group">
+                        <div class="row" id="button-group">
                             <div class="btn-group scope md-whiteframe-2dp">
                                 <button type="button" class="btn btn-secondary lb-btn {{ lbOverall }}" ng-click="changeScope('overall')">Overall</button>
                                 <button type="button" class="btn btn-secondary lb-btn {{ lbState }}" ng-click="changeScope('state')">State</button>
@@ -46,43 +47,42 @@
                             </div>
                         </div>
 
-                        <div class="row lb-body">
-                            <div class="col-sm-4 lb-one-third">
-                                <div class="row sup-cat-icon">
+                        <div layout="row" class="lb-body">
+                            <div flex="33" layout="column" layout-align="none center" class="lb-one-third">
+                                <div class="sup-cat-icon">
                                     <i class="fa fa-usd lb-icon1"></i>
                                     <i class="fa fa-circle icon-background1"></i>
                                 </div>
                                 <p class="sup-cat-text">
                                     <strong>Financials</strong> - TEXT GOES HERE
                                 </p>
-                                <md-button class="kpi financials md-whiteframe-4dp">
-                                    <div class="row">
-                                        <div class="col-sm-9 kpi-text">
-                                            Assets Under Management
-                                        </div>
-                                        <div class="col-sm-3 kpi-text">
-                                            1.1 m
-                                        </div>
+                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
+                                        Assets Under Management
+                                    </div>
+                                    <div flex="30" class=" kpi-text">
+                                        1.1 m
+                                    </div>
+
+                                </md-button>
+                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
+                                        Net Worth
+                                    </div>
+                                    <div flex="30" class=" kpi-text">
+                                        12.1 m
                                     </div>
                                 </md-button>
-                                <md-button class="kpi financials md-whiteframe-4dp">
-                                     <div class="col-sm-9 kpi-text">
-                                         Net Worth
-                                     </div>
-                                     <div class="col-sm-3 kpi-text">
-                                         12.1 m
-                                     </div>
-                                 </md-button>
-                                <md-button class="kpi financials md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         Number of HNIs
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         9
                                     </div>
-                                 </md-button>
+                                </md-button>
                             </div>
-                            <div class="col-sm-4 lb-one-third">
+                            <div flex="33" layout="column" layout-align="none center" class="lb-one-third">
                                 <div class="row sup-cat-icon">
                                     <i class="fa fa-handshake-o lb-icon2"></i>
                                     <i class="fa fa-circle icon-background2"></i>
@@ -90,40 +90,40 @@
                                 <p class="sup-cat-text">
                                     <strong>Client Management</strong> - TEXT GOES HERE
                                 </p>
-                                <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         Conversion Rate
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         56%
                                     </div>
                                 </md-button>
-                                <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         Average Conversion Time
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         17 Days
                                     </div>
                                 </md-button>
-                                <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         Retention Rate
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         95%
                                     </div>
                                 </md-button>
-                                <md-button class="kpi client-management md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         Weekly Client Logins
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         45
                                     </div>
                                 </md-button>
                             </div>
-                            <div class="col-sm-4 lb-one-third">
+                            <div flex="33" layout="column" layout-align="none center" class="lb-one-third">
                                 <div class="row sup-cat-icon">
                                     <i class="fa fa-line-chart lb-icon3"></i>
                                     <i class="fa fa-circle icon-background3"></i>
@@ -131,27 +131,27 @@
                                 <p class="sup-cat-text">
                                     <strong>Growth</strong> - TEXT GOES HERE
                                 </p>
-                                <md-button class="kpi growth md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         QoQ AUM Growth
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         4.8%
                                     </div>
                                 </md-button>
-                                <md-button class="kpi growth md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         Goals On Track
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         5%
                                     </div>
                                 </md-button>
-                                <md-button class="kpi growth md-whiteframe-4dp">
-                                    <div class="col-sm-9 kpi-text">
+                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
+                                    <div flex="70" class=" kpi-text kpi-name">
                                         QoQ Net Worth Growth
                                     </div>
-                                    <div class="col-sm-3 kpi-text">
+                                    <div flex="30" class=" kpi-text">
                                         15%
                                     </div>
                                 </md-button>
@@ -173,58 +173,4 @@
 
 
 
-    <div style="visibility: hidden" >
-        <div class="md-dialog-container" id="myDialog">
-            <md-dialog style="width:800px">
-                <div>
-                    <div layout="column">
-                        <div layout="row" layout-align="center center">
-                            <h3>title</h3>
-
-                        </div>
-                        <div layout="row" layout-align="space-around stretch" style="max-height:200px">
-                            <div id="chart-sm" flex="33" >adasdasd</div>
-
-                            <div flex="33" style="text-align: center;margin:auto"><h1>777 <small>k</small></h1> <h3>ssddfsdf</h3> </div>
-
-                            <div flex="33">adasdasd</div>
-
-
-                        </div>
-                        <div id="chart-lg" layout="row" layout-align="center center" style="max-height:200px">
-                            <div class="loader no-animate primary-loader loader--style3">
-                                <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
-                                    xml:space="preserve">
-                                    <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
-                                        />
-                                    </path>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <md-tabs>
-                            <md-tab label="Tab #1"></md-tab>
-                            <md-tab label="Tab #2"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #1"></md-tab>
-                            <md-tab label="Tab #2"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #1"></md-tab>
-                            <md-tab label="Tab #2"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                        </md-tabs>
-
-
-
-
-
-
-                    </div>
-                </div>
-            </md-dialog>
-        </div>
-    </div>
 </div>

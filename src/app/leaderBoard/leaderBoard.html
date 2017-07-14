@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="lb-lower-row">
                                     <div class="lb-right-text">
-                                        PERCENTILE IN SCOPE
+                                        PERCENTILE IN {{ scope }}
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                                         Assets Under Management
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        1.1 m
+                                         {{ kpi.aum }}
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
@@ -81,7 +81,7 @@
                                         Net Worth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        12.1 m
+                                        {{ kpi.networth }}
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
@@ -89,7 +89,7 @@
                                         Number of HNIs
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        9
+                                         {{ kpi.hnis }}
                                     </div>
                                 </md-button>
                             </div>
@@ -106,7 +106,7 @@
                                         Conversion Rate
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        56%
+                                        {{ kpi.conversionRate }} %
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
@@ -114,7 +114,7 @@
                                         Average Conversion Time
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        17 Days
+                                        {{ kpi.avgConversionTime }} Days
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
@@ -122,7 +122,7 @@
                                         Retention Rate
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        95%
+                                        {{ kpi.retentionRate }} %
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
@@ -130,7 +130,7 @@
                                         Weekly Client Logins
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        45
+                                         {{ kpi.logins }}
                                     </div>
                                 </md-button>
                             </div>
@@ -144,26 +144,27 @@
                                 </p>
                                 <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
                                     <div flex="70" class=" kpi-text kpi-name">
-                                        QoQ AUM Growth
+                                         Annualized AUM Growth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        4.8%
+                                       {{ kpi.aumGrowth }} %
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
                                     <div flex="70" class=" kpi-text kpi-name">
-                                        Goals On Track
+                                         Annualized Clientele Growth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        5%
+                                         {{ kpi.clientGrowth }} %
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
                                     <div flex="70" class=" kpi-text kpi-name">
-                                        QoQ Net Worth Growth
+                                        Annualized Net Worth Growth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        15%
+                                       
+                                        {{ kpi.networthGrowth }} %
                                     </div>
                                 </md-button>
                             </div>

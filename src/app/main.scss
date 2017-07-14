@@ -175,6 +175,14 @@ div#button-group {
     }
 }
 
+#horizontal-line {
+    border-top: 2px solid #dfdfdf ;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%; left: 0; right: 0; bottom: 0;
+    width: 100%;
+}
+
 
 .offFocus {
 	background-color: $lb-grey;
@@ -195,8 +203,8 @@ div#button-group {
 }
 
 .scope {
-	float: right;
-	border-radius: 4px;
+    border-radius: 4px;
+    max-width:300px;
 }
 
 .lb-one-third {

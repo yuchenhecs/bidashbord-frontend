@@ -42,11 +42,20 @@
                             </div>
                         </div>
 
-                        <div class="row" id="button-group">
-                            <div class="btn-group scope md-whiteframe-2dp">
-                                <button type="button" class="btn btn-secondary lb-btn {{ lbOverall }}" ng-click="changeScope('overall')">Overall</button>
-                                <button type="button" class="btn btn-secondary lb-btn {{ lbState }}" ng-click="changeScope('state')">State</button>
-                                <button type="button" class="btn btn-secondary lb-btn {{ lbFirm }}" ng-click="changeScope('firm')">Firm</button>
+                        <div layout="row" layout-align="end none" id="button-group">
+                            <div id="horizontal-line"></div>
+                            <div class="btn-group btn-group-justified md-whiteframe-2dp scope">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary lb-btn {{ lbOverall }}" ng-click="changeScope('overall')">Overall</button>
+                                </div>
+                                <div class="btn-group">
+
+                                    <button type="button" class="btn btn-secondary lb-btn {{ lbState }}" ng-click="changeScope('state')">State</button>
+                                </div>
+                                <div class="btn-group">
+
+                                    <button type="button" class="btn btn-secondary lb-btn {{ lbFirm }}" ng-click="changeScope('firm')">Firm</button>
+                                </div>
                             </div>
                         </div>
 

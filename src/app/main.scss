@@ -31,6 +31,16 @@ $font-extended-sidebar:13px;
 $font-menu-tile:12px;
 $font-universal: 'Open Sans', sans-serif;
 
+//lb colors
+$lb-grey: #D6D6D6;
+$lb-dark-grey: #313131;
+$lb-blue: #91E4FB;
+$lb-light-blue: #D3F4FD;
+$lb-green: #AEDD94;
+$lb-light-green: #DEF1D4;
+$lb-yellow: #FEF8A0;
+$lb-light-yellow: #FEFCD9;
+
 body {
 	font-family: $font-universal;
 }
@@ -104,8 +114,7 @@ ul {
 }
 
 .lb-header {
-	 margin-left: 20px;
-	 margin-right: 20px;
+	margin: 0px 20px;
 	 color: #2A303D;
 }
 
@@ -173,11 +182,11 @@ div#button-group {
 }
 
 .offFocus {
-	background-color: #D6D6D6;
+	background-color: $lb-grey;
 }
 
 .onFocus {
-	background-color: #313131;
+	background-color: $lb-dark-grey;
 	color: white !important;
 }
 
@@ -192,6 +201,7 @@ div#button-group {
 
 .scope {
 	float: right;
+	border-radius: 4px;
 }
 
 .lb-one-third {
@@ -201,7 +211,6 @@ div#button-group {
 .sup-cat-icon {
 	text-align: center;
 	padding-bottom: 10px;
-	color: #000000;
 	text-align: center;
 }
 
@@ -218,31 +227,31 @@ div#button-group {
 }
 
 .kpi-text {
-	color: #000000;
+	color: black;
 }
 
 .financials {
-	background-color: #91E4FB;
+	background-color: $lb-blue;
 }
 
 .financials:hover {
-	background-color: #D3F4FD !important;
+	background-color: $lb-light-blue !important;
 }
 
 .client-management {
-	background-color: #AEDD94;
+	background-color: $lb-green;
 }
 
 .client-management:hover {
-	background-color: #DEF1D4 !important;
+	background-color: $lb-light-green !important;
 }
 
 .growth {
-	background-color: #FEF8A0;
+	background-color: $lb-yellow;
 }
 
 .growth:hover {
-	background-color: #FEFCD9 !important;
+	background-color: $lb-light-yellow !important;
 }
 
 .fa-info-circle:hover .tooltip-text {
@@ -255,7 +264,7 @@ div#button-group {
 	z-index: 5;
 	left: -15px;
 	font-size: 64px;
-	color: #91E4FB;
+	color: $lb-blue;
 }
 
 .icon-background2 {
@@ -263,7 +272,7 @@ div#button-group {
 	z-index: 5;
 	left: -26px;
 	font-size: 64px;
-	color: #AEDD94;
+	color: $lb-green;
 }
 
 .icon-background3 {
@@ -271,16 +280,16 @@ div#button-group {
 	z-index: 5;
 	left: -25px;
 	font-size: 64px;
-	color: #FEF8A0;
+	color: $lb-yellow;
 }
 
 .fa-info-circle {
-	color: #D6D6D6;
+	color: $lb-grey;
 	margin-left: 10px;
 }
 
 .lb-icon1 {
-	color: #FFFFFF;
+	color: white;
 	font-size: 50px;
 	position: relative;
 	top: -5px;
@@ -289,7 +298,7 @@ div#button-group {
 }
 
 .lb-icon2 {
-	color: #FFFFFF;
+	color: white;
 	font-size: 38px;
 	position: relative;
 	top: -9px;
@@ -298,7 +307,7 @@ div#button-group {
 }
 
 .lb-icon3 {
-	color: #FFFFFF;
+	color: white;
 	font-size: 36px;
 	position: relative;
 	top: -11px;

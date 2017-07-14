@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="row lb-lower-row">
                                     <div class="lb-right-text">
-                                        PERCENTILE IN SCOPE
+                                        PERCENTILE IN {{ scope }}
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                                             Assets Under Management
                                         </div>
                                         <div class="col-sm-3 kpi-text">
-                                            1.1 m
+                                            {{ kpi.aum }}
                                         </div>
                                     </div>
                                 </md-button>
@@ -70,7 +70,7 @@
                                          Net Worth
                                      </div>
                                      <div class="col-sm-3 kpi-text">
-                                         12.1 m
+                                         {{ kpi.networth }}
                                      </div>
                                  </md-button>
                                 <md-button class="kpi financials md-whiteframe-4dp">
@@ -78,7 +78,7 @@
                                         Number of HNIs
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        9
+                                        {{ kpi.hnis }}
                                     </div>
                                  </md-button>
                             </div>
@@ -95,15 +95,17 @@
                                         Conversion Rate
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        56%
+                                        {{ kpi.conversionRate }} %
                                     </div>
                                 </md-button>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
                                     <div class="col-sm-9 kpi-text">
-                                        Average Conversion Time
+                                        <p>
+                                            Average Conversion Time
+                                        </p>
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        17 Days
+                                        {{ kpi.avgConversionTime }} Days
                                     </div>
                                 </md-button>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
@@ -111,7 +113,7 @@
                                         Retention Rate
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        95%
+                                        {{ kpi.retentionRate }} %
                                     </div>
                                 </md-button>
                                 <md-button class="kpi client-management md-whiteframe-4dp">
@@ -119,7 +121,7 @@
                                         Weekly Client Logins
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        45
+                                        {{ kpi.logins }}
                                     </div>
                                 </md-button>
                             </div>
@@ -133,26 +135,26 @@
                                 </p>
                                 <md-button class="kpi growth md-whiteframe-4dp">
                                     <div class="col-sm-9 kpi-text">
-                                        QoQ AUM Growth
+                                        Annualized AUM Growth
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        4.8%
+                                        {{ kpi.aumGrowth }} %
                                     </div>
                                 </md-button>
                                 <md-button class="kpi growth md-whiteframe-4dp">
                                     <div class="col-sm-9 kpi-text">
-                                        Goals On Track
+                                        Annualized Clientele Growth
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        5%
+                                        {{ kpi.clientGrowth }} %
                                     </div>
                                 </md-button>
                                 <md-button class="kpi growth md-whiteframe-4dp">
                                     <div class="col-sm-9 kpi-text">
-                                        QoQ Net Worth Growth
+                                        Annualized Net Worth Growth
                                     </div>
                                     <div class="col-sm-3 kpi-text">
-                                        15%
+                                        {{ kpi.networthGrowth }} %
                                     </div>
                                 </md-button>
                             </div>

@@ -69,6 +69,9 @@ ul {
 
 #main-container {
     padding: 64px 0 0 50px;
+    display: table;
+    min-height: 800px;
+    width: 100%;
 }
 
 .side-nav {
@@ -104,7 +107,8 @@ ul {
 
 .page {
 	padding: $padding-page;
-	background-color: $app-main-bg;
+    background-color: $app-main-bg;
+    display: table-cell;
 }
 
 //leaderboard
@@ -164,14 +168,6 @@ ul {
 
 div#button-group {
     position: relative;
-
-   &:before {
-        border-top: 2px solid #dfdfdf ;
-        margin: 0 auto;
-        position: absolute;
-        top: 50%; left: 0; right: 0; bottom: 0;
-        width: 100%;
-    }
 }
 
 #horizontal-line {
@@ -184,17 +180,17 @@ div#button-group {
 
 
 .offFocus {
-	background-color: $lb-grey;
+	background-color: #EFEFEF;
 }
 
 .onFocus {
-	background-color: $lb-dark-grey;
+	background-color: #163259;
 	color: white !important;
 }
 
 .lb-btn {
 	width: 125px;
-	border-color: black;
+	//border-color: white;
 }
 
 .lb-body {
@@ -921,13 +917,14 @@ md-tooltip {
 
 .md-tab {
     padding: 10px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
     border-top: 3px solid transparent;
     border-bottom: 3px solid transparent;
-    background-color: #DCDCDC;
+    background-color: #EFEFEF;
     color: black !important;
-    margin: 2px;
+    margin: 0 1px;
+    text-transform: none;
 }
 
 md-tabs .md-tab.md-active{
@@ -937,10 +934,11 @@ md-tabs .md-tab.md-active{
     background-color: white !important;
 }
 
-
+.md-scroll-mask {
+    background-color: rgba(0, 126, 106, 0.3) !important;
+}
 
 .md-dialog-container {
-    background-color: rgba(0, 126, 106, 0.3) !important;
 }
 
 

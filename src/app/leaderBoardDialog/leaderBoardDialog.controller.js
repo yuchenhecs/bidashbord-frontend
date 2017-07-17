@@ -102,33 +102,33 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
         var dialogHTML = `
-            <md-dialog style="width:700px">
+            <md-dialog style="width:800px">
                 <div>
                     <div layout="column" >
+                        <div layout="row" layout-align="space-around stretch">
+                            <h4>title</h4>
+                        </div>
                         
-                        <div layout="row" layout-align="space-around stretch"  layout-padding>
-                            <div id="chart-sm" flex="40">
-                                
+                        <div layout="row" layout-align="space-around center">
+                         <div flex="25" style="text-align: center;margin:auto">
+                                <h1>777 <small>k</small></h1>
+                            </div>
+    <div style="height:100px;border-left: thin solid #dfdfdf;"></div>
+                            
+                            <div flex="25" style="text-align: center">
+                                <div id="chart-sm" style="height:150px"></div>
+                                <h6 style="margin:0">least in state</h6>
                             </div>
 
-                            <div flex="60" layout="column">
-                                <h3>title</h3>
+                            <div flex="25" style="text-align: center;margin:auto">
+                                <h1>777 <small>k</small></h1>
+                                <h3>least in state</h3>
+                            </div>
 
-                                 <div layout="row" layout-align="space-around stretch" >
-                                     <div flex="50" style="text-align: center;margin:auto">
-                                        <h1>777 <small>k</small></h1>
-                                        <h3>least in state</h3>
-                                    </div>
-
-                                    <div flex="50" style="text-align: center;margin:auto">
-                                        <h1>777 <small>k</small></h1>
-                                        <h3>least in state</h3>
-                                    </div>
-                                </div>
-                            
-                             </div>
-
-                            
+                            <div flex="25" style="text-align: center;margin:auto">
+                                <h1>777 <small>k</small></h1>
+                                <h3>least in state</h3>
+                            </div>
                         </div>
                         <div id="chart-lg" layout="row" layout-align="center center" style="max-height:300px;margin:auto"  layout-padding>
                             <div class="loader no-animate primary-loader loader--style3">
@@ -142,17 +142,17 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                         </div>
 
-                        <md-tabs md-stretch-tabs='always' md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
-                            <md-tab label="Tab #1"></md-tab>
-                            <md-tab label="Tab #2"></md-tab>
-                            <md-tab label="Tab #3"></md-tab>
-                            <md-tab label="Tab #4"></md-tab>
-                            <md-tab label="Tab #5"></md-tab>
-                            <md-tab label="Tab #6"></md-tab>
-                            <md-tab label="Tab #7"></md-tab>
-                            <md-tab label="Tab #8"></md-tab>
-                            <md-tab label="Tab #9"></md-tab>
-                            <md-tab label="Tab #10"></md-tab>
+                        <md-tabs  md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
+                            <md-tab label=" AUM "></md-tab>
+                            <md-tab label="Net Worth" ></md-tab>
+                            <md-tab label="# HNIs"></md-tab>
+                            <md-tab label="Conv. Rate"></md-tab>
+                            <md-tab label="Avg Conv. Time"></md-tab>
+                            <md-tab label="Retention Rate"></md-tab>
+                            <md-tab label="Goals created"></md-tab>
+                            <md-tab label="Annual AUM"></md-tab>
+                            <md-tab label="Annual Clientele"></md-tab>
+                            <md-tab label="Annual Net Worth"></md-tab>
                         </md-tabs>
                     </div>
                 </div>

@@ -279,6 +279,15 @@ function chartData($http, $log) {
 
 	return chartData;
 
+	chartData.addSign = function(num) {
+		console.log('un function');
+		if (num >= 0) {
+			return '+' + num;
+		}
+
+		return num;
+	};
+
 }
 
 function HomeController($scope, $http, $log, chartData) {
@@ -304,13 +313,27 @@ function HomeController($scope, $http, $log, chartData) {
 		toggle = !toggle;
 	};
 
+	$scope.addSign = function(num) {
+		if (num >= 0) {
+			return '+' + num;
+		}
+
+		return num;
+	};
+
 	$scope.loginApi = function() {
 		return $http.get(clientUrl).then(function mySuccess(clientResponse) {
 			$scope.clientData = clientResponse["data"]["data"]["client"];
+			$scope.clientData['changeInTotalLogins'] = $scope.addSign($scope.clientData['changeInTotalLogins']);
+			$scope.clientData['changeInUniqueLogins'] = $scope.addSign($scope.clientData['changeInUniqueLogins']);
+			$scope.clientData['changeInAvgSessionTime'] = $scope.addSign($scope.clientData['changeInAvgSessionTime']);
 		}).then(function () {
 			return $http.get(prospectUrl).then(function mySuccess1(prospectResponse) {
 				$scope.prospectData = prospectResponse["data"]["data"]["prospect"];
-			}).then(function wakeup() {
+				$scope.prospectData['changeInTotalLogins'] = $scope.addSign($scope.prospectData['changeInTotalLogins']);
+				$scope.prospectData['changeInUniqueLogins'] = $scope.addSign($scope.prospectData['changeInUniqueLogins']);
+				$scope.prospectData['changeInAvgSessionTime'] = $scope.addSign($scope.prospectData['changeInAvgSessionTime']);
+			}).then(function assignValue() {
 				$scope.toggleLoginData();
 			})
 		}, function myError(response) {

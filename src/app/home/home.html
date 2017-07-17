@@ -81,36 +81,36 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 loginText">
+                            <div class="col-md-4 loginCol">
                                 <div class="row loginNum">
                                     {{ showData['totalLogins'] }}
                                 </div>
-                                <div class="row {{ totalSign }}">
-                                    {{ showData['changeInTotalLogins'] }}
-                                </div>
                                 <div class="row">
+                                    <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong> from last week
+                                </div>
+                                <div class="row loginText">
                                     Total Logins
                                 </div>
                             </div>
-                            <div class="col-md-4 loginText">
+                            <div class="col-md-4 loginCol">
                                 <div class="row loginNum">
                                     {{ showData['uniqueLogins'] }}
                                 </div>
-                                <div class="row {{ uniqueSign }}">
-                                    {{ showData['changeInUniqueLogins'] }}
+                                <div class="row ">
+                                    <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> from last week
                                 </div>
-                                <div class="row">
+                                <div class="row loginText">
                                     Unique Logins
                                 </div>
                             </div>
-                            <div class="col-md-4 loginText">
+                            <div class="col-md-4 loginCol">
                                 <div class="row loginNum">
                                     {{ showData['avgSessionTime'] }}
                                 </div>
-                                <div class="row {{ timeSign }}">
-                                    {{ showData['changeInAvgSessionTime'] }}
-                                </div>
                                 <div class="row">
+                                    <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> from last week
+                                </div>
+                                <div class="row loginText">
                                     Average User Session (min)
                                 </div>
                             </div>

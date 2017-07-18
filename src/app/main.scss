@@ -911,16 +911,23 @@ md-tooltip {
 }
 
 .md-tab {
-    padding: 10px !important;
-    padding-left: 3px !important;
-    padding-right: 3px !important;
+    padding: 5px !important;
     border-top: 3px solid transparent;
     border-bottom: 3px solid transparent;
     background-color: #EFEFEF;
     color: black !important;
     margin: 0 1px;
     text-transform: none;
+    font-size:10px;
+    min-width: 50px;
+        height: 40px !important;
+
 }
+
+md-tabs {
+    height: 40px !important;
+}
+
 
 md-tabs .md-tab.md-active{
     border-top-style:  hidden !important;

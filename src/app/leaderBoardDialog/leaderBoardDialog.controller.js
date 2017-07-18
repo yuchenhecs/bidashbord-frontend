@@ -102,7 +102,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
         var dialogHTML = `
-            <md-dialog style="width:800px">
+            <md-dialog style="width:720px">
                 <div>
                     <div layout="column" >
                         <div layout="row" layout-align="space-around stretch">

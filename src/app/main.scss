@@ -919,8 +919,7 @@ md-tooltip {
     margin: 0 1px;
     text-transform: none;
     font-size:10px;
-    min-width: 50px;
-        height: 40px !important;
+    height: 40px !important;
 
 }
 
@@ -936,11 +935,10 @@ md-tabs .md-tab.md-active{
     background-color: white !important;
 }
 
-.md-scroll-mask {
-    background-color: rgba(0, 126, 106, 0.3) !important;
-}
 
 .md-dialog-container {
+
+    background-color: rgba(0, 126, 106, 0.3) !important;
 }
 
 

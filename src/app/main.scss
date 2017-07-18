@@ -35,11 +35,11 @@ $font-universal: 'Open Sans', sans-serif;
 $lb-grey: #D6D6D6;
 $lb-dark-grey: #313131;
 $lb-blue: #91E4FB;
-$lb-light-blue: #D3F4FD;
+$lb-light-blue: #C9F1FD;
 $lb-green: #AEDD94;
-$lb-light-green: #DEF1D4;
+$lb-light-green: #CBE8BA;
 $lb-yellow: #FEF8A0;
-$lb-light-yellow: #FEFCD9;
+$lb-light-yellow: #FEFAC0;
 
 body {
     font-family: $font-universal;
@@ -366,7 +366,7 @@ div#button-group {
     left: $sub-sidebar-width+80px !important
 }
 
-.loginText {
+.loginCol {
 	text-align: center;
 	padding: 15px 0 15px 0;
 
@@ -375,6 +375,11 @@ div#button-group {
 .loginNum {
 	font-size: 65px;
 	color: #3EB6B5;
+}
+
+.loginText {
+    font-weight: bold;
+    padding-top: 10px;
 }
 
 .subtitle {

@@ -12,13 +12,13 @@
                                 </div>
                                 <div layout="column">
                                     <div class="lb-upper-row">
-                                        NAME
+                                        {{ kpi.name }}
                                     </div>
                                     <div class="lb-lower-row">
-                                        POINTS
+                                        {{ kpi.points }} Points
                                         <i class="fa fa-info-circle">
                                             <md-tooltip>
-                                                Your score is calculated by...
+                                                Points shown are calculated by ...
                                             </md-tooltip>
                                             <!-- <span class="tooltip-text">
                                                 Your score is calculated by...
@@ -31,12 +31,12 @@
                             <div>
                                 <div class="lb-upper-row">
                                     <div class="lb-right-text">
-                                        RANK
+                                        {{ rank }}
                                     </div>
                                 </div>
                                 <div class="lb-lower-row">
                                     <div class="lb-right-text">
-                                        PERCENTILE IN {{ scope }}
+                                        Percentile in {{ scope }}
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
 
-                        <div layout="row" class="lb-body">
+                        <div layout="row" layout-sm="column" class="lb-body">
                             <div flex="33" layout="column" layout-align="none center" class="lb-one-third">
                                 <div class="sup-cat-icon">
                                     <i class="fa fa-usd lb-icon1"></i>
@@ -81,7 +81,7 @@
                                         Net Worth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                        {{ kpi.networth }}
+                                        {{ kpi.netWorth }}
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
@@ -89,7 +89,7 @@
                                         Number of HNIs
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                         {{ kpi.hnis }}
+                                         {{ kpi.hni }}
                                     </div>
                                 </md-button>
                             </div>
@@ -130,7 +130,7 @@
                                         Weekly Client Logins
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                         {{ kpi.logins }}
+                                         {{ kpi.weeklyLogins }}
                                     </div>
                                 </md-button>
                             </div>
@@ -155,7 +155,7 @@
                                          Annualized Clientele Growth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                         {{ kpi.clientGrowth }} %
+                                         {{ kpi.clienteleGrowth }} %
                                     </div>
                                 </md-button>
                                 <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
@@ -163,8 +163,8 @@
                                         Annualized Net Worth Growth
                                     </div>
                                     <div flex="30" class=" kpi-text">
-                                       
-                                        {{ kpi.networthGrowth }} %
+
+                                        {{ kpi.netWorthGrowth }} %
                                     </div>
                                 </md-button>
                             </div>

@@ -11,7 +11,7 @@ function LeaderBoardService(LeaderBoardDialogService) {
 }
 
 
-function LeaderBoardController($scope, $mdDialog, LeaderBoardService, LeaderBoardDialogService) {
+function LeaderBoardController($scope, $http, $mdDialog, LeaderBoardService, LeaderBoardDialogService) {
     $scope.showChart = function (ev) {
         LeaderBoardDialogService.showChart(ev);
     };
@@ -37,47 +37,46 @@ function LeaderBoardController($scope, $mdDialog, LeaderBoardService, LeaderBoar
 
     $scope.shortenNumber = function (num) {
         if (num >= 1000 && num < 1000000) {
-            return (num/1000) + 'k';
+            return (num/1000).toFixed(2) + 'k';
         } else if (num >= 1000000 && num <1000000000) {
-            return (num/1000000) + 'M';
-        } else if (num >= 1000000000) {
-            return (num/1000000000) + 'B';
-        } else return num;
-    };
-
-    $scope.changeScope = function (scope) {
-        //this.apiCallFunctionToBeWritten (this only affects pat on the back text and ranking)
-        $scope.highlightButton(scope);
+            return (num/1000000).toFixed(2) + 'M';
+        } else if (num >= 1000000000 && num < 1000000000000) {
+            return (num/1000000000).toFixed(2) + 'B';
+        } else if (num >= 1000000000000) {
+            return (num/1000000000000).toFixed(2) + 'T';
+        } else return num.toFixed(2);
     };
 
     $scope.kpiApi = function (url) {
         return $http.get(url).then(function mySuccess(response) {
+            console.log(response);
             $scope.kpi = response["data"]["data"];
+            $scope.kpi.aum = $scope.shortenNumber($scope.kpi.aum);
+            $scope.kpi.netWorth = $scope.shortenNumber($scope.kpi.netWorth);
+            $scope.kpi.avgConversionTime = ($scope.kpi.avgConversionTime/24).toFixed(2);
+            $scope.kpi.retentionRate = ($scope.kpi.retentionRate/1).toFixed(2);
+            $scope.kpi.conversionRate = ($scope.kpi.conversionRate/1).toFixed(2);
+            $scope.changeScope('state'); //have the default scope set to state
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");
         }
     };
 
-    //have the default scope set to state
-    $scope.changeScope('state');
+    $scope.kpiApi('http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/summary');
 
-    //change once apis are exposed
-    if (useDummyData) {
-        $scope.kpi = {
-            aum: 1000000,
-            networth: 12100000,
-            hnis: 9,
-            conversionRate: 56,
-            avgConversionTime: 17,
-            retentionRate: 95,
-            logins: 45,
-            aumGrowth: 4.8,
-            clientGrowth: 5,
-            networthGrowth: 15
-        };
-        $scope.kpi.aum = $scope.shortenNumber($scope.kpi.aum);
-        $scope.kpi.networth = $scope.shortenNumber($scope.kpi.networth);
-    } else {
-        $scope.kpiApi('');
-    }
+    //510
+    //332
+
+    $scope.changeScope = function (scope) {
+        if (scope == 'overall') {
+            $scope.rank = $scope.kpi.percentileOverall;
+        } else if (scope === 'state') {
+            $scope.rank = $scope.kpi.percentileState;
+        } else {
+            $scope.rank = $scope.kpi.percentileFirm;
+        }
+        $scope.highlightButton(scope);
+    };
+
+
 }

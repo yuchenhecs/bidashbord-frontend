@@ -126,7 +126,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                          
                             <div flex="25" style="text-align: center">
-                                <div id="chart-overall" style="height:120px"></div>
+                                <svg viewBox="0 0 100 100"
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" style="height:100px">       
+                                    <image xlink:href="test.png" height="100" width="100"/>    
+                                </svg>
                             </div>
 
                             <div flex="30" style="text-align: center;margin:auto">
@@ -208,7 +212,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             </md-dialog>
         `;
 
-        
+
         $mdDialog.show({
             controller: LeaderBoardController,
             template: dialogHTML,
@@ -219,10 +223,10 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 document.getElementsByTagName("md-tabs")[0].style['visibility'] = "";
 
                 document.getElementById("tag").style['visibility'] = "";
-                
+
 
                 document.getElementById("tag").classList.add("tag-one");
-                
+
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(2)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(3)").classList.add("tab-one");
@@ -237,7 +241,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
 
 
-                LeaderBoardDialogService.self.createRingChart('chart-overall');
+                LeaderBoardDialogService.self.createBarChart('chart-overall');
                 LeaderBoardDialogService.self.createRingChart('chart-state');
                 LeaderBoardDialogService.self.createRingChart('chart-firm');
             }
@@ -250,7 +254,10 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         Highcharts.setOptions(colorTheme);
     };
 
+    this.createBarChart = function (id) {
+        
 
+    }
 
     this.createRingChart = function (id) {
         var chart_sm = Highcharts.chart(id, {

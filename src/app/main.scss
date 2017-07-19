@@ -969,5 +969,18 @@ md-tabs .md-tab.md-active{
 
     border-top-style:  solid !important;
     border-bottom-style:  hidden !important;
+}
 
+#tag {
+    padding:15px;
+    height:50px;
+    position: absolute;
+    text-align: center; 
+    margin-left: -5px; 
+    top: 5px;
+}
+
+.tag-one {
+    background-color: #91e4fb;
+    color:black;
 }

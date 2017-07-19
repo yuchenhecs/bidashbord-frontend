@@ -11,7 +11,10 @@ function LeaderBoardService(LeaderBoardDialogService) {
 }
 
 
-function LeaderBoardController($scope, $http, $mdDialog, LeaderBoardService, LeaderBoardDialogService) {
+function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, LeaderBoardPercentileService) {
+    // var percentileService = LeaderBoardPercentileService.init();
+    // percentileService.launch();
+
     $scope.showChart = function (ev) {
         LeaderBoardDialogService.showChart(ev);
     };

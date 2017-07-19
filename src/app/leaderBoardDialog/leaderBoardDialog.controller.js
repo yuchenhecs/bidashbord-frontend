@@ -1,6 +1,5 @@
 angular
     .module('app')
-    .controller('LeaderBoardDialogController', LeaderBoardDialogController)
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
 function LeaderBoardDialogService(MetricsService, $mdDialog) {
@@ -98,13 +97,13 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
     this.showChart = function (ev) {
-       
-
-
         var dialogHTML = `
             <md-dialog style="width:720px">
                 <div>
                     <div layout="column" >
+                        <div layout="row" layout-align="end stretch" style="padding-top:5px; padding-right:5px">
+                            <a> Overall </a> | <a> State </a> | <a> Firm </a>
+                        </div>
                         <div layout="row" layout-align="space-around stretch">
                             <h4>title</h4>
                         </div>
@@ -113,7 +112,8 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                          <div flex="25" style="text-align: center;margin:auto">
                                 <h1>777 <small>k</small></h1>
                             </div>
-    <div style="height:100px;border-left: thin solid #dfdfdf;"></div>
+                                <div style="height:100px;border-left: thin solid #dfdfdf;">
+                            </div>
                             
                             <div flex="25" style="text-align: center">
                                 <div id="chart-sm" style="height:150px"></div>
@@ -130,16 +130,19 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                                 <h3>least in state</h3>
                             </div>
                         </div>
-                        <div id="chart-lg" layout="row" layout-align="center center" style="max-height:300px;margin:auto"  layout-padding>
-                            <div class="loader no-animate primary-loader loader--style3">
-                                <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;" xml:space="preserve">
-                                    <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
-                                        />
-                                    </path>
-                                </svg>
+                            <div layout="row" layout-align="center center" style="margin:0">
+                                <div flex="80" id="chart-lg"  style="max-height:300px">
+                                    <div class="loader no-animate primary-loader loader--style3">
+                                    <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                        width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;" xml:space="preserve">
+                                        <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
+                                            />
+                                        </path>
+                                    </svg>
+                                </div>
                             </div>
+                            
                         </div>
 
                         <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
@@ -182,11 +185,28 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 document.querySelector("md-tab-item:nth-child(8)").classList.add("tab-three");
                 document.querySelector("md-tab-item:nth-child(9)").classList.add("tab-three");
                 document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
-                
+
+
+
+                //  var rangeBlocks = text.element.children;
+
+                // for (var i = 0; i < rangeBlocks.length; i = i + 2) {
+                //     rangeBlocks[i].setAttribute('data-isWeek', i);
+                //     rangeBlocks[i].classList.add("path-link");
+                //     rangeBlocks[i].classList.add("chart-legend");
+                //     rangeBlocks[i].onclick = function () {
+                //         base.rangeOnClick(this);
+                //     };
+                // };
+
+                // var tmp = base.isWeek ? 0 : 2;
+                // rangeBlocks[tmp].classList.add("curr-path-link");
+
+
                 LeaderBoardDialogService.self.createRingChart();
                 service.launch();
                 service.chart.reflow();
-                
+
             }
         });
 
@@ -194,11 +214,10 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             colors: ["#007E6A"]
         };
 
-        
-
         Highcharts.setOptions(colorTheme);
-
     };
+
+
 
     this.createRingChart = function () {
         var chart_sm = Highcharts.chart('chart-sm', {
@@ -267,9 +286,4 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         //      chart_sm.reflow();
 
     }
-}
-
-
-function LeaderBoardDialogController($scope, LeaderBoardDialogService) {
-
 }

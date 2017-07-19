@@ -126,11 +126,14 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                          
                             <div flex="25" style="text-align: center">
-                                <svg viewBox="0 0 100 100"
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    xmlns:xlink="http://www.w3.org/1999/xlink" style="height:100px">       
-                                    <image xlink:href="test.png" height="100" width="100"/>    
+                                    
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="height:120px;width:120px">
+                                    <rect width="100" height="100" style="fill:rgba(0,126,106,0.2)" />         
+                                    <rect y="20" width="100" height="100" style="fill:rgb(0,126,106)" />       
+                                    <image xlink:href="/assets/images/test.png" height="100" width="100"/>    
+                                    <text text-anchor="middle" x="50" y="50">asdasdasdas</text>
                                 </svg>
+                                
                             </div>
 
                             <div flex="30" style="text-align: center;margin:auto">

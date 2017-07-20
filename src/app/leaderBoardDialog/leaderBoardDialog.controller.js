@@ -97,14 +97,12 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
     this.showChart = function (ev) {
-
         var service = this.init();
 
-        console.log("asd");
         var dialogHTML = `
             <md-dialog style="width:720px;overflow: visible">
-                <div style="position: relative">
-                    <div id="tag" class="md-whiteframe-2dp" style="visibility: hidden">
+                <div id="dialog-content" style="position: relative;visibility: hidden;">
+                    <div id="tag" class="md-whiteframe-2dp">
                         <h4 style="margin:0">Asset Under Management</h4>
                     </div>
 
@@ -125,14 +123,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             <div style="height:100px;border-right: thin solid #dfdfdf;">
                             </div>
                          
-                            <div flex="25" style="text-align: center">
-                                    
-                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="height:120px;width:120px">
-                                    <rect width="100" height="100" style="fill:rgba(0,126,106,0.2)" />         
-                                    <rect y="20" width="100" height="100" style="fill:rgb(0,126,106)" />       
-                                    <image xlink:href="/assets/images/test.png" height="100" width="100"/>    
-                                    <text text-anchor="middle" x="50" y="50">asdasdasdas</text>
-                                </svg>
+                            <div flex="25">
+                                <div id="chart-overall" style="height:120px;width:120px"></div>
+                                
                                 
                             </div>
 
@@ -198,7 +191,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                         </div>
                             
 
-                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
+                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" > 
                             <md-tab label="&nbsp;&nbsp; AUM &nbsp;&nbsp;"></md-tab>
                             <md-tab label="Net Worth" ></md-tab>
                             <md-tab label="# HNIs"></md-tab>
@@ -215,7 +208,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             </md-dialog>
         `;
 
-
         $mdDialog.show({
             controller: LeaderBoardController,
             template: dialogHTML,
@@ -223,10 +215,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
-                document.getElementsByTagName("md-tabs")[0].style['visibility'] = "";
-
-                document.getElementById("tag").style['visibility'] = "";
-
 
                 document.getElementById("tag").classList.add("tag-one");
 
@@ -243,12 +231,17 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 document.querySelector("md-tab-item:nth-child(9)").classList.add("tab-three");
                 document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
 
-
-                LeaderBoardDialogService.self.createBarChart('chart-overall');
+                LeaderBoardDialogService.self.createAreaChart('chart-overall');
                 LeaderBoardDialogService.self.createRingChart('chart-state');
                 LeaderBoardDialogService.self.createRingChart('chart-firm');
+
+
+                document.getElementById("dialog-content").style['visibility'] = "";
+
             }
         });
+
+
 
         var colorTheme = {
             colors: ["#007E6A"]
@@ -257,13 +250,63 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         Highcharts.setOptions(colorTheme);
     };
 
-    this.createBarChart = function (id) {
-        
+    this.createAreaChart = function (id) {
+        Highcharts.chart(id, {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
+                    .setOpacity(0.2)
+                    .get(),
+                type: 'column',
+                margin: [0, 0, 0, 0]
+            },
+            title: {
+                text: null
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: {
+                visible: false
+            },
+            yAxis: {
+                min: 0,
+                max: 100,
+                visible: false
+            },
+            plotOptions: {
+                series: {
+                    enableMouseTracking: false,
+                    borderWidth: 0,
+                    pointWidth: 120,
+                    marker: {
+                        enabled: false
+                    }
+                }
+            },
+            series: [{
+                data: [50]
+            }]
+        }, function (chart) { // on complete
+            chart.renderer.image('/assets/images/test.png', 0, 0, 123, 120).attr({zIndex: 3}).add();
+            chart.renderer.text('asdasdasdas', 60, 60).attr({'text-anchor': 'middle', zIndex: 4}).add();
+            
+        });
+
 
     }
 
+    // <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="height:120px;width:120px">
+    //                                 <rect width="100" height="100" style="fill:rgba(0,126,106,0.2)" />         
+    //                                 <rect y="20" width="100" height="100" style="fill:rgb(0,126,106)" />       
+    //                                 <image id="stateImg" xlink:href="" height="100" width="100"/>    
+    //                                 <text text-anchor="middle" x="50" y="50">asdasdasdas</text>
+    //                             </svg>
+
     this.createRingChart = function (id) {
-        var chart_sm = Highcharts.chart(id, {
+        Highcharts.chart(id, {
             credits: {
                 enabled: false
             },

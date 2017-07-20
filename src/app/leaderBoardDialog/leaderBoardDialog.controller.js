@@ -9,7 +9,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             <md-dialog style="width:900px;overflow: visible">
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
                 
-                    <div id="tag" class="md-whiteframe-2dp {{tabInfo[currentTab].color}}">
+                    <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
                         <h4 style="margin:0"><b>{{tabInfo[currentTab].title}}</b></h4>
                     </div>
 
@@ -120,30 +120,41 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             </md-dialog>
         `;
 
+    var currentColor = 0;
 
     this.init = function ($scope) {
         var colorTheme = {
-            colors: ["#007E6A"]
+            colors: ["#00a4d3", "#72bb53", "#CDC114"]
         };
+
+
+        //    colors: ["#14A2CD", "#48B312", "#CDC114"]
+        
+        //007E6A
+
+
         Highcharts.setOptions(colorTheme);
 
+        $scope.tagColors = ["tag-one","tag-two","tag-three"];
+
         $scope.tabInfo = [
-            { title: "Asset Under Management", color: "tag-one" },
-            { title: "Net Worth", color: "tag-one" },
-            { title: "Number of HNIs", color: "tag-one" },
-            { title: "Convertion Rate", color: "tag-two" },
-            { title: "Average Convertion Time", color: "tag-two" },
-            { title: "Retention Rate", color: "tag-two" },
-            { title: "Weekly Client Logins", color: "tag-two" },
-            { title: "Annualized AUM Growth", color: "tag-three" },
-            { title: "Annualized Clientele Growth", color: "tag-three" },
-            { title: "Annualized Worth Growth", color: "tag-three" }
+            { title: "Asset Under Management", colorId:0 },
+            { title: "Net Worth",colorId:0 },
+            { title: "Number of HNIs", colorId:0 },
+            { title: "Convertion Rate",  colorId:1 },
+            { title: "Average Convertion Time",colorId:1 },
+            { title: "Retention Rate", colorId:1 },
+            { title: "Weekly Client Logins",colorId:1 },
+            { title: "Annualized AUM Growth",colorId:2 },
+            { title: "Annualized Clientele Growth", colorId:2 },
+            { title: "Annualized Worth Growth",colorId:2 }
         ];
 
         $scope.currentTab = 0;
 
         $scope.tabOnSelected = function (tab) {
             $scope.currentTab = tab;
+            currentColor = $scope.tabInfo[tab].colorId;
             LeaderBoardDialogService.self.loadData(tab);
         };
     }
@@ -202,7 +213,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 enabled: false
             },
             chart: {
-                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
+                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[currentColor])
                     .setOpacity(0.2)
                     .get(),
                 type: 'column',
@@ -230,15 +241,16 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     pointWidth: x,
                     marker: {
                         enabled: false
-                    }
+                    },
+                    color: Highcharts.getOptions().colors[currentColor]
                 }
             },
             series: [{
-                data: [value]
+                data: [value] 
             }]
         }, function (chart) { // on complete
             chart.renderer.image('/assets/images/' + img + '.png', 0, 0, x + 1, y + 1).attr({ zIndex: 3 }).add();
-            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: '#007E6A', fill: 'white', 'font-size': '3em', 'font-weight':'bold'}).add();
+            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: Highcharts.getOptions().colors[currentColor], fill: 'white', 'font-size': '3em', 'font-weight':'bold'}).add();
         });
     }
 
@@ -263,7 +275,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 background: [{ // Track for Move
                     outerRadius: '115%',
                     innerRadius: '100%',
-                    backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
+                    backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[currentColor])
                         .setOpacity(0.3)
                         .get(),
                     borderWidth: 0
@@ -288,7 +300,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             fontSize: '12px'
                         },
                         formatter: function () {
-                            return '<div style="width:100%;text-align:center;"><span style="font-size:1.2em;font-weight:bold;">' + this.point.series.name + '</span><br/><span style="font-size:3em;color:' + Highcharts.getOptions().colors[0] + ';font-weight:bold;">' + Highcharts.numberFormat(this.y / 10, 0) + '</span>';
+                            return '<div style="width:100%;text-align:center;"><span style="font-size:1.2em;font-weight:bold;">' + this.point.series.name + '</span><br/><span style="font-size:3em;color:' + Highcharts.getOptions().colors[currentColor] + ';font-weight:bold;">' + Highcharts.numberFormat(this.y / 10, 0) + '</span>';
                         }
                     },
                     linecap: 'round',
@@ -299,7 +311,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             series: [{
                 name: 'Top',
                 data: [{
-                    color: Highcharts.getOptions().colors[0],
+                    color: Highcharts.getOptions().colors[currentColor],
                     radius: '115%',
                     innerRadius: '100%',
                     y: 80

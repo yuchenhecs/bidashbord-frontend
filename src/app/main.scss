@@ -930,6 +930,9 @@ md-tooltip {
 
 md-tabs {
     height: 40px !important;
+    padding-left:2px;
+    padding-right:2px;
+    
 }
 
 
@@ -982,5 +985,17 @@ md-tabs .md-tab.md-active{
 
 .tag-one {
     background-color: #91e4fb;
+    color:black;
+}
+
+
+.tag-two {
+    background-color: #aedd94;
+    color:black;
+}
+
+
+.tag-three {
+    background-color: #fef8a0;
     color:black;
 }

@@ -5,233 +5,30 @@ angular
 function LeaderBoardDialogService(MetricsService, $mdDialog) {
     LeaderBoardDialogService.self = this;
 
-    this.init = function () {
-        // most code is written in MetricsController
-        var base = new MetricsService();
-        // constants
-        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-        base.SUB_DOMAIN = "/bi/goals";
-        base.USE_DUMMY_DATA = true;
-        base.controllerName = "leaderBoard";
-        base.showDatepicker = false;
-        base.chart_id = 'chart-lg';
-
-        base.data1 = {
-            "firms": [{
-                "name": "firm 1",
-                "total": 40,
-                "goals": {
-                    "custom": 3,
-                    "college": 8,
-                    "retirement": 15,
-                    "insurance": 4,
-                    "home": 10
-                }
-            },
-            {
-                "total": 25,
-                "name": "firm 2",
-                "goals": {
-                    "custom": 3,
-                    "college": 8,
-                    "retirement": 0,
-                    "insurance": 4,
-                    "home": 10
-                }
-            },
-            {
-                "total": 34,
-                "name": "firm 3",
-                "goals": {
-                    "custom": 3,
-                    "College": 2,
-                    "retirement": 15,
-                    "insurance": 4,
-                    "home": 10
-                }
-            }]
-        };
-
-        //construct series data for chart template
-        base.prepareSeries = function (input) {
-            return [{
-                data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-            }];
-        }
-
-        base.chartSelector = function () {
-            var chart = {
-                type: 'spline'
-            }
-            return chart;
-        }
-
-        base.legendSelector = function () {
-            var legend = {
-                enabled: false
-            }
-            return legend;
-        }
-
-        base.xAxisSelector = function (input) {
-            var xAxis = {
-                crosshair: false
-            };
-            return xAxis;
-        }
-
-        base.yAxisSelector = function () {
-            var yAxis = {
-                min: 0,
-                title: {
-                    text: null
-                }
-            }
-
-            return yAxis;
-        }
-
-
-        return base;
-    }
-
-
-    this.showChart = function (ev) {
-        var service = this.init();
-
-        var dialogHTML = `
-            <md-dialog style="width:720px;overflow: visible">
+    var dialogHTML = `
+            <md-dialog style="width:900px;overflow: visible">
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
-                    <div id="tag" class="md-whiteframe-2dp">
-                        <h4 style="margin:0">Asset Under Management</h4>
+                
+                    <div id="tag" class="md-whiteframe-2dp {{tabInfo[currentTab].color}}">
+                        <h4 style="margin:0"><b>{{tabInfo[currentTab].title}}</b></h4>
                     </div>
 
 
                     <div layout="column" >
                         <div layout="row" layout-align="end center"  layout-padding>
                             <div>
-                                <h2 style="margin:0">777 <small>k</small></h2>
-                            </div>
-                        </div>
-                        
-                        <div layout="row" layout-align="space-between center"  layout-padding>
-
-                            <div flex="15" style="text-align: center;margin:auto">
-                                <h4>Overall</h4>
-                            </div>
-
-                            <div style="height:100px;border-right: thin solid #dfdfdf;">
-                            </div>
-                         
-                            <div flex="25">
-                                <div id="chart-overall" style="height:120px;width:120px"></div>
-                                
-                                
-                            </div>
-
-                            <div flex="30" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>least in state</h3>
-                            </div>
-
-                            <div flex="30" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>least in state</h3>
-                            </div>
-                        </div>
-
-
-                        <div layout="row" layout-align="space-around center"  layout-padding>
-                            <div flex="15" style="text-align: center;margin:auto">
-                                <h4>State</h4>
-                            </div>
-
-                            <div style="height:100px;border-right: thin solid #dfdfdf;">
-                            </div>
-                         
-                            <div flex="25" style="text-align: center">
-                                <div id="chart-state" style="height:120px"></div>
-                            </div>
-
-                            <div flex="30" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>least in state</h3>
-                            </div>
-
-                            <div flex="30" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>least in state</h3>
-                            </div>
-                        </div>
-
-                      
-
-
-                        <div layout="row" layout-align="space-around center"  layout-padding>
-                            <div flex="15" style="text-align: center;margin:auto">
-                                <h4>Firm</h4>
-                            </div>
-
-                            <div style="height:100px;border-right: thin solid #dfdfdf;">
-                            </div>
-                         
-                            <div flex="25" style="text-align: center">
-                                <div id="chart-firm" style="height:120px"></div>
-                            </div>
-
-                            <div flex="30" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>least in state</h3>
-                            </div>
-
-                            <div flex="30" style="text-align: center;margin:auto">
-                                <h1>777 <small>k</small></h1>
-                                <h3>least in state</h3>
-                            </div>
-                        </div>
-                            
-
-                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" > 
-                            <md-tab label="&nbsp;&nbsp; AUM &nbsp;&nbsp;"></md-tab>
-                            <md-tab label="Net Worth" ></md-tab>
-                            <md-tab label="# HNIs"></md-tab>
-                            <md-tab label="Conv. Rate"></md-tab>
-                            <md-tab label="Avg Conv. Time"></md-tab>
-                            <md-tab label="Retention Rate"></md-tab>
-                            <md-tab label="Goals created"></md-tab>
-                            <md-tab label="Annual AUM"></md-tab>
-                            <md-tab label="Annual Clientele"></md-tab>
-                            <md-tab label="Annual Net Worth"></md-tab>
-                        </md-tabs>
-                    </div>
-                </div>
-            </md-dialog>
-        `;
-
-
-        var dialogHTML2 = `
-            <md-dialog style="width:720px;overflow: visible">
-                <div id="dialog-content" style="position: relative;visibility: hidden;">
-                    <div id="tag" class="md-whiteframe-2dp">
-                        <h4 style="margin:0">Asset Under Management</h4>
-                    </div>
-
-
-                    <div layout="column" >
-                        <div layout="row" layout-align="end center"  layout-padding>
-                            <div>
-                                <h2 style="margin:0">777 <small>k</small></h2>
+                                <h1 style="margin:0">777 <small>k</small></h1>
                             </div>
                         </div>
                         
                         <div layout="row" layout-align="space-between center"  layout-padding>
 
                          
-                            <div flex="33" layout="column" layout-align="center center" >
+                            <div flex="40" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
-                                    <h4>Overall</h4>
+                                    <h6>Overall</h6>
                                 </div>
-                                <div id="chart-overall" style="height:200px;width:200px"></div>
+                                <div id="chart-overall" style="height:200px;width:300px"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
@@ -251,9 +48,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                                 
                             </div>
                             
-                            <div flex="33" layout="column" layout-align="center center" >
+                            <div flex="30" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
-                                    <h4>State</h4>
+                                    <h6>State</h6>
                                 </div>
                                 <div id="chart-state" style="height:200px;width:200px"></div>
                                 
@@ -275,9 +72,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                                 
                             </div>
                             
-                            <div flex="33" layout="column" layout-align="center center" >
+                            <div flex="30" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
-                                    <h4>Firm</h4>
+                                    <h6>Firm</h6>
                                 </div>
                                 <div id="chart-firm" style="height:200px;width:200px"></div>
                                 
@@ -307,35 +104,70 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             
 
                         <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" > 
-                            <md-tab label="&nbsp;&nbsp; AUM &nbsp;&nbsp;"></md-tab>
-                            <md-tab label="Net Worth" ></md-tab>
-                            <md-tab label="# HNIs"></md-tab>
-                            <md-tab label="Conv. Rate"></md-tab>
-                            <md-tab label="Avg Conv. Time"></md-tab>
-                            <md-tab label="Retention Rate"></md-tab>
-                            <md-tab label="Goals created"></md-tab>
-                            <md-tab label="Annual AUM"></md-tab>
-                            <md-tab label="Annual Clientele"></md-tab>
-                            <md-tab label="Annual Net Worth"></md-tab>
+                            <md-tab label="AUM" md-on-select="tabOnSelected(0)"></md-tab>
+                            <md-tab label="Net Worth" md-on-select="tabOnSelected(1)"></md-tab>
+                            <md-tab label="# HNIs" md-on-select="tabOnSelected(2)"></md-tab>
+                            <md-tab label="Conv. Rate" md-on-select="tabOnSelected(3)"></md-tab>
+                            <md-tab label="Avg Conv. Time" md-on-select="tabOnSelected(4)"></md-tab>
+                            <md-tab label="Retention Rate" md-on-select="tabOnSelected(5)"></md-tab>
+                            <md-tab label="Goals created" md-on-select="tabOnSelected(6)"></md-tab>
+                            <md-tab label="Annual AUM" md-on-select="tabOnSelected(7)"></md-tab>
+                            <md-tab label="Annual Clientele" md-on-select="tabOnSelected(8)"></md-tab>
+                            <md-tab label="Annual Net Worth" md-on-select="tabOnSelected(9)"></md-tab>
                         </md-tabs>
                     </div>
                 </div>
             </md-dialog>
         `;
 
+
+    this.init = function ($scope) {
+        var colorTheme = {
+            colors: ["#007E6A"]
+        };
+        Highcharts.setOptions(colorTheme);
+
+        $scope.tabInfo = [
+            { title: "Asset Under Management", color: "tag-one" },
+            { title: "Net Worth", color: "tag-one" },
+            { title: "Number of HNIs", color: "tag-one" },
+            { title: "Convertion Rate", color: "tag-two" },
+            { title: "Average Convertion Time", color: "tag-two" },
+            { title: "Retention Rate", color: "tag-two" },
+            { title: "Weekly Client Logins", color: "tag-two" },
+            { title: "Annualized AUM Growth", color: "tag-three" },
+            { title: "Annualized Clientele Growth", color: "tag-three" },
+            { title: "Annualized Worth Growth", color: "tag-three" }
+        ];
+
+        $scope.currentTab = 0;
+
+        $scope.tabOnSelected = function (tab) {
+            $scope.currentTab = tab;
+            LeaderBoardDialogService.self.loadData(tab);
+        };
+    }
+
+
+    this.loadData = function (tab) {
+        this.createAreaChart('chart-overall', 10, 'test_us', true);
+        this.createAreaChart('chart-state', 30, 'test_state');
+        this.createAreaChart('chart-firm', 80, 'test_firm');
+
+    }
+
+
+    this.showChart = function (ev) {
+
         $mdDialog.show({
             controller: LeaderBoardController,
-            template: dialogHTML2,
+            template: dialogHTML,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
-                LeaderBoardDialogService.self.createAreaChart('chart-overall');
-                LeaderBoardDialogService.self.createAreaChart('chart-state');
-                LeaderBoardDialogService.self.createRingChart('chart-firm');
+                LeaderBoardDialogService.self.loadData(0);
 
-
-                document.getElementById("tag").classList.add("tag-one");
 
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(2)").classList.add("tab-one");
@@ -359,15 +191,12 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         });
 
 
-
-        var colorTheme = {
-            colors: ["#007E6A"]
-        };
-
-        Highcharts.setOptions(colorTheme);
     };
 
-    this.createAreaChart = function (id) {
+    this.createAreaChart = function (id, value, img, isRectangle) {
+        var x = isRectangle ? 300 : 200;
+        var y = isRectangle ? 200 : 200;
+
         Highcharts.chart(id, {
             credits: {
                 enabled: false
@@ -396,20 +225,20 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             plotOptions: {
                 series: {
                     enableMouseTracking: false,
+                    borderColor: 'white',
                     borderWidth: 0,
-                    pointWidth: 200,
+                    pointWidth: x,
                     marker: {
                         enabled: false
                     }
                 }
             },
             series: [{
-                data: [50]
+                data: [value]
             }]
         }, function (chart) { // on complete
-            chart.renderer.image('/assets/images/test.png', 0, 0, 201, 201).attr({ zIndex: 3 }).add();
-            chart.renderer.text('Top 10%', 100, 100).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ 'font-size': '16px' }).add();
-
+            chart.renderer.image('/assets/images/' + img + '.png', 0, 0, x + 1, y + 1).attr({ zIndex: 3 }).add();
+            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: 'grey', fill: 'white', 'font-size': '3em', 'font-weight': 'bold' }).add();
         });
     }
 
@@ -468,7 +297,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 }
             },
             series: [{
-                name: 'Move',
+                name: 'Top',
                 data: [{
                     color: Highcharts.getOptions().colors[0],
                     radius: '115%',

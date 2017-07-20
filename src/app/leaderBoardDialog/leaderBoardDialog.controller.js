@@ -227,61 +227,73 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                         <div layout="row" layout-align="space-between center"  layout-padding>
 
                          
-                              <div flex="33" layout="column" layout-align="none center" >
+                            <div flex="33" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h4>Overall</h4>
                                 </div>
                                 <div id="chart-overall" style="height:200px;width:200px"></div>
                                 
-                                <div layout="row" layout-align="space-between center">
+                                <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3>111 <small>k</small></h3>
-                                        <h6>least in state</h6>
+                                        <h3 style="margin:0">111 <small>k</small></h3>
+                                        <h6>least</h6>
                                     </div>
 
+                                    <div style="height:50px;border-right: thin solid #dfdfdf;">
+                                    </div>
+                         
+
                                     <div flex="50" style="text-align: center">
-                                        <h3>999 <small>k</small></h3>
-                                        <h6>most in state</h6>
+                                        <h3 style="margin:0">999 <small>k</small></h3>
+                                        <h6>most</h6>
                                     </div>
                                 </div>
                                 
                             </div>
                             
-                             <div flex="33" layout="column" layout-align="none center" >
+                            <div flex="33" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h4>State</h4>
                                 </div>
                                 <div id="chart-state" style="height:200px;width:200px"></div>
                                 
-                                <div layout="row" layout-align="space-between center">
+                                <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3>111 <small>k</small></h3>
-                                        <h6>least in state</h6>
+                                        <h3 style="margin:0">111 <small>k</small></h3>
+                                        <h6>least</h6>
                                     </div>
 
+                                    <div style="height:50px;border-right: thin solid #dfdfdf;">
+                                    </div>
+                         
+
                                     <div flex="50" style="text-align: center">
-                                        <h3>999 <small>k</small></h3>
-                                        <h6>most in state</h6>
+                                        <h3 style="margin:0">999 <small>k</small></h3>
+                                        <h6>most</h6>
                                     </div>
                                 </div>
                                 
                             </div>
                             
-                            <div flex="33" layout="column" layout-align="none center" >
+                            <div flex="33" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h4>Firm</h4>
                                 </div>
                                 <div id="chart-firm" style="height:200px;width:200px"></div>
                                 
-                                <div layout="row" layout-align="space-between center">
+                                <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3>111 <small>k</small></h3>
-                                        <h6>least in state</h6>
+                                        <h3 style="margin:0">111 <small>k</small></h3>
+                                        <h6>least</h6>
                                     </div>
 
+                                    <div style="height:50px;border-right: thin solid #dfdfdf;">
+                                    </div>
+                         
+
                                     <div flex="50" style="text-align: center">
-                                        <h3>999 <small>k</small></h3>
-                                        <h6>most in state</h6>
+                                        <h3 style="margin:0">999 <small>k</small></h3>
+                                        <h6>most</h6>
                                     </div>
                                 </div>
                                 
@@ -313,11 +325,15 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
         $mdDialog.show({
             controller: LeaderBoardController,
-            template: dialogHTML,
+            template: dialogHTML2,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
+                LeaderBoardDialogService.self.createAreaChart('chart-overall');
+                LeaderBoardDialogService.self.createAreaChart('chart-state');
+                LeaderBoardDialogService.self.createRingChart('chart-firm');
+
 
                 document.getElementById("tag").classList.add("tag-one");
 
@@ -334,9 +350,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 document.querySelector("md-tab-item:nth-child(9)").classList.add("tab-three");
                 document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
 
-                LeaderBoardDialogService.self.createAreaChart('chart-overall');
-                LeaderBoardDialogService.self.createRingChart('chart-state');
-                LeaderBoardDialogService.self.createRingChart('chart-firm');
+
 
 
                 document.getElementById("dialog-content").style['visibility'] = "";
@@ -393,9 +407,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 data: [50]
             }]
         }, function (chart) { // on complete
-            chart.renderer.image('/assets/images/test.png', 0, 0, 200, 200).attr({zIndex: 3}).add();
-            chart.renderer.text('Top 10%', 100, 100).attr({'text-anchor': 'middle', zIndex: 4}).add();
-            
+            chart.renderer.image('/assets/images/test.png', 0, 0, 201, 201).attr({ zIndex: 3 }).add();
+            chart.renderer.text('Top 10%', 100, 100).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ 'font-size': '16px' }).add();
+
         });
     }
 

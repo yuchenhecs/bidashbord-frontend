@@ -208,6 +208,109 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             </md-dialog>
         `;
 
+
+        var dialogHTML2 = `
+            <md-dialog style="width:720px;overflow: visible">
+                <div id="dialog-content" style="position: relative;visibility: hidden;">
+                    <div id="tag" class="md-whiteframe-2dp">
+                        <h4 style="margin:0">Asset Under Management</h4>
+                    </div>
+
+
+                    <div layout="column" >
+                        <div layout="row" layout-align="end center"  layout-padding>
+                            <div>
+                                <h2 style="margin:0">777 <small>k</small></h2>
+                            </div>
+                        </div>
+                        
+                        <div layout="row" layout-align="space-between center"  layout-padding>
+
+                         
+                              <div flex="33" layout="column" layout-align="none center" >
+                                <div style="text-align: center">
+                                    <h4>Overall</h4>
+                                </div>
+                                <div id="chart-overall" style="height:200px;width:200px"></div>
+                                
+                                <div layout="row" layout-align="space-between center">
+                                    <div flex="50" style="text-align: center">
+                                        <h3>111 <small>k</small></h3>
+                                        <h6>least in state</h6>
+                                    </div>
+
+                                    <div flex="50" style="text-align: center">
+                                        <h3>999 <small>k</small></h3>
+                                        <h6>most in state</h6>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                             <div flex="33" layout="column" layout-align="none center" >
+                                <div style="text-align: center">
+                                    <h4>State</h4>
+                                </div>
+                                <div id="chart-state" style="height:200px;width:200px"></div>
+                                
+                                <div layout="row" layout-align="space-between center">
+                                    <div flex="50" style="text-align: center">
+                                        <h3>111 <small>k</small></h3>
+                                        <h6>least in state</h6>
+                                    </div>
+
+                                    <div flex="50" style="text-align: center">
+                                        <h3>999 <small>k</small></h3>
+                                        <h6>most in state</h6>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            <div flex="33" layout="column" layout-align="none center" >
+                                <div style="text-align: center">
+                                    <h4>Firm</h4>
+                                </div>
+                                <div id="chart-firm" style="height:200px;width:200px"></div>
+                                
+                                <div layout="row" layout-align="space-between center">
+                                    <div flex="50" style="text-align: center">
+                                        <h3>111 <small>k</small></h3>
+                                        <h6>least in state</h6>
+                                    </div>
+
+                                    <div flex="50" style="text-align: center">
+                                        <h3>999 <small>k</small></h3>
+                                        <h6>most in state</h6>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                           
+                        </div>
+
+
+                       
+                            
+
+                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" > 
+                            <md-tab label="&nbsp;&nbsp; AUM &nbsp;&nbsp;"></md-tab>
+                            <md-tab label="Net Worth" ></md-tab>
+                            <md-tab label="# HNIs"></md-tab>
+                            <md-tab label="Conv. Rate"></md-tab>
+                            <md-tab label="Avg Conv. Time"></md-tab>
+                            <md-tab label="Retention Rate"></md-tab>
+                            <md-tab label="Goals created"></md-tab>
+                            <md-tab label="Annual AUM"></md-tab>
+                            <md-tab label="Annual Clientele"></md-tab>
+                            <md-tab label="Annual Net Worth"></md-tab>
+                        </md-tabs>
+                    </div>
+                </div>
+            </md-dialog>
+        `;
+
         $mdDialog.show({
             controller: LeaderBoardController,
             template: dialogHTML,
@@ -280,7 +383,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 series: {
                     enableMouseTracking: false,
                     borderWidth: 0,
-                    pointWidth: 120,
+                    pointWidth: 200,
                     marker: {
                         enabled: false
                     }
@@ -290,20 +393,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 data: [50]
             }]
         }, function (chart) { // on complete
-            chart.renderer.image('/assets/images/test.png', 0, 0, 123, 120).attr({zIndex: 3}).add();
-            chart.renderer.text('asdasdasdas', 60, 60).attr({'text-anchor': 'middle', zIndex: 4}).add();
+            chart.renderer.image('/assets/images/test.png', 0, 0, 200, 200).attr({zIndex: 3}).add();
+            chart.renderer.text('Top 10%', 100, 100).attr({'text-anchor': 'middle', zIndex: 4}).add();
             
         });
-
-
     }
-
-    // <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="height:120px;width:120px">
-    //                                 <rect width="100" height="100" style="fill:rgba(0,126,106,0.2)" />         
-    //                                 <rect y="20" width="100" height="100" style="fill:rgb(0,126,106)" />       
-    //                                 <image id="stateImg" xlink:href="" height="100" width="100"/>    
-    //                                 <text text-anchor="middle" x="50" y="50">asdasdasdas</text>
-    //                             </svg>
 
     this.createRingChart = function (id) {
         Highcharts.chart(id, {

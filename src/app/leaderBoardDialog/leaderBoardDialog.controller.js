@@ -238,7 +238,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             }]
         }, function (chart) { // on complete
             chart.renderer.image('/assets/images/' + img + '.png', 0, 0, x + 1, y + 1).attr({ zIndex: 3 }).add();
-            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: 'grey', fill: 'white', 'font-size': '3em', 'font-weight': 'bold' }).add();
+            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: '#007E6A', fill: 'white', 'font-size': '3em', 'font-weight':'bold'}).add();
         });
     }
 

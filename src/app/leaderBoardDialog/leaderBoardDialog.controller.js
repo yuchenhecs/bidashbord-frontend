@@ -102,7 +102,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
         var dialogHTML = `
-            <md-dialog style="width:800px">
+            <md-dialog style="width:720px">
                 <div>
                     <div layout="column" >
                         <div layout="row" layout-align="space-around stretch">
@@ -142,8 +142,8 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             </div>
                         </div>
 
-                        <md-tabs  md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
-                            <md-tab label=" AUM "></md-tab>
+                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" style="visibility: hidden;"> 
+                            <md-tab label="&nbsp;&nbsp; AUM &nbsp;&nbsp;"></md-tab>
                             <md-tab label="Net Worth" ></md-tab>
                             <md-tab label="# HNIs"></md-tab>
                             <md-tab label="Conv. Rate"></md-tab>

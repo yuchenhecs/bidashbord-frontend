@@ -129,25 +129,25 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
         //    colors: ["#14A2CD", "#48B312", "#CDC114"]
-        
+
         //007E6A
 
 
         Highcharts.setOptions(colorTheme);
 
-        $scope.tagColors = ["tag-one","tag-two","tag-three"];
+        $scope.tagColors = ["tag-one", "tag-two", "tag-three"];
 
         $scope.tabInfo = [
-            { title: "Asset Under Management", colorId:0 },
-            { title: "Net Worth",colorId:0 },
-            { title: "Number of HNIs", colorId:0 },
-            { title: "Convertion Rate",  colorId:1 },
-            { title: "Average Convertion Time",colorId:1 },
-            { title: "Retention Rate", colorId:1 },
-            { title: "Weekly Client Logins",colorId:1 },
-            { title: "Annualized AUM Growth",colorId:2 },
-            { title: "Annualized Clientele Growth", colorId:2 },
-            { title: "Annualized Worth Growth",colorId:2 }
+            { title: "Asset Under Management", colorId: 0 },
+            { title: "Net Worth", colorId: 0 },
+            { title: "Number of HNIs", colorId: 0 },
+            { title: "Convertion Rate", colorId: 1 },
+            { title: "Average Convertion Time", colorId: 1 },
+            { title: "Retention Rate", colorId: 1 },
+            { title: "Weekly Client Logins", colorId: 1 },
+            { title: "Annualized AUM Growth", colorId: 2 },
+            { title: "Annualized Clientele Growth", colorId: 2 },
+            { title: "Annualized Worth Growth", colorId: 2 }
         ];
 
         $scope.currentTab = 0;
@@ -161,9 +161,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
 
     this.loadData = function (tab) {
-        this.createAreaChart('chart-overall', 10, 'test_us', true);
-        this.createAreaChart('chart-state', 30, 'test_state');
-        this.createAreaChart('chart-firm', 80, 'test_firm');
+        this.createAreaChart('chart-overall', 10, 'US', true);
+        this.createAreaChart('chart-state', 100, 'state_CA', false, 0, 0);
+        this.createAreaChart('chart-firm', 80, 'firm');
 
     }
 
@@ -204,9 +204,12 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
     };
 
-    this.createAreaChart = function (id, value, img, isRectangle) {
+    this.createAreaChart = function (id, value, img, isRectangle, marginTop, marginBottom) {
         var x = isRectangle ? 300 : 200;
         var y = isRectangle ? 200 : 200;
+
+        var marginTop = marginTop ? marginTop : 0;
+        var marginBottom = marginBottom ? marginBottom : 0;
 
         Highcharts.chart(id, {
             credits: {
@@ -217,7 +220,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     .setOpacity(0.2)
                     .get(),
                 type: 'column',
-                margin: [0, 0, 0, 0]
+                margin: [marginTop, 0, marginBottom, 0]
             },
             title: {
                 text: null
@@ -246,11 +249,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 }
             },
             series: [{
-                data: [value] 
+                data: [value]
             }]
         }, function (chart) { // on complete
             chart.renderer.image('/assets/images/' + img + '.png', 0, 0, x + 1, y + 1).attr({ zIndex: 3 }).add();
-            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: Highcharts.getOptions().colors[currentColor], fill: 'white', 'font-size': '3em', 'font-weight':'bold'}).add();
+            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: Highcharts.getOptions().colors[currentColor], fill: 'white', 'font-size': '3em', 'font-weight': 'bold' }).add();
         });
     }
 

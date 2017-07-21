@@ -1,7 +1,7 @@
 <div id="main-container">
     <div class="page">
-        <div class="row" id="top-row">
-            <div class="col-md-12" style="overflow:auto">
+        <div layout="row" id="top-row">
+            <div flex="100" style="overflow:auto">
                 <div class="tile-outer">
                     <div class="lb-tile-inner">
 
@@ -61,10 +61,10 @@
 
                         <div id="leaderboardCarousel" class="carousel slide" data-ride="carousel" data-interval="7000">
                             <ol class="carousel-indicators">
-                                <li ng-repeat="kpi in textList" data-target="#leaderboardCarousel" data-slide-to="{{ kpi.index }}" class"{{ kpi.active }}"></li>
+                                <li ng-repeat="kpi in textList" data-target="#leaderboardCarousel" data-slide-to="{{ kpi.index }}" class="{{ kpi.active }}"></li>
                             </ol>
                             <div class="carousel-inner" role="listbox">
-                                <div layout="row" ng-repeat="kpi in textList" class="carousel-item {{ kpi.active }}">
+                                <div id="text" layout="row" ng-repeat="kpi in textList" class="carousel-item {{ kpi.active }}">
                                     <div flex="15"></div>
                                     <div flex="70" style="text-align:center;">
                                         <p>
@@ -191,8 +191,4 @@
             </div>
         </div>
     </div>
-
-
-
-
 </div>

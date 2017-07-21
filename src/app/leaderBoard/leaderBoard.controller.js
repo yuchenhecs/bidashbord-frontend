@@ -91,7 +91,6 @@ function LeaderBoardController($scope, $http, $mdDialog, LeaderBoardService, Lea
             $scope.kpi = response["data"]["data"];
             preprocessing($scope.kpi, "kpi");
             $scope.changeScope('state'); //have the default scope set to state
-            POTBApi( POTBUrlBase + $scope.scope);
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");
         }

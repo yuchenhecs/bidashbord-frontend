@@ -253,6 +253,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
         $scope.currentTab = 0;
 
+        $scope.self_data = '777';
 
         $scope.tabOnSelected = function (tab) {
             $scope.currentTab = tab;

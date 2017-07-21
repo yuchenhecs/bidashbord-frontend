@@ -5,6 +5,11 @@ angular
 function LeaderBoardDialogService(MetricsService, $mdDialog) {
     LeaderBoardDialogService.self = this;
 
+    var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    var SUB_DOMAINS = ["/bi/networth"];
+    var USE_DUMMY_DATA = true;
+
+
     var dialogHTML = `
             <md-dialog style="width:900px;overflow: visible">
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
@@ -159,8 +164,18 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         };
     }
 
+    this.getData = function (tab) {
+        var url = DOMAIN + SUB_DOMAINS[tab];
 
-    this.loadData = function (tab) {
+        
+
+    }
+
+    this.getDataFromApi = function () {
+
+    }
+
+    this.loadData = function () {
         this.createAreaChart('chart-overall', 10, 'US', true);
         this.createAreaChart('chart-state', 100, 'state_CA', false, 0, 0);
         this.createAreaChart('chart-firm', 80, 'firm');
@@ -177,7 +192,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
-                LeaderBoardDialogService.self.loadData(0);
+                LeaderBoardDialogService.self.loadData();
 
 
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");

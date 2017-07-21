@@ -52,57 +52,12 @@ ul {
     padding: 0;
 }
 
-.top-nav {
-    position: fixed;
-    z-index: 1001;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 64px;
-    line-height: 64px;
-    padding-left: 20px;
-    color: #3D4051;
-    background-color: #fff;
-    color: #3D4051;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-}
 
 #main-container {
     padding: 64px 0 0 50px;
     display: table;
     min-height: 800px;
     width: 100%;
-}
-
-.side-nav {
-	background: $dark-blue;
-	color: $gray-blue ;
-	position: fixed;
-    z-index: 1000;
-    top: 64px;
-    left: 0;
-    bottom: 0;
-    width: 80px;
-    font-size: $font-menu-tile;
-
-    li {
-    	padding: 10px;
-        transition: 0.3s;
-        &:hover {
-            background:$sidebar-background;
-        }
-
-	    &:hover > a{
-	    	color: #fff;
-	    }
-    }
-}
-
-.side-nav a{
-    color:$gray-blue;
-    display: block;
-    transition: 0.3s;
-    text-decoration: none;
 }
 
 .page {
@@ -385,44 +340,6 @@ div#button-group {
 .subtitle {
 	text-align: center;
 	font-size: 14px;
-}
-
-.side-toggle {
-        width: 20px;
-        height: 100%;
-        z-index: 1;
-        top: 64px;
-        left: 80px;
-        background-color: $sidebar-background;
-        position: fixed;
-        text-align: center
-}
-
-.sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 64px;
-        left: 80px;
-        background-color:$sidebar-background;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top:15px;
-}
-
-.sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: $font-extended-sidebar;
-        color: $tile-bg;
-        display: block;
-        transition: 0.3s;
-}
-
-.sidenav a:hover,
-.offcanvas a:focus {
-		color: #f1f1f1;
 }
 
 #main {
@@ -851,10 +768,6 @@ md-switch {
     }
 }
 
-md-sidenav {
-  z-index: 99;
-  max-width: 250px;
-}
 
 .md-open-menu-container {
   font-size: 14px;
@@ -905,10 +818,6 @@ md-autocomplete.oranj-default {
     }
 }
 
-md-sidenav {
-    z-index: 10000;
-}
-
 md-tooltip {
     &.multiline {
         height: auto;
@@ -917,8 +826,8 @@ md-tooltip {
 
 .md-tab {
     padding: 5px !important;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
     background-color: #EFEFEF;
     color: black !important;
     margin: 0 1px;

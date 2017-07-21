@@ -6,10 +6,10 @@
     "angular": "1.6.4",
     "angular-mocks": "~1.5.11",
     "angular-ui-router": "1.0.0-beta.3",
-    "oranj-navigation": "~1.0.5",
     "angular-messages": "~1.5.3",
     "angular-material": "~1.1.4",
-    "oranj-highcharts": "~1.0.0"
+    "oranj-navigation": "git@bitbucket.org:runoranj/oranj-navigation.git#^1.0.1",
+    "oranj-ui-components": "git@bitbucket.org:runoranj/oranjweb-ui-components.git#^1.0.0"
   },
   "authors": [
     "Nate Smith <nsmith@runoranj.com>"

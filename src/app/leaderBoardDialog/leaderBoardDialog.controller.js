@@ -5,13 +5,57 @@ angular
 function LeaderBoardDialogService(MetricsService, $mdDialog) {
     LeaderBoardDialogService.self = this;
 
+    var scope;
     var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var SUB_DOMAINS = ["/bi/networth"];
+    var STATE_RATIOS = {
+        SC: 0.799,
+        SD: 0.620,
+        TN: 0.243,
+        VA: 0.433,
+        WV: 0.884,
+        WY: 0.772,
+        NY: 0.763,
+        PA: 0.575,
+        TX: 0.955,
+        WA: 0.655,
+        AK: 0.801,
+        AR: 0.872,
+        CO: 0.722,
+        CT: 0.549,
+        IA: 0.653,
+        KS: 0.516,
+        KY: 0.432,
+        MA: 0.613,
+        MD: 0.528,
+        MO: 0.869,
+        MT: 0.578,
+        NC: 0.382,
+        ND: 0.596,
+        NE: 0.456,
+        OK: 0.492,
+        OR: 0.742,
+        HI: 0.645
+    };
     var USE_DUMMY_DATA = true;
-
 
     var dialogHTML = `
             <md-dialog style="width:900px;overflow: visible">
+                <div id="dialog-loading" layout="row"  layout-align="center center">
+                    <div class="loader no-animate primary-loader loader--style3" >
+                        <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
+                                    xml:space="preserve">
+                            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
+                                        />
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+
+
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
                 
                     <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
@@ -22,7 +66,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     <div layout="column" >
                         <div layout="row" layout-align="end center"  layout-padding>
                             <div>
-                                <h1 style="margin:0">777 <small>k</small></h1>
+                                <h1 style="margin:0">{{ self_data }} <small>k</small></h1>
                             </div>
                         </div>
                         
@@ -55,7 +99,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             
                             <div flex="30" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
-                                    <h6>State</h6>
+                                    <h6>{{ STATE_NAMES[currentState] }}</h6>
                                 </div>
                                 <div id="chart-state" style="height:200px;width:200px"></div>
                                 
@@ -115,7 +159,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                             <md-tab label="Conv. Rate" md-on-select="tabOnSelected(3)"></md-tab>
                             <md-tab label="Avg Conv. Time" md-on-select="tabOnSelected(4)"></md-tab>
                             <md-tab label="Retention Rate" md-on-select="tabOnSelected(5)"></md-tab>
-                            <md-tab label="Goals created" md-on-select="tabOnSelected(6)"></md-tab>
+                            <md-tab label="Weekly Client Logins" md-on-select="tabOnSelected(6)"></md-tab>
                             <md-tab label="Annual AUM" md-on-select="tabOnSelected(7)"></md-tab>
                             <md-tab label="Annual Clientele" md-on-select="tabOnSelected(8)"></md-tab>
                             <md-tab label="Annual Net Worth" md-on-select="tabOnSelected(9)"></md-tab>
@@ -128,15 +172,14 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
     var currentColor = 0;
 
     this.init = function ($scope) {
+        scope = $scope;
+
         var colorTheme = {
             colors: ["#00a4d3", "#72bb53", "#CDC114"]
         };
 
-
         //    colors: ["#14A2CD", "#48B312", "#CDC114"]
-
         //007E6A
-
 
         Highcharts.setOptions(colorTheme);
 
@@ -155,30 +198,140 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             { title: "Annualized Worth Growth", colorId: 2 }
         ];
 
+        $scope.STATE_NAMES = {
+            AL: 'Alabama',
+            AK: 'Alaska',
+            AZ: 'Arizona',
+            AR: 'Arkansas',
+            CA: 'California',
+            CO: 'Colorado',
+            CT: 'Connecticut',
+            DE: 'Delaware',
+            FL: 'Florida',
+            GA: 'Georgia',
+            HI: 'Hawaii',
+            ID: 'Idaho',
+            IL: 'Illinois',
+            IN: 'Indiana',
+            IA: 'Iowa',
+            KS: 'Kansas',
+            KY: 'Kentucky',
+            LA: 'Louisiana',
+            ME: 'Maine',
+            MD: 'Maryland',
+            MA: 'Massachusetts',
+            MI: 'Michigan',
+            MN: 'Minnesota',
+            MS: 'Mississippi',
+            MO: 'Missouri',
+            MT: 'Montana',
+            NE: 'Nebraska',
+            NV: 'Nevada',
+            NH: 'New Hampshire',
+            NJ: 'New Jersey',
+            NM: 'New Mexico',
+            NY: 'New York',
+            NC: 'North Carolina',
+            ND: 'North Dakota',
+            OH: 'Ohio',
+            OK: 'Oklahoma',
+            OR: 'Oregon',
+            PA: 'Pennsylvania',
+            RI: 'Rhode Island',
+            SC: 'South Carolina',
+            SD: 'South Dakota',
+            TN: 'Tennessee',
+            TX: 'Texas',
+            UT: 'Utah',
+            VT: 'Vermont',
+            VA: 'Virginia',
+            WA: 'Washington',
+            WV: 'West Virginia',
+            WI: 'Wisconsin',
+            WY: 'Wyoming'
+        };
+
         $scope.currentTab = 0;
+
 
         $scope.tabOnSelected = function (tab) {
             $scope.currentTab = tab;
             currentColor = $scope.tabInfo[tab].colorId;
-            LeaderBoardDialogService.self.loadData(tab);
+
+            var loading = document.getElementById("dialog-loading");
+
+            loading.style['visibility'] = "";
+
+            var self = LeaderBoardDialogService.self;
+            self.getData(self.currentTab);
         };
+
     }
 
     this.getData = function (tab) {
         var url = DOMAIN + SUB_DOMAINS[tab];
 
-        
+        this.getDataFromApi(url);
+    }
+
+    //var tmp = 0;
+    this.getDataFromApi = function (url) {
+        console.log(url);
+
+        if (USE_DUMMY_DATA) {
+
+
+            //var states = Object.keys(scope.STATE_NAMES);
+
+            setTimeout(function () {
+                var overall = 10;
+                var state = 90;
+                var firm = 80;
+                var stateCode = 'OR';
+
+                scope.$apply(function () {  // outside angular framework
+                    scope.currentState = stateCode;
+                });
+
+                LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
+
+                //tmp++
+                //LeaderBoardDialogService.self.getData();
+            }, 1000);
+
+            return;
+        }
+
+        return this.$http.get(url).then(function mySuccess(response) {
+
+            var overall = 10;
+            var state = 90;
+            var firm = 80;
+            var stateCode = 'IA';
+
+            scope.$apply(function () {
+                scope.currentState = stateCode;
+            });
+
+            LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
+
+        }, function myError(response, error) {
+            console.log("Error " + response.status + ": " + response.statusText + "!");
+        });
+
 
     }
 
-    this.getDataFromApi = function () {
+    this.loadData = function (overall, state, firm, stateCode) {
+        var padding = STATE_RATIOS[stateCode] ? 100 * (1 - STATE_RATIOS[stateCode]) : 0;
 
-    }
+        this.createAreaChart('chart-overall', overall, 'US', true);
+        this.createAreaChart('chart-state', state, 'state_' + stateCode, false, padding, padding);
+        this.createAreaChart('chart-firm', firm, 'firm');
 
-    this.loadData = function () {
-        this.createAreaChart('chart-overall', 10, 'US', true);
-        this.createAreaChart('chart-state', 100, 'state_CA', false, 0, 0);
-        this.createAreaChart('chart-firm', 80, 'firm');
+        var loading = document.getElementById("dialog-loading");
+
+        loading.style['visibility'] = "hidden";
 
     }
 
@@ -192,8 +345,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
-                LeaderBoardDialogService.self.loadData();
-
 
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(2)").classList.add("tab-one");
@@ -209,9 +360,8 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
 
 
-
-
-                document.getElementById("dialog-content").style['visibility'] = "";
+                var content = document.getElementById("dialog-content");
+                content.style['visibility'] = "";
 
             }
         });

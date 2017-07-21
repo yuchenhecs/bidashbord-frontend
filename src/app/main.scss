@@ -884,6 +884,7 @@ md-tabs .md-tab.md-active{
     text-align: center; 
     margin-left: -5px; 
     top: 5px;
+    z-index: 1;
 }
 
 .tag-one {
@@ -901,4 +902,14 @@ md-tabs .md-tab.md-active{
 .tag-three {
     background-color: #fef8a0;
     color:black;
+}
+
+#dialog-loading {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index: 1;
+    background:rgba(255,255,255,0.5);
 }

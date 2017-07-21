@@ -59,7 +59,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
                 
                     <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
-                        <h4 style="margin:0"><b>{{tabInfo[currentTab].title}}</b></h4>
+                        <h5 style="margin:0"><b>{{tabInfo[currentTab].title}}</b></h5>
                     </div>
 
 

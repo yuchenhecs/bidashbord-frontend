@@ -1,7 +1,7 @@
 <div id="main-container">
     <div class="page">
-        <div class="row" id="top-row">
-            <div class="col-md-12" style="overflow:auto">
+        <div layout="row" id="top-row">
+            <div flex="100" style="overflow:auto">
                 <div class="tile-outer">
                     <div class="lb-tile-inner">
 
@@ -69,15 +69,38 @@
                             </div>
                         </div>
 
-                        <div layout="row" class="lb-body">
+                        <div id="leaderboardCarousel" class="carousel slide" data-ride="carousel" data-interval="7000">
+                            <ol class="carousel-indicators">
+                                <li ng-repeat="kpi in textList" data-target="#leaderboardCarousel" data-slide-to="{{ kpi.index }}" class="{{ kpi.active }}"></li>
+                            </ol>
+                            <div class="carousel-inner" role="listbox">
+                                <div id="text" layout="row" ng-repeat="kpi in textList" class="carousel-item {{ kpi.active }}">
+                                    <div flex="15"></div>
+                                    <div class="POTBText"flex="70" style="text-align:center;">
+                                        <p>
+                                            <strong>{{ kpi.text }}</strong>
+                                        </p>
+                                    </div>
+                                    <div flex="15"></div>
+                                </div>
+                            </div>
+                          <!-- <a class="carousel-control-prev" href="" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="carousel-control-next" href="" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                          </a> -->
+                      </div>
+
+
+                        <div layout="row" layout-sm="column" class="lb-body">
                             <div flex="33" layout="column" layout-align="none center" class="lb-one-third">
                                 <div class="sup-cat-icon">
                                     <i class="fa fa-usd lb-icon1"></i>
                                     <i class="fa fa-circle icon-background1"></i>
                                 </div>
-                                <p class="sup-cat-text">
-                                    <strong>Financials</strong> - TEXT GOES HERE
-                                </p>
                                 <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Assets Under Management
@@ -108,9 +131,6 @@
                                     <i class="fa fa-handshake-o lb-icon2"></i>
                                     <i class="fa fa-circle icon-background2"></i>
                                 </div>
-                                <p class="sup-cat-text">
-                                    <strong>Client Management</strong> - TEXT GOES HERE
-                                </p>
                                 <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Conversion Rate
@@ -149,9 +169,6 @@
                                     <i class="fa fa-line-chart lb-icon3"></i>
                                     <i class="fa fa-circle icon-background3"></i>
                                 </div>
-                                <p class="sup-cat-text">
-                                    <strong>Growth</strong> - TEXT GOES HERE
-                                </p>
                                 <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
                                     <div flex="70" class=" kpi-text kpi-name">
                                          Annualized AUM Growth
@@ -179,15 +196,14 @@
                                 </md-button>
                             </div>
                         </div>
+<<<<<<< HEAD
 
  
+=======
+>>>>>>> gamification
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
 </div>

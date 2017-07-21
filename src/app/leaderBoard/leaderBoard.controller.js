@@ -20,9 +20,34 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         LeaderBoardDialogService.showChart(ev);
     };
 
-    var useDummyData = true;
+    var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/summary";
+    var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/patOnTheBack?region="
 
-    $scope.highlightButton = function (scope) {
+    var preprocessing = function(data, type) {
+
+        if (type === "POTB") {
+            var textList = [];
+            var i = 0;
+            for (var key in data) {
+                if (key === "id" || key === "advisorId" || key === "region") { continue; }
+                if (data[key] !== null) {
+                    textList.push({text:data[key], index:i});
+                    i++;
+                }
+            }
+            //set one to be the active slide to show
+            textList[0].active = "active";
+            $scope.textList = textList;
+        } else if (type === "kpi") {
+            data.aum = shortenNumber(data.aum);
+            data.netWorth = shortenNumber(data.netWorth);
+            data.avgConversionTime = (data.avgConversionTime/24).toFixed(2);
+            data.retentionRate = (data.retentionRate/1).toFixed(2);
+            data.conversionRate = (data.conversionRate/1).toFixed(2);
+        }
+    };
+
+    var highlightButton = function (scope) {
         $scope.lbOverall = 'offFocus';
         $scope.lbState = 'offFocus';
         $scope.lbFirm = 'offFocus';
@@ -30,16 +55,19 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         if (scope === 'overall') {
             $scope.lbOverall = 'onFocus';
             $scope.scope = scope;
+            POTBApi( POTBUrlBase + $scope.scope);
         } else if (scope === 'state') {
             $scope.lbState = 'onFocus';
             $scope.scope = scope;
+            POTBApi( POTBUrlBase + $scope.scope);
         } else {
             $scope.lbFirm = 'onFocus';
             $scope.scope = scope;
+            POTBApi( POTBUrlBase + $scope.scope);
         }
     };
 
-    $scope.shortenNumber = function (num) {
+    var shortenNumber = function (num) {
         if (num >= 1000 && num < 1000000) {
             return (num/1000).toFixed(2) + 'k';
         } else if (num >= 1000000 && num <1000000000) {
@@ -51,36 +79,34 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         } else return num.toFixed(2);
     };
 
-    $scope.kpiApi = function (url) {
-        return $http.get(url).then(function mySuccess(response) {
-            console.log(response);
-            $scope.kpi = response["data"]["data"];
-            $scope.kpi.aum = $scope.shortenNumber($scope.kpi.aum);
-            $scope.kpi.netWorth = $scope.shortenNumber($scope.kpi.netWorth);
-            $scope.kpi.avgConversionTime = ($scope.kpi.avgConversionTime/24).toFixed(2);
-            $scope.kpi.retentionRate = ($scope.kpi.retentionRate/1).toFixed(2);
-            $scope.kpi.conversionRate = ($scope.kpi.conversionRate/1).toFixed(2);
-            $scope.changeScope('state'); //have the default scope set to state
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
-        }
-    };
-
-    $scope.kpiApi('http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/summary');
-
-    //510
-    //332
-
     $scope.changeScope = function (scope) {
-        if (scope == 'overall') {
+        if (scope === 'overall') {
             $scope.rank = $scope.kpi.percentileOverall;
         } else if (scope === 'state') {
             $scope.rank = $scope.kpi.percentileState;
         } else {
             $scope.rank = $scope.kpi.percentileFirm;
         }
-        $scope.highlightButton(scope);
+        highlightButton(scope);
     };
 
+    var kpiApi = function (url) {
+        return $http.get(url).then(function mySuccess(response) {
+            $scope.kpi = response["data"]["data"];
+            preprocessing($scope.kpi, "kpi");
+            $scope.changeScope('state'); //have the default scope set to state
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
+    };
 
+    var POTBApi = function(url) {
+        return $http.get(url).then(function mySuccess(response) {
+            preprocessing(response["data"]["data"], "POTB");
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
+    };
+
+    kpiApi(kpiUrl);
 }

@@ -1,33 +1,32 @@
 <div id="main-container">
     <div class="page">
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12 tile">
+        <div layout="row">
+            <div flex="33" layout-padding>
                 <div class="tile-outer">
                     <div class="tile-inner">
-                        <div class="row tile-header">
-                            <div class="col-md-9">
+                        <div layout="row" class="tile-header">
+                            <div flex="75">
                                 Goals
                             </div>
-                            <div class="col-md-3">
+                            <div flex="25">
                                 <div class="more">
                                     <a href="/#/goals">More</a>
                                 </div>
                             </div>
                         </div>
                         <div id="goalsContainer">
-
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 col-md-8 col-sm-12 tile">
+            <div flex="66" layout-padding>
                 <div class="tile-outer">
                     <div class="tile-inner">
-                        <div class="row tile-header">
-                            <div class="col-md-9">
+                        <div layout="row" class="tile-header">
+                            <div flex="75">
                                 Assets Under Management
                             </div>
-                            <div class="col-md-3">
+                            <div flex="25">
                                 <div class="more">
                                     <a href="/#/aum">More</a>
                                 </div>
@@ -40,8 +39,8 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-12 tile">
+        <div layout="row">
+            <div class="tile" flex="100">
                 <div class="tile-outer">
                     <div class="tile-inner">
                         <div class="row tile-header">
@@ -61,61 +60,61 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-12 tile">
+        <div layout="row">
+            <div class="tile" flex="100">
                 <div class="tile-outer">
                     <div class="tile-inner">
-                        <div class="row tile-header">
-                            <div class="col-md-9">
+                        <div layout="row" class="tile-header">
+                            <div flex="75">
                                 Login
                             </div>
-                            <div class="col-md-3">
+                            <div flex="25">
                                 <div class="more">
                                     <a href="/#/login">More</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12 subtitle">
+                        <div layout="row">
+                            <div class="subtitle" flex="100">
                             Login Metrics from the Last 7 Days
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4 loginText">
-                                <div class="row loginNum">
-                                    {{ showData['totalLogins'] }}
-                                </div>
-                                <div class="row {{ totalSign }}">
-                                    {{ showData['changeInTotalLogins'] }}
-                                </div>
-                                <div class="row">
-                                    Total Logins
-                                </div>
+                        <div layout="row">
+                            <div layout="column" flex="33" layout-align="center center">
+                                    <div layout="row" class="loginNum">
+                                        {{ showData['totalLogins'] }}
+                                    </div>
+                                    <div layout="row">
+                                        <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong> from previous week
+                                    </div>
+                                    <div layout="row" class="loginText">
+                                        Total Logins
+                                    </div>
                             </div>
-                            <div class="col-md-4 loginText">
-                                <div class="row loginNum">
-                                    {{ showData['uniqueLogins'] }}
-                                </div>
-                                <div class="row {{ uniqueSign }}">
-                                    {{ showData['changeInUniqueLogins'] }}
-                                </div>
-                                <div class="row">
-                                    Unique Logins
-                                </div>
+                            <div layout="column" flex="33" layout-align="center center">
+                                    <div layout="row" class="loginNum">
+                                        {{ showData['uniqueLogins'] }}
+                                    </div>
+                                    <div layout="row">
+                                        <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> from previous week
+                                    </div>
+                                    <div layout="row" class="loginText">
+                                        Unique Logins
+                                    </div>
                             </div>
-                            <div class="col-md-4 loginText">
-                                <div class="row loginNum">
-                                    {{ showData['avgSessionTime'] }}
-                                </div>
-                                <div class="row {{ timeSign }}">
-                                    {{ showData['changeInAvgSessionTime'] }}
-                                </div>
-                                <div class="row">
-                                    Average User Session (min)
-                                </div>
+                            <div layout="column" flex="33" layout-align="center center">
+                                    <div layout="row" class="loginNum">
+                                        {{ showData['avgSessionTime'] }}
+                                    </div>
+                                    <div layout="row">
+                                        <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> from previous week
+                                    </div>
+                                    <div layout="row" class="loginText">
+                                        Average User Session (min)
+                                    </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div layout="row">
                             <div class="oranj-toggle medium-one-color">
                                 <input id="login" type="checkbox"  ng-model="ngModel" ng-change="toggleLoginData()">
                                 <label for="login">

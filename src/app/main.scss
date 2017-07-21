@@ -31,8 +31,19 @@ $font-extended-sidebar:13px;
 $font-menu-tile:12px;
 $font-universal: 'Open Sans', sans-serif;
 
+//lb colors
+$lb-grey: #D6D6D6;
+$lb-dark-grey: #313131;
+$lb-blue: #91E4FB;
+$lb-light-blue: #C9F1FD;
+$lb-green: #AEDD94;
+$lb-light-green: #CBE8BA;
+$lb-yellow: #FEF8A0;
+$lb-light-yellow: #FEFAC0;
+
 body {
-	font-family: $font-universal;
+    font-family: $font-universal;
+    min-height: 0px !important;
 }
 
 ul {
@@ -57,8 +68,10 @@ ul {
 }
 
 #main-container {
-	padding: 64px 0 0 50px;
-    height: 2000px;
+    padding: 64px 0 0 50px;
+    display: table;
+    min-height: 800px;
+    width: 100%;
 }
 
 .side-nav {
@@ -94,13 +107,209 @@ ul {
 
 .page {
 	padding: $padding-page;
-	background-color: $app-main-bg;
-    height: 100%;
+    background-color: $app-main-bg;
+    display: table-cell;
 }
 
-// .row {
-// 	padding: $padding-tiles-out 0px;
-// }
+//leaderboard
+.lb-tile-inner {
+	padding: 30px 50px;
+}
+
+
+.avatar-wrapper {
+	height: 80px;
+    width: 68.5px;
+    margin-right: 20px;
+}
+
+.avatar-image {
+	height: 100%;
+	width: 100%;
+}
+
+.lb-header {
+	margin-bottom: 20px;
+}
+
+.lb-upper-row {
+	font-size: 28px;
+    padding: 5px 0;
+    margin: 0;
+}
+
+.lb-lower-row {
+	font-size: 14px;
+    padding: 5px 0;
+     margin: 0;
+}
+
+.lb-right-text {
+	margin-left: 15px;
+	float: right;
+}
+
+div#button-group {
+    position: relative;
+}
+
+#horizontal-line {
+    border-top: 2px solid #dfdfdf ;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%; left: 0; right: 0; bottom: 0;
+    width: 100%;
+}
+
+
+.offFocus {
+	background-color: #EFEFEF;
+}
+
+.onFocus {
+	background-color: #163259;
+	color: white !important;
+}
+
+#leaderboardCarousel {
+    padding: 70px 0px;
+}
+
+.carousel-indicators li {
+    background-color: #A7A7A7;
+}
+
+.carousel-indicators .active {
+    background-color: black;
+}
+
+.lb-btn {
+	width: 125px;
+	//border-color: white;
+}
+
+.scope {
+    border-radius: 4px;
+}
+
+.lb-body {
+    margin-top: 35px;
+}
+
+.lb-one-third {
+	text-align: center;
+}
+
+.sup-cat-icon {
+	text-align: center;
+	padding-bottom: 25px;
+	text-align: center;
+}
+
+.sup-cat-text {
+	padding: 25px 0px;
+	margin: 0px;
+}
+
+.kpi {
+	height: 85px;
+	width: 75%;
+	border-radius: 5px !important;
+	margin-left: 0px;
+}
+
+.kpi-text {
+    color: black;
+}
+
+.kpi-name {
+    white-space: normal;
+}
+
+.financials {
+	background-color: $lb-blue;
+}
+
+.financials:hover {
+	background-color: $lb-light-blue !important;
+}
+
+.client-management {
+	background-color: $lb-green;
+}
+
+.client-management:hover {
+	background-color: $lb-light-green !important;
+}
+
+.growth {
+	background-color: $lb-yellow;
+}
+
+.growth:hover {
+	background-color: $lb-light-yellow !important;
+}
+
+.icon-background1 {
+	position: relative;
+	z-index: 5;
+	left: -15px;
+	font-size: 64px;
+	color: $lb-blue;
+}
+
+.icon-background2 {
+	position: relative;
+	z-index: 5;
+	left: -26px;
+	font-size: 64px;
+	color: $lb-green;
+}
+
+.icon-background3 {
+	position: relative;
+	z-index: 5;
+	left: -25px;
+	font-size: 64px;
+	color: $lb-yellow;
+}
+
+.fa-info-circle {
+	color: $lb-grey;
+	margin-left: 10px;
+}
+
+.lb-icon1 {
+	color: white;
+	font-size: 50px;
+	position: relative;
+	top: -5px;
+	left: 30px;
+	z-index: 10;
+}
+
+.lb-icon2 {
+	color: white;
+	font-size: 38px;
+	position: relative;
+	top: 14px;
+	left: 26px;
+	z-index: 10;
+}
+
+.lb-icon3 {
+	color: white;
+	font-size: 36px;
+	position: relative;
+	top: 14px;
+	left: 24px;
+	z-index: 10;
+}
+
+.ng-leave {
+    display: none !important;
+}
+//end leaderboard
 
 #top-row {
 	padding-top: 0px;
@@ -150,7 +359,7 @@ ul {
     left: $sub-sidebar-width+80px !important
 }
 
-.loginText {
+.loginCol {
 	text-align: center;
 	padding: 15px 0 15px 0;
 
@@ -159,6 +368,11 @@ ul {
 .loginNum {
 	font-size: 65px;
 	color: #3EB6B5;
+}
+
+.loginText {
+    font-weight: bold;
+    padding-top: 10px;
 }
 
 .subtitle {
@@ -205,7 +419,7 @@ ul {
 }
 
 #main {
-		transition: margin-left .5s;
+        transition: margin-left .5s;
 }
 
 #toggle {
@@ -253,12 +467,8 @@ ul {
 .neg {
 	color: red;
 }
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 
-
-//for toggle
+//for client/prospect toggle
 $color-green-active: #40B349;
 $color-green: #A1CB39;
 $color-blue: #11BEDF;
@@ -699,27 +909,33 @@ md-tooltip {
 }
 
 .md-tab {
-    padding: 10px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding: 5px !important;
     border-top: 3px solid transparent;
     border-bottom: 3px solid transparent;
-    background-color: #DCDCDC;
+    background-color: #EFEFEF;
     color: black !important;
-    margin: 2px;
+    margin: 0 1px;
+    text-transform: none;
+    font-size:10px;
+    height: 40px !important;
+
 }
+
+md-tabs {
+    height: 40px !important;
+}
+
 
 md-tabs .md-tab.md-active{
     border-top-style:  hidden !important;
     border-bottom-style:  solid !important;
-    
+
     background-color: white !important;
 }
 
 
+.md-dialog-container {
 
-.md-scroll-mask {
-    //color:$light-green !important;
     background-color: rgba(0, 126, 106, 0.3) !important;
 }
 
@@ -746,5 +962,5 @@ md-tabs .md-tab.md-active{
 
     border-top-style:  solid !important;
     border-bottom-style:  hidden !important;
-    
+
 }

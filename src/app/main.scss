@@ -250,11 +250,6 @@ div#button-group {
 	background-color: $lb-light-yellow !important;
 }
 
-// .fa-info-circle:hover .tooltip-text {
-//     visibility: visible;
-// }
-
-
 .icon-background1 {
 	position: relative;
 	z-index: 5;
@@ -309,6 +304,10 @@ div#button-group {
 	top: 14px;
 	left: 24px;
 	z-index: 10;
+}
+
+.ng-leave {
+    display: none !important;
 }
 //end leaderboard
 

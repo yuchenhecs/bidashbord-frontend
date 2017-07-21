@@ -41,6 +41,26 @@ $lb-light-green: #CBE8BA;
 $lb-yellow: #FEF8A0;
 $lb-light-yellow: #FEFAC0;
 
+
+@media (max-width: 600px) {
+    #main-container {
+        padding: 64px 0 0 50px;
+        display: table;
+        min-height: 800px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 600px) {
+        
+    #main-container {
+        padding: 64px 0 0 70px;
+        display: table;
+        min-height: 800px;
+        width: 100%;
+    }
+}
+
 body {
     font-family: $font-universal;
     min-height: 0px !important;
@@ -50,14 +70,6 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
-
-
-#main-container {
-    padding: 64px 0 0 50px;
-    display: table;
-    min-height: 800px;
-    width: 100%;
 }
 
 .page {
@@ -342,20 +354,6 @@ div#button-group {
 	font-size: 14px;
 }
 
-#main {
-        transition: margin-left .5s;
-}
-
-#toggle {
-		transition: left .5s;
-}
-
-#inner {
-		top: 50%;
-		position: fixed;
-		width: 20px;
-		color: white
-}
 
 #chart {
 	min-width: 310px;

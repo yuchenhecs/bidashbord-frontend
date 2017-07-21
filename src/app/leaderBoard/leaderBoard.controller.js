@@ -16,7 +16,36 @@ function LeaderBoardController($scope, $http, $mdDialog, LeaderBoardService, Lea
         LeaderBoardDialogService.showChart(ev);
     };
 
-    var useDummyData = true;
+    var testData = {
+        "id": 3,
+        "advisorId": 510,
+        "region": "firm",
+        "aumAchievement": "You are Ranked 1st in AUM among all advisors in the firm",
+        "netWorthAchievement": "Your NET WORTH is above the firm average",
+        "hniAchievement": null,
+        "conversionRateAchievement": null,
+        "avgConversionRateAchievement": null,
+        "retentionRateAchievement": "Your RETENTION RATE is above the firm average",
+        "weeklyClientLoginsAchievement": null,
+        "aumGrowthAchievement": null,
+        "netWorthGrowthAchievement": null,
+        "clienteleGrowthAchievement": null
+    };
+
+    var preprocessing = function(data) {
+        var textList = [];
+        var i = 0;
+        for (var key in data) {
+            if (key === "id" || key === "advisorId" || key === "region") { continue; }
+            if (data[key] !== null) {
+                textList.push({text:data[key], index:i});
+                i++;
+            }
+        }
+        //set one to be the active slide to show
+        textList[0].active = "active";
+        $scope.textList = textList;
+    };
 
     $scope.highlightButton = function (scope) {
         $scope.lbOverall = 'offFocus';
@@ -62,11 +91,6 @@ function LeaderBoardController($scope, $http, $mdDialog, LeaderBoardService, Lea
         }
     };
 
-    $scope.kpiApi('http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/summary');
-
-    //510
-    //332
-
     $scope.changeScope = function (scope) {
         if (scope == 'overall') {
             $scope.rank = $scope.kpi.percentileOverall;
@@ -78,5 +102,6 @@ function LeaderBoardController($scope, $http, $mdDialog, LeaderBoardService, Lea
         $scope.highlightButton(scope);
     };
 
-
+    $scope.kpiApi('http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/summary');
+    preprocessing(testData);
 }

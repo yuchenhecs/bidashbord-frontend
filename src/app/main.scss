@@ -149,23 +149,6 @@ ul {
 	float: right;
 }
 
-// .tooltip-text {
-//     visibility: hidden;
-//     width: 120px;
-//     background-color: black;
-//     color: #fff;
-//     text-align: center;
-//     border-radius: 6px;
-//     padding: 5px 0;
-//     position: absolute;
-//     z-index: 1;
-//     top: 105%;
-// 	left:7.4%;
-//     margin-left: -60px;
-// 	opacity: 0.6;
-// 	font-family: $font-universal;
-// }
-
 div#button-group {
     position: relative;
 }
@@ -188,18 +171,29 @@ div#button-group {
 	color: white !important;
 }
 
+#leaderboardCarousel {
+    padding: 70px 0px;
+}
+
+.carousel-indicators li {
+    background-color: #A7A7A7;
+}
+
+.carousel-indicators .active {
+    background-color: black;
+}
+
 .lb-btn {
 	width: 125px;
 	//border-color: white;
 }
 
-.lb-body {
-	margin-top: 50px;
-}
-
 .scope {
     border-radius: 4px;
-    max-width:300px;
+}
+
+.lb-body {
+    margin-top: 35px;
 }
 
 .lb-one-third {
@@ -208,7 +202,7 @@ div#button-group {
 
 .sup-cat-icon {
 	text-align: center;
-	padding-bottom: 10px;
+	padding-bottom: 25px;
 	text-align: center;
 }
 
@@ -303,8 +297,8 @@ div#button-group {
 	color: white;
 	font-size: 38px;
 	position: relative;
-	top: -9px;
-	left: 30px;
+	top: 14px;
+	left: 26px;
 	z-index: 10;
 }
 
@@ -312,8 +306,8 @@ div#button-group {
 	color: white;
 	font-size: 36px;
 	position: relative;
-	top: -11px;
-	left: 27px;
+	top: 14px;
+	left: 24px;
 	z-index: 10;
 }
 //end leaderboard

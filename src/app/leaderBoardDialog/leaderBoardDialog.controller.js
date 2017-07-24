@@ -7,7 +7,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
 
     var scope;
     var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-    var SUB_DOMAINS = ["/bi/networth"];
+    var SUB_DOMAINS = ["/bi/networth","/bi/networth"];
     var STATE_RATIOS = {
         SC: 0.799,
         SD: 0.620,
@@ -252,7 +252,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         };
 
         $scope.currentTab = 0;
-
         $scope.self_data = '777';
 
         $scope.tabOnSelected = function (tab) {
@@ -280,8 +279,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         console.log(url);
 
         if (USE_DUMMY_DATA) {
-
-
             //var states = Object.keys(scope.STATE_NAMES);
 
             setTimeout(function () {
@@ -423,72 +420,4 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         });
     }
 
-    this.createRingChart = function (id) {
-        Highcharts.chart(id, {
-            credits: {
-                enabled: false
-            },
-            chart: {
-                type: 'solidgauge',
-                margin: [0, 0, 0, 0]
-            },
-            title: {
-                text: null
-            },
-            tooltip: {
-                enabled: false
-            },
-            pane: {
-                startAngle: 0,
-                endAngle: 360,
-                background: [{ // Track for Move
-                    outerRadius: '115%',
-                    innerRadius: '100%',
-                    backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[currentColor])
-                        .setOpacity(0.3)
-                        .get(),
-                    borderWidth: 0
-                }]
-            },
-            yAxis: {
-                min: 0,
-                max: 100,
-                lineWidth: 0,
-                tickPositions: []
-            },
-            plotOptions: {
-                solidgauge: {
-                    dataLabels: {
-                        enabled: true,
-                        y: -40,
-                        borderWidth: 0,
-                        backgroundColor: 'none',
-                        useHTML: true,
-                        shadow: false,
-                        style: {
-                            fontSize: '12px'
-                        },
-                        formatter: function () {
-                            return '<div style="width:100%;text-align:center;"><span style="font-size:1.2em;font-weight:bold;">' + this.point.series.name + '</span><br/><span style="font-size:3em;color:' + Highcharts.getOptions().colors[currentColor] + ';font-weight:bold;">' + Highcharts.numberFormat(this.y / 10, 0) + '</span>';
-                        }
-                    },
-                    linecap: 'round',
-                    stickyTracking: false,
-                    rounded: true
-                }
-            },
-            series: [{
-                name: 'Top',
-                data: [{
-                    color: Highcharts.getOptions().colors[currentColor],
-                    radius: '115%',
-                    innerRadius: '100%',
-                    y: 80
-                }]
-            }]
-        });
-
-        //      chart_sm.reflow();
-
-    }
 }

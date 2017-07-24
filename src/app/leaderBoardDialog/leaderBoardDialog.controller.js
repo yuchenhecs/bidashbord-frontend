@@ -7,7 +7,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
     var scope;
     var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-    var SUB_DOMAINS = ["/bi/networth", "/bi/networth"];
+
     var STATE_RATIOS = {
         SC: 0.799,
         SD: 0.620,
@@ -40,7 +40,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     var USE_DUMMY_DATA = true;
 
     var dialogHTML = `
-            <md-dialog style="width:900px;overflow: visible">
+            <md-dialog style="overflow: visible">
                 <div id="dialog-loading" layout="row"  layout-align="center center">
                     <div class="loader no-animate primary-loader loader--style3" >
                         <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -71,75 +71,75 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                     <div layout="column" >
                         <div layout="row" layout-align="end center"  layout-padding>
                             <div>
-                                <h1 style="margin:0">{{ kpi.advisorKpi }}</h1>
+                                <h1 style="margin:0" ng-bind-html="kpi.advisorKpi"></h1>
                             </div>
                         </div>
                         
                         <div layout="row" layout-align="space-between center"  layout-padding>
  
-                            <div flex="40" layout="column" layout-align="none stretch" >
+                            <div flex="40" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h6>Overall</h6>
                                 </div>
-                                <div id="chart-overall" style="height:200px;width:300px;margin:auto"></div>
+                                <div id="chart-overall" style="height:200px;width:300px"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.worst }}</h3>
-                                        <h6>least</h6>
+                                        <h3 ng-bind-html="kpi.overall.worst"></h3>
+                                        <h6>{{tabInfo[currentTab].text_worst}}</h6>
                                     </div>
 
                                     <div style="height:50px;border-right: thin solid #dfdfdf;">
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.best }}</h3>
-                                        <h6>most</h6>
+                                        <h3 ng-bind-html="kpi.overall.best"></h3>
+                                        <h6>{{tabInfo[currentTab].text_best}}</h6>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div flex="30" layout="column" layout-align="none stretch" >
+                            <div flex="30" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h6>{{ STATE_NAMES[kpi.stateCode] }}</h6>
                                 </div>
-                                <div id="chart-state" style="height:200px;width:200px;margin:auto"></div>
+                                <div id="chart-state" style="height:200px;width:200px"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.state.worst }}</h3>
-                                        <h6>least</h6>
+                                        <h3 ng-bind-html="kpi.state.worst"></h3>
+                                        <h6>{{tabInfo[currentTab].text_worst}}</h6>
                                     </div>
 
                                     <div style="height:50px;border-right: thin solid #dfdfdf;">
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.state.best }}</h3>
-                                        <h6>most</h6>
+                                        <h3 ng-bind-html="kpi.state.best"></h3>
+                                        <h6>{{tabInfo[currentTab].text_best}}</h6>
                                     </div>
                                 </div>
                                 
                             </div>
                             
-                            <div flex="30" layout="column" layout-align="none stretch" >
+                            <div flex="30" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h6>Firm</h6>
                                 </div>
-                                <div id="chart-firm" style="height:200px;width:200px;margin:auto"></div>
+                                <div id="chart-firm" style="height:200px;width:200px"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.worst }}</h3>
-                                        <h6>least</h6>
+                                        <h3 ng-bind-html="kpi.firm.worst"></h3>
+                                        <h6>{{tabInfo[currentTab].text_worst}}</h6>
                                     </div>
 
                                     <div style="height:50px;border-right: thin solid #dfdfdf;">
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.best }}</h3>
-                                        <h6>most</h6>
+                                        <h3 ng-bind-html="kpi.firm.best"></h3>
+                                        <h6>{{tabInfo[currentTab].text_best}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -164,15 +164,19 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
     var currentColor = 0;
 
+    var unitWrapper = function (unit) {
+        return '<small>' + unit + '</small>';
+    }
+
     var shortenNumber = function (num) {
         if (num >= 1000 && num < 1000000) {
-            return (num / 1000).toFixed(2) + 'k';
+            return (num / 1000).toFixed(2) + unitWrapper('k');
         } else if (num >= 1000000 && num < 1000000000) {
-            return (num / 1000000).toFixed(2) + 'M';
+            return (num / 1000000).toFixed(2) + unitWrapper('M');
         } else if (num >= 1000000000 && num < 1000000000000) {
-            return (num / 1000000000).toFixed(2) + 'B';
+            return (num / 1000000000).toFixed(2) + unitWrapper('B');
         } else if (num >= 1000000000000) {
-            return (num / 1000000000000).toFixed(2) + 'T';
+            return (num / 1000000000000).toFixed(2) + unitWrapper('T');
         } else return num.toFixed(2);
     };
 
@@ -191,16 +195,66 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
         $scope.tagColors = ["tag-one", "tag-two", "tag-three"];
 
         $scope.tabInfo = [
-            { title: "Asset Under Management", colorId: 0, formatter: shortenNumber },
-            { title: "Net Worth", colorId: 0, formatter: shortenNumber },
-            { title: "Number of HNIs", colorId: 0, formatter: (num) => { return num } },
-            { title: "Convertion Rate", colorId: 1, formatter: (num) => { return (num / 1).toFixed(2) + '%' } },
-            { title: "Average Convertion Time", colorId: 1, formatter: (num) => { return (num / 24).toFixed(2) + ' days' } },
-            { title: "Retention Rate", colorId: 1, formatter: (num) => { return (num / 1).toFixed(2) + '%' } },
-            { title: "Weekly Client Logins", colorId: 1, formatter: (num) => { return num } },
-            { title: "Annualized AUM Growth", colorId: 2, formatter: (num) => { return num + '%' } },
-            { title: "Annualized Clientele Growth", colorId: 2, formatter: (num) => { return num + '%' } },
-            { title: "Annualized Worth Growth", colorId: 2, formatter: (num) => { return num + '%' } }
+            {   
+                title: "Asset Under Management", colorId: 0, 
+                formatter: shortenNumber, 
+                text_worst: 'least', text_best: 'most', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Net Worth", colorId: 0, 
+                formatter: shortenNumber, 
+                text_worst: 'least', text_best: 'most', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Number of HNIs", colorId: 0, 
+                formatter: (num) => { return num }, 
+                text_worst: 'least', text_best: 'most', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Convertion Rate", colorId: 1, 
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') }, 
+                text_worst: 'lowest', text_best: 'highest', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Average Convertion Time", colorId: 1, 
+                formatter: (num) => { return (num / 24).toFixed(2) + unitWrapper('days') }, 
+                text_worst: 'longest', text_best: 'shortest', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Retention Rate", colorId: 1, 
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') }, 
+                text_worst: 'lowest', text_best: 'highest', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Weekly Client Logins", colorId: 1, 
+                formatter: (num) => { return num }, 
+                text_worst: 'least', text_best: 'most', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Annualized AUM Growth", colorId: 2, 
+                formatter: (num) => { return num + unitWrapper('%') }, 
+                text_worst: 'lowest', text_best: 'highest', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Annualized Clientele Growth", colorId: 2, 
+                formatter: (num) =>  { return num + unitWrapper('%') }, 
+                text_worst: 'lowest', text_best: 'highest', 
+                SUB_DOMAIN: "/bi/networth" 
+            },
+            { 
+                title: "Annualized Worth Growth", colorId: 2, 
+                formatter: (num) =>  { return num + unitWrapper('%') }, 
+                text_worst: 'lowest', text_best: 'highest', 
+                SUB_DOMAIN: "/bi/networth" 
+            }
         ];
 
         $scope.STATE_NAMES = {
@@ -273,7 +327,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     }
 
     this.getData = function (tab) {
-        var url = DOMAIN + SUB_DOMAINS[tab];
+        var url = DOMAIN + scope.tabInfo[scope.currentTab].SUB_DOMAIN;
 
         this.getDataFromApi(url);
     }

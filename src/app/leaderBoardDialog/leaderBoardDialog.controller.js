@@ -2,7 +2,7 @@ angular
     .module('app')
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
-function LeaderBoardDialogService(MetricsService, $mdDialog) {
+function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     LeaderBoardDialogService.self = this;
 
     var scope;
@@ -54,8 +54,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     </div>
                 </div>
 
-
-
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
                 
                     <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
@@ -66,14 +64,13 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                     <div layout="column" >
                         <div layout="row" layout-align="end center"  layout-padding>
                             <div>
-                                <h1 style="margin:0">{{ self_data }} <small>k</small></h1>
+                                <h1 style="margin:0">{{ kpi.advisorKpi }} <small>{{ kpi.advisorKpi_unit}}</small></h1>
                             </div>
                         </div>
                         
                         <div layout="row" layout-align="space-between center"  layout-padding>
-
-                         
-                            <div flex="40" layout="column" layout-align="center center" >
+ 
+                            <div flex="40" layout="column" layout-align="none stretch" >
                                 <div style="text-align: center">
                                     <h6>Overall</h6>
                                 </div>
@@ -81,47 +78,44 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">111 <small>k</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.worst }} <small>{{ kpi.overall.worst_unit }}</small></h3>
                                         <h6>least</h6>
                                     </div>
 
                                     <div style="height:50px;border-right: thin solid #dfdfdf;">
                                     </div>
                          
-
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">999 <small>k</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.best }} <small>{{ kpi.overall.best_unit }}</small></h3>
                                         <h6>most</h6>
                                     </div>
                                 </div>
-                                
                             </div>
                             
-                            <div flex="30" layout="column" layout-align="center center" >
+                            <div flex="30" layout="column" layout-align="none stretch" >
                                 <div style="text-align: center">
-                                    <h6>{{ STATE_NAMES[currentState] }}</h6>
+                                    <h6>{{ STATE_NAMES[kpi.stateCode] }}</h6>
                                 </div>
                                 <div id="chart-state" style="height:200px;width:200px"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">111 <small>k</small></h3>
+                                        <h3 style="margin:0">{{ kpi.state.worst }} <small>{{ kpi.state.worst_unit }}</small></h3>
                                         <h6>least</h6>
                                     </div>
 
                                     <div style="height:50px;border-right: thin solid #dfdfdf;">
                                     </div>
                          
-
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">999 <small>k</small></h3>
+                                        <h3 style="margin:0">{{ kpi.state.best }} <small>{{ kpi.state.best_unit }}</small></h3>
                                         <h6>most</h6>
                                     </div>
                                 </div>
                                 
                             </div>
                             
-                            <div flex="30" layout="column" layout-align="center center" >
+                            <div flex="30" layout="column" layout-align="none stretch" >
                                 <div style="text-align: center">
                                     <h6>Firm</h6>
                                 </div>
@@ -129,28 +123,20 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">111 <small>k</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.worst }} <small>{{ kpi.overall.worst_unit }}</small></h3>
                                         <h6>least</h6>
                                     </div>
 
                                     <div style="height:50px;border-right: thin solid #dfdfdf;">
                                     </div>
                          
-
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">999 <small>k</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.best }} <small>{{ kpi.overall.best_unit }}</small></h3>
                                         <h6>most</h6>
                                     </div>
                                 </div>
-                                
                             </div>
-
-                           
-                        </div>
-
-
-                       
-                            
+                        </div>          
 
                         <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" > 
                             <md-tab label="AUM" md-on-select="tabOnSelected(0)"></md-tab>
@@ -252,7 +238,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         };
 
         $scope.currentTab = 0;
+
         $scope.self_data = '777';
+        
 
         $scope.tabOnSelected = function (tab) {
             $scope.currentTab = tab;
@@ -279,22 +267,44 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         console.log(url);
 
         if (USE_DUMMY_DATA) {
-            //var states = Object.keys(scope.STATE_NAMES);
-
             setTimeout(function () {
                 var overall = 10;
                 var state = 90;
                 var firm = 80;
                 var stateCode = 'OR';
-
+                
                 scope.$apply(function () {  // outside angular framework
-                    scope.currentState = stateCode;
+                    scope.kpi = {
+                        advisorKpi:800,
+                        advisorKpi_unit:'k',
+                        overall:{
+                            percentile:overall,
+                            best:999,
+                            best_unit:'k',
+                            worst:111,
+                            worst_unit:'m'
+                        },
+                        state:{
+                            percentile:state,
+                            best:888,
+                            best_unit:'b',
+                            worst:222,
+                            worst_unit:''
+                        },
+                        firm:{
+                            percentile:firm,
+                            best:777,
+                            best_unit:'t',
+                            worst:333,
+                            worst_unit:'k'
+                        },
+                        stateCode:stateCode
+                    };
                 });
+
 
                 LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
 
-                //tmp++
-                //LeaderBoardDialogService.self.getData();
             }, 1000);
 
             return;
@@ -328,7 +338,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
         this.createAreaChart('chart-firm', firm, 'firm');
 
         var loading = document.getElementById("dialog-loading");
-
         loading.style['visibility'] = "hidden";
 
     }
@@ -344,6 +353,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
             clickOutsideToClose: true,
             onComplete: () => {
 
+                // assign color to tabs
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(2)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(3)").classList.add("tab-one");
@@ -415,7 +425,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog) {
                 data: [value]
             }]
         }, function (chart) { // on complete
+            // map mask 
             chart.renderer.image('/assets/images/' + img + '.png', 0, 0, x + 1, y + 1).attr({ zIndex: 3 }).add();
+            // chart label
             chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: Highcharts.getOptions().colors[currentColor], fill: 'white', 'font-size': '3em', 'font-weight': 'bold' }).add();
         });
     }

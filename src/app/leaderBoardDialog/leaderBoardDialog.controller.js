@@ -181,7 +181,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     };
 
     this.init = function ($scope) {
-        scope = $scope;
+        scope = $scope.$new();
 
         var colorTheme = {
             colors: ["#00a4d3", "#72bb53", "#CDC114"]
@@ -192,9 +192,9 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
         Highcharts.setOptions(colorTheme);
 
-        $scope.tagColors = ["tag-one", "tag-two", "tag-three"];
+        scope.tagColors = ["tag-one", "tag-two", "tag-three"];
 
-        $scope.tabInfo = [
+        scope.tabInfo = [
             {   
                 title: "Asset Under Management", colorId: 0, 
                 formatter: shortenNumber, 
@@ -257,7 +257,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             }
         ];
 
-        $scope.STATE_NAMES = {
+        scope.STATE_NAMES = {
             AL: 'Alabama',
             AK: 'Alaska',
             AZ: 'Arizona',
@@ -310,8 +310,10 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             WY: 'Wyoming'
         };
 
-        $scope.tabOnSelected = function (tab) {
-            currentColor = $scope.tabInfo[tab].colorId;
+        scope.tabOnSelected = function (tab) {
+
+            scope.currentTab = tab;
+            currentColor = scope.tabInfo[tab].colorId;
 
             var loading = document.getElementById("dialog-loading");
 
@@ -407,20 +409,18 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     }
 
 
-    this.showChart = function (ev, tab) {
-
-
+    this.show = function (ev, tab, $scope) {
+        this.init($scope);
         scope.currentTab = tab;
-        console.log(scope);
-
+        
         $mdDialog.show({
             controller: LeaderBoardController,
             template: dialogHTML,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
+            scope:scope,
             clickOutsideToClose: true,
             onComplete: () => {
-                //scope.currentTab = tab;
 
 
                 // assign color to tabs

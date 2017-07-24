@@ -7,7 +7,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
     var scope;
     var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-    var SUB_DOMAINS = ["/bi/networth","/bi/networth"];
+    var SUB_DOMAINS = ["/bi/networth", "/bi/networth"];
     var STATE_RATIOS = {
         SC: 0.799,
         SD: 0.620,
@@ -57,14 +57,21 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                 <div id="dialog-content" style="position: relative;visibility: hidden;">
                 
                     <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
-                        <h5 style="margin:0"><b>{{tabInfo[currentTab].title}}</b></h5>
+                        <h5 style="margin:0"><b>{{tabInfo[currentTab].title}}</b>
+                            <i class="fa fa-info-circle" style="color:white">
+                                <md-tooltip>
+                                    Points shown are calculated by ...
+                                </md-tooltip>
+                            </i>
+                        
+                        </h5>
                     </div>
 
 
                     <div layout="column" >
                         <div layout="row" layout-align="end center"  layout-padding>
                             <div>
-                                <h1 style="margin:0">{{ kpi.advisorKpi }} <small>{{ kpi.advisorKpi_unit}}</small></h1>
+                                <h1 style="margin:0">{{ kpi.advisorKpi }}</h1>
                             </div>
                         </div>
                         
@@ -74,11 +81,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                 <div style="text-align: center">
                                     <h6>Overall</h6>
                                 </div>
-                                <div id="chart-overall" style="height:200px;width:300px"></div>
+                                <div id="chart-overall" style="height:200px;width:300px;margin:auto"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.worst }} <small>{{ kpi.overall.worst_unit }}</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.worst }}</h3>
                                         <h6>least</h6>
                                     </div>
 
@@ -86,7 +93,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.best }} <small>{{ kpi.overall.best_unit }}</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.best }}</h3>
                                         <h6>most</h6>
                                     </div>
                                 </div>
@@ -96,11 +103,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                 <div style="text-align: center">
                                     <h6>{{ STATE_NAMES[kpi.stateCode] }}</h6>
                                 </div>
-                                <div id="chart-state" style="height:200px;width:200px"></div>
+                                <div id="chart-state" style="height:200px;width:200px;margin:auto"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.state.worst }} <small>{{ kpi.state.worst_unit }}</small></h3>
+                                        <h3 style="margin:0">{{ kpi.state.worst }}</h3>
                                         <h6>least</h6>
                                     </div>
 
@@ -108,7 +115,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.state.best }} <small>{{ kpi.state.best_unit }}</small></h3>
+                                        <h3 style="margin:0">{{ kpi.state.best }}</h3>
                                         <h6>most</h6>
                                     </div>
                                 </div>
@@ -119,11 +126,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                 <div style="text-align: center">
                                     <h6>Firm</h6>
                                 </div>
-                                <div id="chart-firm" style="height:200px;width:200px"></div>
+                                <div id="chart-firm" style="height:200px;width:200px;margin:auto"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.worst }} <small>{{ kpi.overall.worst_unit }}</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.worst }}</h3>
                                         <h6>least</h6>
                                     </div>
 
@@ -131,7 +138,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 style="margin:0">{{ kpi.overall.best }} <small>{{ kpi.overall.best_unit }}</small></h3>
+                                        <h3 style="margin:0">{{ kpi.overall.best }}</h3>
                                         <h6>most</h6>
                                     </div>
                                 </div>
@@ -157,6 +164,18 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
     var currentColor = 0;
 
+    var shortenNumber = function (num) {
+        if (num >= 1000 && num < 1000000) {
+            return (num / 1000).toFixed(2) + 'k';
+        } else if (num >= 1000000 && num < 1000000000) {
+            return (num / 1000000).toFixed(2) + 'M';
+        } else if (num >= 1000000000 && num < 1000000000000) {
+            return (num / 1000000000).toFixed(2) + 'B';
+        } else if (num >= 1000000000000) {
+            return (num / 1000000000000).toFixed(2) + 'T';
+        } else return num.toFixed(2);
+    };
+
     this.init = function ($scope) {
         scope = $scope;
 
@@ -172,16 +191,16 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
         $scope.tagColors = ["tag-one", "tag-two", "tag-three"];
 
         $scope.tabInfo = [
-            { title: "Asset Under Management", colorId: 0 },
-            { title: "Net Worth", colorId: 0 },
-            { title: "Number of HNIs", colorId: 0 },
-            { title: "Convertion Rate", colorId: 1 },
-            { title: "Average Convertion Time", colorId: 1 },
-            { title: "Retention Rate", colorId: 1 },
-            { title: "Weekly Client Logins", colorId: 1 },
-            { title: "Annualized AUM Growth", colorId: 2 },
-            { title: "Annualized Clientele Growth", colorId: 2 },
-            { title: "Annualized Worth Growth", colorId: 2 }
+            { title: "Asset Under Management", colorId: 0, formatter: shortenNumber },
+            { title: "Net Worth", colorId: 0, formatter: shortenNumber },
+            { title: "Number of HNIs", colorId: 0, formatter: (num) => { return num } },
+            { title: "Convertion Rate", colorId: 1, formatter: (num) => { return (num / 1).toFixed(2) + '%' } },
+            { title: "Average Convertion Time", colorId: 1, formatter: (num) => { return (num / 24).toFixed(2) + ' days' } },
+            { title: "Retention Rate", colorId: 1, formatter: (num) => { return (num / 1).toFixed(2) + '%' } },
+            { title: "Weekly Client Logins", colorId: 1, formatter: (num) => { return num } },
+            { title: "Annualized AUM Growth", colorId: 2, formatter: (num) => { return num + '%' } },
+            { title: "Annualized Clientele Growth", colorId: 2, formatter: (num) => { return num + '%' } },
+            { title: "Annualized Worth Growth", colorId: 2, formatter: (num) => { return num + '%' } }
         ];
 
         $scope.STATE_NAMES = {
@@ -239,9 +258,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
         $scope.currentTab = 0;
 
-        $scope.self_data = '777';
-        
-
         $scope.tabOnSelected = function (tab) {
             $scope.currentTab = tab;
             currentColor = $scope.tabInfo[tab].colorId;
@@ -262,49 +278,45 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
         this.getDataFromApi(url);
     }
 
-    //var tmp = 0;
+
     this.getDataFromApi = function (url) {
         console.log(url);
 
         if (USE_DUMMY_DATA) {
             setTimeout(function () {
                 var overall = 10;
-                var state = 90;
+                var state = 70;
                 var firm = 80;
                 var stateCode = 'OR';
-                
+                var advisorKpi = 80000000;
+
                 scope.$apply(function () {  // outside angular framework
+
+
+                    var formatter = scope.tabInfo[scope.currentTab].formatter;
                     scope.kpi = {
-                        advisorKpi:800,
-                        advisorKpi_unit:'k',
-                        overall:{
-                            percentile:overall,
-                            best:999,
-                            best_unit:'k',
-                            worst:111,
-                            worst_unit:'m'
+                        advisorKpi: formatter(80000000),
+                        overall: {
+                            percentile: overall,
+                            best: formatter(999),
+                            worst: formatter(111)
                         },
-                        state:{
-                            percentile:state,
-                            best:888,
-                            best_unit:'b',
-                            worst:222,
-                            worst_unit:''
+                        state: {
+                            percentile: state,
+                            best: formatter(888),
+                            worst: formatter(111),
                         },
-                        firm:{
-                            percentile:firm,
-                            best:777,
-                            best_unit:'t',
-                            worst:333,
-                            worst_unit:'k'
+                        firm: {
+                            percentile: firm,
+                            best: formatter(777),
+                            worst: formatter(333),
                         },
-                        stateCode:stateCode
+                        stateCode: stateCode
                     };
                 });
 
 
                 LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
-
             }, 1000);
 
             return;

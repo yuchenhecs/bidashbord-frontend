@@ -40,7 +40,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     var USE_DUMMY_DATA = true;
 
     var dialogHTML = `
-            <md-dialog style="overflow: visible">
+            <md-dialog style="width:1000px;overflow: visible">
                 <div id="dialog-loading" layout="row"  layout-align="center center">
                     <div class="loader no-animate primary-loader loader--style3" >
                         <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -71,7 +71,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                     <div layout="column" >
                         <div layout="row" layout-align="end center"  layout-padding>
                             <div>
-                                <h1 style="margin:0" ng-bind-html="kpi.advisorKpi"></h1>
+                                <h1 style="margin:0" ng-bind-html="kpi_details.advisorKpi"></h1>
                             </div>
                         </div>
                         
@@ -85,7 +85,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi.overall.worst"></h3>
+                                        <h3 ng-bind-html="kpi_details.overall.worst"></h3>
                                         <h6>{{tabInfo[currentTab].text_worst}}</h6>
                                     </div>
 
@@ -93,7 +93,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi.overall.best"></h3>
+                                        <h3 ng-bind-html="kpi_details.overall.best"></h3>
                                         <h6>{{tabInfo[currentTab].text_best}}</h6>
                                     </div>
                                 </div>
@@ -101,13 +101,13 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                             
                             <div flex="30" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
-                                    <h6>{{ STATE_NAMES[kpi.stateCode] }}</h6>
+                                    <h6>{{ STATE_NAMES[kpi_details.stateCode] }}</h6>
                                 </div>
                                 <div id="chart-state" style="height:200px;width:200px"></div>
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi.state.worst"></h3>
+                                        <h3 ng-bind-html="kpi_details.state.worst"></h3>
                                         <h6>{{tabInfo[currentTab].text_worst}}</h6>
                                     </div>
 
@@ -115,7 +115,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi.state.best"></h3>
+                                        <h3 ng-bind-html="kpi_details.state.best"></h3>
                                         <h6>{{tabInfo[currentTab].text_best}}</h6>
                                     </div>
                                 </div>
@@ -130,7 +130,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                 
                                 <div layout="row" layout-align="space-between center"  layout-margin>
                                     <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi.firm.worst"></h3>
+                                        <h3 ng-bind-html="kpi_details.firm.worst"></h3>
                                         <h6>{{tabInfo[currentTab].text_worst}}</h6>
                                     </div>
 
@@ -138,14 +138,14 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                                     </div>
                          
                                     <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi.firm.best"></h3>
+                                        <h3 ng-bind-html="kpi_details.firm.best"></h3>
                                         <h6>{{tabInfo[currentTab].text_best}}</h6>
                                     </div>
                                 </div>
                             </div>
                         </div>          
 
-                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" > 
+                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" md-selected="currentTab" > 
                             <md-tab label="AUM" md-on-select="tabOnSelected(0)"></md-tab>
                             <md-tab label="Net Worth" md-on-select="tabOnSelected(1)"></md-tab>
                             <md-tab label="# HNIs" md-on-select="tabOnSelected(2)"></md-tab>
@@ -199,61 +199,61 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                 title: "Asset Under Management", colorId: 0, 
                 formatter: shortenNumber, 
                 text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/0" 
             },
             { 
                 title: "Net Worth", colorId: 0, 
                 formatter: shortenNumber, 
                 text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/1" 
             },
             { 
                 title: "Number of HNIs", colorId: 0, 
                 formatter: (num) => { return num }, 
                 text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/2" 
             },
             { 
                 title: "Convertion Rate", colorId: 1, 
                 formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') }, 
                 text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/3" 
             },
             { 
                 title: "Average Convertion Time", colorId: 1, 
                 formatter: (num) => { return (num / 24).toFixed(2) + unitWrapper('days') }, 
                 text_worst: 'longest', text_best: 'shortest', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/4" 
             },
             { 
                 title: "Retention Rate", colorId: 1, 
                 formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') }, 
                 text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/5" 
             },
             { 
                 title: "Weekly Client Logins", colorId: 1, 
                 formatter: (num) => { return num }, 
                 text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/6" 
             },
             { 
                 title: "Annualized AUM Growth", colorId: 2, 
                 formatter: (num) => { return num + unitWrapper('%') }, 
                 text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/7" 
             },
             { 
                 title: "Annualized Clientele Growth", colorId: 2, 
                 formatter: (num) =>  { return num + unitWrapper('%') }, 
                 text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/8" 
             },
             { 
                 title: "Annualized Worth Growth", colorId: 2, 
                 formatter: (num) =>  { return num + unitWrapper('%') }, 
                 text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/networth" 
+                SUB_DOMAIN: "/bi/9" 
             }
         ];
 
@@ -310,10 +310,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             WY: 'Wyoming'
         };
 
-        $scope.currentTab = 0;
-
         $scope.tabOnSelected = function (tab) {
-            $scope.currentTab = tab;
             currentColor = $scope.tabInfo[tab].colorId;
 
             var loading = document.getElementById("dialog-loading");
@@ -334,6 +331,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
 
     this.getDataFromApi = function (url) {
+        
         console.log(url);
 
         if (USE_DUMMY_DATA) {
@@ -348,7 +346,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
 
                     var formatter = scope.tabInfo[scope.currentTab].formatter;
-                    scope.kpi = {
+                    scope.kpi_details = {
                         advisorKpi: formatter(80000000),
                         overall: {
                             percentile: overall,
@@ -409,7 +407,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     }
 
 
-    this.showChart = function (ev) {
+    this.showChart = function (ev, tab) {
+
+
+        scope.currentTab = tab;
+        console.log(scope);
 
         $mdDialog.show({
             controller: LeaderBoardController,
@@ -418,6 +420,8 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             targetEvent: ev,
             clickOutsideToClose: true,
             onComplete: () => {
+                //scope.currentTab = tab;
+
 
                 // assign color to tabs
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");

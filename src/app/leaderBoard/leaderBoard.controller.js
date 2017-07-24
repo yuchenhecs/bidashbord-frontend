@@ -15,14 +15,17 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     // percentileService.launch();
     LeaderBoardDialogService.init($scope);
 
-    $scope.showChart = function (ev) {
-        LeaderBoardDialogService.showChart(ev);
+    $scope.showChart = function (ev, tab) {
+        console.log("asdasdas");
+        LeaderBoardDialogService.showChart(ev, tab);
     };
 
-    var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/summary";
-    var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/510/patOnTheBack?region="
+    $scope.showPOTB = true;
+    var advisorId = 332;
+    var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
+    var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
 
-    var preprocessing = function(data, type) {
+    var preprocessing = function (data, type) {
 
         if (type === "POTB") {
             var textList = [];
@@ -30,19 +33,24 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
             for (var key in data) {
                 if (key === "id" || key === "advisorId" || key === "region") { continue; }
                 if (data[key] !== null) {
-                    textList.push({text:data[key], index:i});
+                    textList.push({ text: data[key], index: i });
                     i++;
                 }
             }
             //set one to be the active slide to show
-            textList[0].active = "active";
+            if (textList[0] != null) {
+                $scope.showPOTB= true;
+                textList[0].active = "active";
+            }else{
+                $scope.showPOTB=false;
+            }
             $scope.textList = textList;
         } else if (type === "kpi") {
             data.aum = shortenNumber(data.aum);
             data.netWorth = shortenNumber(data.netWorth);
-            data.avgConversionTime = (data.avgConversionTime/24).toFixed(2);
-            data.retentionRate = (data.retentionRate/1).toFixed(2);
-            data.conversionRate = (data.conversionRate/1).toFixed(2);
+            data.avgConversionTime = (data.avgConversionTime / 24).toFixed(2);
+            data.retentionRate = (data.retentionRate / 1).toFixed(2);
+            data.conversionRate = (data.conversionRate / 1).toFixed(2);
         }
     };
 
@@ -54,27 +62,27 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         if (scope === 'overall') {
             $scope.lbOverall = 'onFocus';
             $scope.scope = scope;
-            POTBApi( POTBUrlBase + $scope.scope);
+            POTBApi(POTBUrlBase + $scope.scope);
         } else if (scope === 'state') {
             $scope.lbState = 'onFocus';
             $scope.scope = scope;
-            POTBApi( POTBUrlBase + $scope.scope);
+            POTBApi(POTBUrlBase + $scope.scope);
         } else {
             $scope.lbFirm = 'onFocus';
             $scope.scope = scope;
-            POTBApi( POTBUrlBase + $scope.scope);
+            POTBApi(POTBUrlBase + $scope.scope);
         }
     };
 
     var shortenNumber = function (num) {
         if (num >= 1000 && num < 1000000) {
-            return (num/1000).toFixed(2) + 'k';
-        } else if (num >= 1000000 && num <1000000000) {
-            return (num/1000000).toFixed(2) + 'M';
+            return (num / 1000).toFixed(2) + 'k';
+        } else if (num >= 1000000 && num < 1000000000) {
+            return (num / 1000000).toFixed(2) + 'M';
         } else if (num >= 1000000000 && num < 1000000000000) {
-            return (num/1000000000).toFixed(2) + 'B';
+            return (num / 1000000000).toFixed(2) + 'B';
         } else if (num >= 1000000000000) {
-            return (num/1000000000000).toFixed(2) + 'T';
+            return (num / 1000000000000).toFixed(2) + 'T';
         } else return num.toFixed(2);
     };
 
@@ -99,7 +107,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         }
     };
 
-    var POTBApi = function(url) {
+    var POTBApi = function (url) {
         return $http.get(url).then(function mySuccess(response) {
             preprocessing(response["data"]["data"], "POTB");
         }), function myError(response) {

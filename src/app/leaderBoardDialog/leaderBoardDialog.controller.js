@@ -351,8 +351,6 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
                 var advisorKpi = 80000000;
 
                 $scope.$apply(function () {  // async function that is outside angular framework, e.g. setTimeout
-
-
                     var formatter = $scope.tabInfo[$scope.currentTab].formatter;
                     $scope.kpi_details = {
                         advisorKpi: formatter(80000000),

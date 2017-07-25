@@ -3,10 +3,8 @@ angular
     .controller('LoginsController', LoginsController)
     .service('LoginsService', LoginsService);
 
-function LoginsService(MetricsService) {
+function LoginsService(MetricsService, $compile) {
     this.init = function(){
-        // most code is written in MetricsController
-
         var base = new MetricsService();
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
@@ -343,7 +341,7 @@ function LoginsService(MetricsService) {
             `;
 
             var chartHTML = angular.element(document.getElementById("chart-container"));
-            chartHTML.append(this.$compile(switchHTML)(scope));
+            chartHTML.append($compile(switchHTML)(scope));
         }
 
         base.createNewLevel = function (options, name, id) {

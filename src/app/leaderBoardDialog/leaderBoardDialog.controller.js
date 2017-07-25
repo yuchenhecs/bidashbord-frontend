@@ -2,7 +2,7 @@ angular
     .module('app')
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
-function LeaderBoardDialogService(MetricsService, $mdDialog, $http) {
+function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
     LeaderBoardDialogService.self = this;
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
@@ -184,6 +184,13 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $http) {
 
     this.init = function ($$scope) {
         $scope = $$scope.$new();
+
+        if ($rootScope.canceller) { // cancel previous pending api calls     
+            $rootScope.canceller.resolve();
+        }
+        $rootScope.canceller = $q.defer();
+
+
 
         var colorTheme = {
             colors: ["#00a4d3", "#72bb53", "#CDC114"]
@@ -373,7 +380,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $http) {
             return;
         }
 
-        return $http.get(url).then(function mySuccess(response) {
+        return $http.get(url, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
            
             var kpi_details = response.data.data;

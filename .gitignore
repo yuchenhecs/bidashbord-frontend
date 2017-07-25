@@ -1,6 +1,7 @@
 .tmp/
 coverage/
 dist/
+bower_dist/
 node_modules/
 bower_components/
 .DS_Store

@@ -5,14 +5,13 @@ angular
 
 function MetricsService($http, $rootScope, $compile, $q) {
     return function () {
-
         var self = this;
-        this.canceller = $q.defer();
-        if (MetricsService.curr) { // cancel previous pending api calls     
-            MetricsService.curr.canceller.resolve();
-        }
 
-        MetricsService.curr = this;
+        if ($rootScope.canceller) { // cancel previous pending api calls     
+            $rootScope.canceller.resolve();
+        }
+        $rootScope.canceller = $q.defer();
+
 
         // constants
         this.DOMAIN = $rootScope.domain;
@@ -29,9 +28,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
         };
 
         Highcharts.setOptions(colorTheme);
-
-        this.$http = $http;
-        this.$compile = $compile;
 
         this.chart = null;
 
@@ -251,7 +247,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 return;
             }
 
-            return this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -751,7 +747,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             `;
 
             var chartHTML = angular.element(document.getElementById("chart-container"));
-            chartHTML.append(this.$compile(datePickerHTML)(scope));
+            chartHTML.append($compile(datePickerHTML)(scope));
         }
 
         this.assignYTD = function () {

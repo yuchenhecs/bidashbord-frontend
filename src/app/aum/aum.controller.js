@@ -3,7 +3,7 @@ angular
     .controller('AUMController', AUMController)
     .service('AUMService', AUMService);
 
-function AUMService($http, MetricsService) {
+function AUMService(MetricsService) {
     this.init = function () {
         var base = new MetricsService();
         // constants

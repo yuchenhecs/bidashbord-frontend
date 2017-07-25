@@ -41,6 +41,28 @@ $lb-light-green: #CBE8BA;
 $lb-yellow: #FEF8A0;
 $lb-light-yellow: #FEFAC0;
 
+
+@media (max-width: 600px) {
+    #main-container {
+        position: relative;
+        padding: 64px 0 0 50px;
+        display: table;
+        min-height: 800px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 600px) {
+        
+    #main-container {
+        position: relative;
+        padding: 64px 0 0 70px;
+        display: table;
+        min-height: 800px;
+        width: 100%;
+    }
+}
+
 body {
     font-family: $font-universal;
     min-height: 0px !important;
@@ -50,59 +72,6 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
-
-.top-nav {
-    position: fixed;
-    z-index: 1001;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 64px;
-    line-height: 64px;
-    padding-left: 20px;
-    color: #3D4051;
-    background-color: #fff;
-    color: #3D4051;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-}
-
-#main-container {
-    padding: 64px 0 0 50px;
-    display: table;
-    min-height: 800px;
-    width: 100%;
-}
-
-.side-nav {
-	background: $dark-blue;
-	color: $gray-blue ;
-	position: fixed;
-    z-index: 1000;
-    top: 64px;
-    left: 0;
-    bottom: 0;
-    width: 80px;
-    font-size: $font-menu-tile;
-
-    li {
-    	padding: 10px;
-        transition: 0.3s;
-        &:hover {
-            background:$sidebar-background;
-        }
-
-	    &:hover > a{
-	    	color: #fff;
-	    }
-    }
-}
-
-.side-nav a{
-    color:$gray-blue;
-    display: block;
-    transition: 0.3s;
-    text-decoration: none;
 }
 
 .page {
@@ -167,7 +136,7 @@ div#button-group {
 }
 
 .onFocus {
-	background-color: #163259;
+	background-color: #163259 !important;
 	color: white !important;
 }
 
@@ -190,6 +159,10 @@ div#button-group {
 
 .scope {
     border-radius: 4px;
+}
+
+.POTBText {
+    font-size: 24px;
 }
 
 .lb-body {
@@ -380,58 +353,6 @@ div#button-group {
 	font-size: 14px;
 }
 
-.side-toggle {
-        width: 20px;
-        height: 100%;
-        z-index: 1;
-        top: 64px;
-        left: 80px;
-        background-color: $sidebar-background;
-        position: fixed;
-        text-align: center
-}
-
-.sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 64px;
-        left: 80px;
-        background-color:$sidebar-background;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top:15px;
-}
-
-.sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: $font-extended-sidebar;
-        color: $tile-bg;
-        display: block;
-        transition: 0.3s;
-}
-
-.sidenav a:hover,
-.offcanvas a:focus {
-		color: #f1f1f1;
-}
-
-#main {
-        transition: margin-left .5s;
-}
-
-#toggle {
-		transition: left .5s;
-}
-
-#inner {
-		top: 50%;
-		position: fixed;
-		width: 20px;
-		color: white
-}
 
 #chart {
 	min-width: 310px;
@@ -844,10 +765,6 @@ md-switch {
     }
 }
 
-md-sidenav {
-  z-index: 99;
-  max-width: 250px;
-}
 
 .md-open-menu-container {
   font-size: 14px;
@@ -898,10 +815,6 @@ md-autocomplete.oranj-default {
     }
 }
 
-md-sidenav {
-    z-index: 10000;
-}
-
 md-tooltip {
     &.multiline {
         height: auto;
@@ -923,6 +836,9 @@ md-tooltip {
 
 md-tabs {
     height: 40px !important;
+    padding-left:2px;
+    padding-right:2px;
+    
 }
 
 
@@ -934,10 +850,6 @@ md-tabs .md-tab.md-active{
 }
 
 
-.md-dialog-container {
-
-    background-color: rgba(0, 126, 106, 0.3) !important;
-}
 
 
 .tab-one{
@@ -962,5 +874,41 @@ md-tabs .md-tab.md-active{
 
     border-top-style:  solid !important;
     border-bottom-style:  hidden !important;
+}
 
+#tag {
+    padding:15px;
+    height:50px;
+    position: absolute;
+    text-align: center; 
+    margin-left: -5px; 
+    top: 5px;
+    z-index: 1;
+}
+
+.tag-one {
+    background-color: #91e4fb;
+    color:black;
+}
+
+
+.tag-two {
+    background-color: #aedd94;
+    color:black;
+}
+
+
+.tag-three {
+    background-color: #fef8a0;
+    color:black;
+}
+
+#dialog-loading {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index: 1;
+    background:rgba(255,255,255,0.5);
 }

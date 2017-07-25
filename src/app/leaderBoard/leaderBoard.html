@@ -19,16 +19,16 @@
                                         <i class="fa fa-info-circle">
                                             <md-tooltip>
                                                 Points shown are calculated by ...
-                                            </md-tooltip>
-                                            <!-- <span class="tooltip-text">
-                                                Your score is calculated by...
-                                            </span> -->
+                                            </md-tooltip>                      
                                         </i>
                                     </div>
                                 </div>
                             </div>
 
-                            <div>
+
+                            <div layout="row">
+
+                                <div layout="column">
                                 <div class="lb-upper-row">
                                     <div class="lb-right-text">
                                         {{ rank }}
@@ -39,6 +39,8 @@
                                         Percentile in {{ scope }}
                                     </div>
                                 </div>
+                                </div>
+                                
                             </div>
                         </div>
 
@@ -59,14 +61,14 @@
                             </div>
                         </div>
 
-                        <div id="leaderboardCarousel" class="carousel slide" data-ride="carousel" data-interval="7000">
+                        <div id="leaderboardCarousel" class="carousel slide" data-ride="carousel" data-interval="7000" ng-if="showPOTB">
                             <ol class="carousel-indicators">
                                 <li ng-repeat="kpi in textList" data-target="#leaderboardCarousel" data-slide-to="{{ kpi.index }}" class="{{ kpi.active }}"></li>
                             </ol>
                             <div class="carousel-inner" role="listbox">
                                 <div id="text" layout="row" ng-repeat="kpi in textList" class="carousel-item {{ kpi.active }}">
                                     <div flex="15"></div>
-                                    <div flex="70" style="text-align:center;">
+                                    <div class="POTBText"flex="70" style="text-align:center;">
                                         <p>
                                             <strong>{{ kpi.text }}</strong>
                                         </p>
@@ -91,7 +93,7 @@
                                     <i class="fa fa-usd lb-icon1"></i>
                                     <i class="fa fa-circle icon-background1"></i>
                                 </div>
-                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event)">
+                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 0)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Assets Under Management
                                     </div>
@@ -99,7 +101,7 @@
                                          {{ kpi.aum }}
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 1)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Net Worth
                                     </div>
@@ -107,7 +109,7 @@
                                         {{ kpi.netWorth }}
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 2)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Number of HNIs
                                     </div>
@@ -121,7 +123,7 @@
                                     <i class="fa fa-handshake-o lb-icon2"></i>
                                     <i class="fa fa-circle icon-background2"></i>
                                 </div>
-                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 3)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Conversion Rate
                                     </div>
@@ -129,7 +131,7 @@
                                         {{ kpi.conversionRate }} %
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 4)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Average Conversion Time
                                     </div>
@@ -137,7 +139,7 @@
                                         {{ kpi.avgConversionTime }} Days
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 5)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Retention Rate
                                     </div>
@@ -145,7 +147,7 @@
                                         {{ kpi.retentionRate }} %
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 6)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Weekly Client Logins
                                     </div>
@@ -159,7 +161,7 @@
                                     <i class="fa fa-line-chart lb-icon3"></i>
                                     <i class="fa fa-circle icon-background3"></i>
                                 </div>
-                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 7)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                          Annualized AUM Growth
                                     </div>
@@ -167,7 +169,7 @@
                                        {{ kpi.aumGrowth }} %
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 8)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                          Annualized Clientele Growth
                                     </div>
@@ -175,7 +177,7 @@
                                          {{ kpi.clienteleGrowth }} %
                                     </div>
                                 </md-button>
-                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp">
+                                <md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 9)">
                                     <div flex="70" class=" kpi-text kpi-name">
                                         Annualized Net Worth Growth
                                     </div>
@@ -186,6 +188,8 @@
                                 </md-button>
                             </div>
                         </div>
+
+ 
                     </div>
                 </div>
             </div>

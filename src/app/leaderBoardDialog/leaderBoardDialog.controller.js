@@ -340,6 +340,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
 
     this.getDataFromApi = function (url) {
 
+        console.log(url);
+
         if (USE_DUMMY_DATA) {
             setTimeout(function () {
                 var overall = 10;

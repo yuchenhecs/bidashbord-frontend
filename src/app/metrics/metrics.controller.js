@@ -30,9 +30,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         Highcharts.setOptions(colorTheme);
 
-        this.$http = $http;
-        this.$compile = $compile;
-
         this.chart = null;
 
         this.level_list = [];
@@ -251,7 +248,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
                 return;
             }
 
-            return this.$http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: this.canceller.promise }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -751,7 +748,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
             `;
 
             var chartHTML = angular.element(document.getElementById("chart-container"));
-            chartHTML.append(this.$compile(datePickerHTML)(scope));
+            chartHTML.append($compile(datePickerHTML)(scope));
         }
 
         this.assignYTD = function () {

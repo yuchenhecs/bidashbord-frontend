@@ -15,7 +15,6 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     // percentileService.launch();
 
     $scope.showChart = function (ev, tab) {
-        console.log("asdasdas");
         LeaderBoardDialogService.show(ev, tab, $scope);
     };
 

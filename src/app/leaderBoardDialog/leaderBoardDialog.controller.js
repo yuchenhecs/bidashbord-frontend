@@ -2,11 +2,15 @@ angular
     .module('app')
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
-function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
+function LeaderBoardDialogService(MetricsService, $mdDialog, $http) {
     LeaderBoardDialogService.self = this;
 
-    var scope;
-    var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    var DOMAIN = "http://10.1.15.177:8080";
+    var SUB_DOMAIN = "/bi/gamification";
+    var advisorId = 9714;
+    var USE_DUMMY_DATA = false;
+    var $scope;
 
     var STATE_RATIOS = {
         SC: 0.799,
@@ -37,7 +41,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
         OR: 0.742,
         HI: 0.645
     };
-    var USE_DUMMY_DATA = true;
+
 
     var dialogHTML = `
             <md-dialog style="width:1000px;overflow: visible">
@@ -162,8 +166,6 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             </md-dialog>
         `;
 
-    var currentColor = 0;
-
     var unitWrapper = function (unit) {
         return '<small>' + unit + '</small>';
     }
@@ -180,8 +182,8 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
         } else return num.toFixed(2);
     };
 
-    this.init = function ($scope) {
-        scope = $scope.$new();
+    this.init = function ($$scope) {
+        $scope = $$scope.$new();
 
         var colorTheme = {
             colors: ["#00a4d3", "#72bb53", "#CDC114"]
@@ -192,72 +194,72 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
         Highcharts.setOptions(colorTheme);
 
-        scope.tagColors = ["tag-one", "tag-two", "tag-three"];
+        $scope.tagColors = ["tag-one", "tag-two", "tag-three"];
 
-        scope.tabInfo = [
-            {   
-                title: "Asset Under Management", colorId: 0, 
-                formatter: shortenNumber, 
-                text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/0" 
+        $scope.tabInfo = [
+            {
+                title: "Asset Under Management", colorId: 0,
+                formatter: shortenNumber,
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Net Worth", colorId: 0, 
-                formatter: shortenNumber, 
-                text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/1" 
+            {
+                title: "Net Worth", colorId: 0,
+                formatter: shortenNumber,
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Number of HNIs", colorId: 0, 
-                formatter: (num) => { return num }, 
-                text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/2" 
+            {
+                title: "Number of HNIs", colorId: 0,
+                formatter: (num) => { return num },
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Convertion Rate", colorId: 1, 
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') }, 
-                text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/3" 
+            {
+                title: "Convertion Rate", colorId: 1,
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Average Convertion Time", colorId: 1, 
-                formatter: (num) => { return (num / 24).toFixed(2) + unitWrapper('days') }, 
-                text_worst: 'longest', text_best: 'shortest', 
-                SUB_DOMAIN: "/bi/4" 
+            {
+                title: "Average Convertion Time", colorId: 1,
+                formatter: (num) => { return (num / 24).toFixed(2) + unitWrapper('days') },
+                text_worst: 'longest', text_best: 'shortest',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Retention Rate", colorId: 1, 
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') }, 
-                text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/5" 
+            {
+                title: "Retention Rate", colorId: 1,
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Weekly Client Logins", colorId: 1, 
-                formatter: (num) => { return num }, 
-                text_worst: 'least', text_best: 'most', 
-                SUB_DOMAIN: "/bi/6" 
+            {
+                title: "Weekly Client Logins", colorId: 1,
+                formatter: (num) => { return num },
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Annualized AUM Growth", colorId: 2, 
-                formatter: (num) => { return num + unitWrapper('%') }, 
-                text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/7" 
+            {
+                title: "Annualized AUM Growth", colorId: 2,
+                formatter: (num) => { return num + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Annualized Clientele Growth", colorId: 2, 
-                formatter: (num) =>  { return num + unitWrapper('%') }, 
-                text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/8" 
+            {
+                title: "Annualized Clientele Growth", colorId: 2,
+                formatter: (num) => { return num + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/aum"
             },
-            { 
-                title: "Annualized Worth Growth", colorId: 2, 
-                formatter: (num) =>  { return num + unitWrapper('%') }, 
-                text_worst: 'lowest', text_best: 'highest', 
-                SUB_DOMAIN: "/bi/9" 
+            {
+                title: "Annualized Worth Growth", colorId: 2,
+                formatter: (num) => { return num + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/aum"
             }
         ];
 
-        scope.STATE_NAMES = {
+        $scope.STATE_NAMES = {
             AL: 'Alabama',
             AK: 'Alaska',
             AZ: 'Arizona',
@@ -310,13 +312,10 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             WY: 'Wyoming'
         };
 
-        scope.tabOnSelected = function (tab) {
-
-            scope.currentTab = tab;
-            currentColor = scope.tabInfo[tab].colorId;
+        $scope.tabOnSelected = function (tab) {
+            $scope.currentTab = tab;
 
             var loading = document.getElementById("dialog-loading");
-
             loading.style['visibility'] = "";
 
             var self = LeaderBoardDialogService.self;
@@ -326,15 +325,13 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
     }
 
     this.getData = function (tab) {
-        var url = DOMAIN + scope.tabInfo[scope.currentTab].SUB_DOMAIN;
+        var url = DOMAIN + SUB_DOMAIN + $scope.tabInfo[$scope.currentTab].KPI_DOMAIN + "?advisorId=" + advisorId;
 
         this.getDataFromApi(url);
     }
 
 
     this.getDataFromApi = function (url) {
-        
-        console.log(url);
 
         if (USE_DUMMY_DATA) {
             setTimeout(function () {
@@ -344,11 +341,11 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                 var stateCode = 'OR';
                 var advisorKpi = 80000000;
 
-                scope.$apply(function () {  // outside angular framework
+                $scope.$apply(function () {  // async function that is outside angular framework, e.g. setTimeout
 
 
-                    var formatter = scope.tabInfo[scope.currentTab].formatter;
-                    scope.kpi_details = {
+                    var formatter = $scope.tabInfo[$scope.currentTab].formatter;
+                    $scope.kpi_details = {
                         advisorKpi: formatter(80000000),
                         overall: {
                             percentile: overall,
@@ -376,24 +373,32 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             return;
         }
 
-        return this.$http.get(url).then(function mySuccess(response) {
+        return $http.get(url).then(function mySuccess(response) {
+            var formatter = $scope.tabInfo[$scope.currentTab].formatter;
+           
+            var kpi_details = response.data.data;
+           
+            kpi_details.advisorKpi = formatter(kpi_details.advisorKpi);
+            kpi_details.overall.best = formatter(kpi_details.overall.best);
+            kpi_details.overall.worst = formatter(kpi_details.overall.worst);
+            kpi_details.state.best = formatter(kpi_details.state.best);
+            kpi_details.state.worst = formatter(kpi_details.state.worst);
+            kpi_details.firm.best = formatter(kpi_details.firm.best);
+            kpi_details.firm.worst = formatter(kpi_details.firm.worst);
 
-            var overall = 10;
-            var state = 90;
-            var firm = 80;
-            var stateCode = 'IA';
+            $scope.kpi_details = kpi_details;
 
-            scope.$apply(function () {
-                scope.currentState = stateCode;
-            });
+            var overall = kpi_details.overall.percentile;
+            var state = kpi_details.state.percentile;
+            var firm = kpi_details.firm.percentile;
+            var stateCode = kpi_details.stateCode;
+            var advisorKpi = kpi_details.advisorKpi;
 
             LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
 
         }, function myError(response, error) {
             console.log("Error " + response.status + ": " + response.statusText + "!");
         });
-
-
     }
 
     this.loadData = function (overall, state, firm, stateCode) {
@@ -405,24 +410,21 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
 
         var loading = document.getElementById("dialog-loading");
         loading.style['visibility'] = "hidden";
-
     }
 
 
-    this.show = function (ev, tab, $scope) {
-        this.init($scope);
-        scope.currentTab = tab;
-        
+    this.show = function (ev, tab, $$scope) {
+        this.init($$scope);
+        $scope.currentTab = tab;
+
         $mdDialog.show({
             controller: LeaderBoardController,
             template: dialogHTML,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
-            scope:scope,
+            scope: $scope,
             clickOutsideToClose: true,
             onComplete: () => {
-
-
                 // assign color to tabs
                 document.querySelector("md-tab-item:nth-child(1)").classList.add("tab-one");
                 document.querySelector("md-tab-item:nth-child(2)").classList.add("tab-one");
@@ -437,10 +439,8 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                 document.querySelector("md-tab-item:nth-child(9)").classList.add("tab-three");
                 document.querySelector("md-tab-item:nth-child(10)").classList.add("tab-three");
 
-
                 var content = document.getElementById("dialog-content");
                 content.style['visibility'] = "";
-
             }
         });
 
@@ -454,12 +454,14 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
         var marginTop = marginTop ? marginTop : 0;
         var marginBottom = marginBottom ? marginBottom : 0;
 
+        var currentColor = Highcharts.getOptions().colors[$scope.tabInfo[$scope.currentTab].colorId];
+
         Highcharts.chart(id, {
             credits: {
                 enabled: false
             },
             chart: {
-                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[currentColor])
+                backgroundColor: Highcharts.Color(currentColor)
                     .setOpacity(0.2)
                     .get(),
                 type: 'column',
@@ -488,7 +490,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
                     marker: {
                         enabled: false
                     },
-                    color: Highcharts.getOptions().colors[currentColor]
+                    color: currentColor
                 }
             },
             series: [{
@@ -498,7 +500,7 @@ function LeaderBoardDialogService(MetricsService, $mdDialog, $compile) {
             // map mask 
             chart.renderer.image('/assets/images/' + img + '.png', 0, 0, x + 1, y + 1).attr({ zIndex: 3 }).add();
             // chart label
-            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: Highcharts.getOptions().colors[currentColor], fill: 'white', 'font-size': '3em', 'font-weight': 'bold' }).add();
+            chart.renderer.text(value + '%', x / 2, y / 2).attr({ 'text-anchor': 'middle', zIndex: 4 }).css({ stroke: currentColor, fill: 'white', 'font-size': '3em', 'font-weight': 'bold' }).add();
         });
     }
 

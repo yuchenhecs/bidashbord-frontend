@@ -9,14 +9,14 @@ function runBlock($location, $rootScope) {
 	function environmentDetection() {
 		var host = $location.host();
 		var protocol = $location.protocol();
-		var port = $location.port();
+		var port = 8080;
 
 		if (host.indexOf('local') > -1) {
-			$rootScope.domain = protocol + '://' + host + ':' + port + '/bibackend';
+			$rootScope.domain = protocol + '://' + host + '/bibackend';
 		} else if (host.indexOf('dev') > -1 || host.indexOf('uat') > -1) {
-			$rootScope.domain = protocol + '://' + host + ':' + port + '/bibackend';
+			$rootScope.domain = protocol + '://' + host + '/bibackend';
 		} else {
-			$rootScope.domain = protocol + '://' + host + ':' + port + '/bibackend';
+			$rootScope.domain = protocol + '://' + host + '/bibackend';
 		}
 		//console.log('Environment:', $rootScope.environment);
 	};

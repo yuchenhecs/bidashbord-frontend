@@ -3,7 +3,7 @@ angular
     .factory('MetricsService', MetricsService);
 
 
-function MetricsService($http, $rootScope, $compile, $q) {
+function MetricsService($http, $rootScope, $compile, $q, SessionService) {
     return function () {
         var self = this;
 
@@ -77,8 +77,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
 
-            var root = 'Oranj';  // dummy root name, should be returned by Oranj API
-            var rootId = -1;
+            var root = SessionService.name;  // dummy root name, should be returned by Oranj API
+            var rootId = SessionService.id;
 
             this.getData(root, rootId, 0);
 
@@ -87,7 +87,7 @@ function MetricsService($http, $rootScope, $compile, $q) {
         };
 
         this.drillDown = function (name, id) {
-            if (this.current_level >= 2) {
+            if (this.current_level + SessionService.level >= 2) {
                 alert('Cannot drilldown anymore!');
                 return; //level number overflowed, cannot drilldown anymore
             }
@@ -160,12 +160,14 @@ function MetricsService($http, $rootScope, $compile, $q) {
             var subdomain = this.SUB_DOMAIN;
             var baseUrl;
 
+            var role_level = level + SessionService.level;
+
             // construct url based on current drilldown level
-            if (level === 0) {
+            if (role_level === 0) {
                 baseUrl = domain + subdomain + "/firms?";
-            } else if (level === 1) {
+            } else if (role_level === 1) {
                 baseUrl = domain + subdomain + "/advisors?firmId=" + id;
-            } else if (level === 2) {
+            } else if (role_level === 2) {
                 baseUrl = domain + subdomain + "/clients?advisorId=" + id;
             } else {
                 console.log("Invalid level!");
@@ -212,11 +214,13 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
         this.getDataFromApi = function (newUrl, name, id, page, level, args, data) {
             var type;
-            if (level === 0) {
+
+            var role_level = level + SessionService.level;
+            if (role_level === 0) {
                 type = 'firms';
-            } else if (level === 1) {
+            } else if (role_level === 1) {
                 type = 'advisors';
-            } else if (level === 2) {
+            } else if (role_level === 2) {
                 type = 'clients';
             }
 
@@ -225,11 +229,14 @@ function MetricsService($http, $rootScope, $compile, $q) {
 
             if (this.USE_DUMMY_DATA) {
                 var response;
-                if (level === 0) {
+
+                var role_level = level + SessionService.level;
+
+                if (role_level === 0) {
                     response = this.data1;
-                } else if (level === 1) {
+                } else if (role_level === 1) {
                     response = this.data2;
-                } else if (level === 2) {
+                } else if (role_level === 2) {
                     response = this.data3;
                 }
 
@@ -333,8 +340,6 @@ function MetricsService($http, $rootScope, $compile, $q) {
             this.lastInitial = '';
             this.hideLoading();
             this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level]['option']);
-
-            console.log(this.level_list[this.current_level]['option']['series']);
             console.timeEnd('Chart');
 
         }
@@ -673,8 +678,8 @@ function MetricsService($http, $rootScope, $compile, $q) {
                     self.pathOnClick(this);
                 };
             }
-
-            pathBlocks[self.current_level * 2 + 1].classList.add("curr-path-link");
+            
+            pathBlocks[(self.current_level) * 2 + 1].classList.add("curr-path-link");
         }
 
         this.pathOnClick = function (element) {

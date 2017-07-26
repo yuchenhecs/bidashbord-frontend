@@ -4,15 +4,14 @@ angular
     .service('LeaderBoardService', LeaderBoardService);
 
 function LeaderBoardService(LeaderBoardDialogService) {
+    
     this.init = function () {
 
     };
 }
 
 
-function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, LeaderBoardPercentileService) {
-    // var percentileService = LeaderBoardPercentileService.init();
-    // percentileService.launch();
+function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService) {
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);
@@ -20,6 +19,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     $scope.showPOTB = true;
     var advisorId = 332;
+
     var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
     var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
 

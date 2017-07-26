@@ -10,7 +10,7 @@ function LeaderBoardService(LeaderBoardDialogService) {
 }
 
 
-function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, LeaderBoardPercentileService) {
+function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService) {
     // var percentileService = LeaderBoardPercentileService.init();
     // percentileService.launch();
 
@@ -20,6 +20,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     $scope.showPOTB = true;
     var advisorId = 332;
+
     var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
     var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
 
@@ -97,6 +98,9 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var kpiApi = function (url) {
         return $http.get(url).then(function mySuccess(response) {
+            console.log('kpi');
+
+            console.log(response);
             $scope.kpi = response["data"]["data"];
             preprocessing($scope.kpi, "kpi");
             $scope.changeScope('state'); //have the default scope set to state
@@ -107,6 +111,9 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var POTBApi = function (url) {
         return $http.get(url).then(function mySuccess(response) {
+console.log('POTB');
+
+            console.log(response);
             preprocessing(response["data"]["data"], "POTB");
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");

@@ -6,12 +6,12 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
     LeaderBoardDialogService.self = this;
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    var $scope;
     var DOMAIN = "http://10.1.15.177:8080";
     var SUB_DOMAIN = "/bi/gamification";
     var advisorId = 9714;
     var USE_DUMMY_DATA = false;
-    var $scope;
-
+    
     var STATE_RATIOS = {
         SC: 0.799,
         SD: 0.620,
@@ -44,7 +44,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
 
 
     var dialogHTML = `
-            <md-dialog style="width:1000px;overflow: visible">
+            <md-dialog style="width:1100px;overflow: visible">
                 <div id="dialog-loading" layout="row"  layout-align="center center">
                     <div class="loader no-animate primary-loader loader--style3" >
                         <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -73,14 +73,14 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
 
 
                     <div layout="column" >
-                        <div layout="row" layout-align="end center"  layout-padding>
-                            <div>
+                        <div layout="column" layout-align="center end"  layout-padding>
                                 <h1 style="margin:0" ng-bind-html="kpi_details.advisorKpi"></h1>
-                            </div>
+                                <h6 style="margin:0"> is better than...</h6>
+                                
                         </div>
                         
-                        <div layout="row" layout-align="space-between center"  layout-padding>
- 
+                        <div layout="row" layout-align="space-between none"  layout-padding>
+                            
                             <div flex="40" layout="column" layout-align="center center" >
                                 <div style="text-align: center">
                                     <h6>Overall</h6>
@@ -214,55 +214,55 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
                 title: "Net Worth", colorId: 0,
                 formatter: shortenNumber,
                 text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/net_worth"
             },
             {
                 title: "Number of HNIs", colorId: 0,
                 formatter: (num) => { return num },
                 text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/hni"
             },
             {
-                title: "Convertion Rate", colorId: 1,
+                title: "Conversion Rate", colorId: 1,
                 formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/conversion_rate"
             },
             {
-                title: "Average Convertion Time", colorId: 1,
-                formatter: (num) => { return (num / 24).toFixed(2) + unitWrapper('days') },
+                title: "Average Conversion Time", colorId: 1,
+                formatter: (num) => { return (num / 24).toFixed(1) + unitWrapper('days') },
                 text_worst: 'longest', text_best: 'shortest',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/avg_conversion_time"
             },
             {
                 title: "Retention Rate", colorId: 1,
                 formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/retention_rate"
             },
             {
                 title: "Weekly Client Logins", colorId: 1,
                 formatter: (num) => { return num },
                 text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/weekly_logins"
             },
             {
                 title: "Annualized AUM Growth", colorId: 2,
-                formatter: (num) => { return num + unitWrapper('%') },
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/aum_growth"
             },
             {
                 title: "Annualized Clientele Growth", colorId: 2,
-                formatter: (num) => { return num + unitWrapper('%') },
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/clientele_growth"
             },
             {
                 title: "Annualized Worth Growth", colorId: 2,
-                formatter: (num) => { return num + unitWrapper('%') },
+                formatter: (num) => { return (num / 1).toFixed(2)  + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum"
+                KPI_DOMAIN: "/net_worth_growth"
             }
         ];
 

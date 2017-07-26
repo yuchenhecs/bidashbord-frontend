@@ -4,6 +4,7 @@ angular
     .service('LeaderBoardService', LeaderBoardService);
 
 function LeaderBoardService(LeaderBoardDialogService) {
+    
     this.init = function () {
 
     };
@@ -11,8 +12,6 @@ function LeaderBoardService(LeaderBoardDialogService) {
 
 
 function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService) {
-    // var percentileService = LeaderBoardPercentileService.init();
-    // percentileService.launch();
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);
@@ -98,9 +97,6 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var kpiApi = function (url) {
         return $http.get(url).then(function mySuccess(response) {
-            console.log('kpi');
-
-            console.log(response);
             $scope.kpi = response["data"]["data"];
             preprocessing($scope.kpi, "kpi");
             $scope.changeScope('state'); //have the default scope set to state
@@ -111,9 +107,6 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var POTBApi = function (url) {
         return $http.get(url).then(function mySuccess(response) {
-console.log('POTB');
-
-            console.log(response);
             preprocessing(response["data"]["data"], "POTB");
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");

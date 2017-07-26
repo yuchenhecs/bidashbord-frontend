@@ -15,7 +15,6 @@
     "Nate Smith <nsmith@runoranj.com>"
   ],
   "description": "Oranj business intelligence dashboard",
-  "main": "bower_dist/main.js",
   "license": "MIT",
   "homepage": "",
   "ignore": [
@@ -27,5 +26,14 @@
   ],
   "resolutions": {
     "angular": "1.6.4"
-  }
+  },
+  "main": [
+    "bower_dist/main.js",
+    "bower_dist/main.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:runoranj/oranjweb-bidashboard.git"
+  },
+  "private": true
 }

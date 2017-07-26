@@ -3,7 +3,7 @@ angular
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
 function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
-    LeaderBoardDialogService.self = this;
+    var self = this;
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var $scope;
@@ -11,6 +11,124 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
     var SUB_DOMAIN = "/bi/gamification";
     var advisorId = 9714;
     var USE_DUMMY_DATA = false;
+    var tagColors = ["tag-one", "tag-two", "tag-three"];
+    var colors = ["#00a4d3", "#72bb53", "#CDC114"];
+    var tabInfo = [
+            {
+                title: "Asset Under Management", colorId: 0,
+                formatter: shortenNumber,
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/aum"
+            },
+            {
+                title: "Net Worth", colorId: 0,
+                formatter: shortenNumber,
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/net_worth"
+            },
+            {
+                title: "Number of HNIs", colorId: 0,
+                formatter: (num) => { return num },
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/hni"
+            },
+            {
+                title: "Conversion Rate", colorId: 1,
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/conversion_rate"
+            },
+            {
+                title: "Average Conversion Time", colorId: 1,
+                formatter: (num) => { return (num / 24).toFixed(1) + unitWrapper('days') },
+                text_worst: 'longest', text_best: 'shortest',
+                KPI_DOMAIN: "/avg_conversion_time"
+            },
+            {
+                title: "Retention Rate", colorId: 1,
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/retention_rate"
+            },
+            {
+                title: "Weekly Client Logins", colorId: 1,
+                formatter: (num) => { return num },
+                text_worst: 'least', text_best: 'most',
+                KPI_DOMAIN: "/weekly_logins"
+            },
+            {
+                title: "Annualized AUM Growth", colorId: 2,
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/aum_growth"
+            },
+            {
+                title: "Annualized Clientele Growth", colorId: 2,
+                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/clientele_growth"
+            },
+            {
+                title: "Annualized Net Worth Growth", colorId: 2,
+                formatter: (num) => { return (num / 1).toFixed(2)  + unitWrapper('%') },
+                text_worst: 'lowest', text_best: 'highest',
+                KPI_DOMAIN: "/net_worth_growth"
+            }
+        ];
+
+
+    var STATE_NAMES = {
+            AL: 'Alabama',
+            AK: 'Alaska',
+            AZ: 'Arizona',
+            AR: 'Arkansas',
+            CA: 'California',
+            CO: 'Colorado',
+            CT: 'Connecticut',
+            DE: 'Delaware',
+            FL: 'Florida',
+            GA: 'Georgia',
+            HI: 'Hawaii',
+            ID: 'Idaho',
+            IL: 'Illinois',
+            IN: 'Indiana',
+            IA: 'Iowa',
+            KS: 'Kansas',
+            KY: 'Kentucky',
+            LA: 'Louisiana',
+            ME: 'Maine',
+            MD: 'Maryland',
+            MA: 'Massachusetts',
+            MI: 'Michigan',
+            MN: 'Minnesota',
+            MS: 'Mississippi',
+            MO: 'Missouri',
+            MT: 'Montana',
+            NE: 'Nebraska',
+            NV: 'Nevada',
+            NH: 'New Hampshire',
+            NJ: 'New Jersey',
+            NM: 'New Mexico',
+            NY: 'New York',
+            NC: 'North Carolina',
+            ND: 'North Dakota',
+            OH: 'Ohio',
+            OK: 'Oklahoma',
+            OR: 'Oregon',
+            PA: 'Pennsylvania',
+            RI: 'Rhode Island',
+            SC: 'South Carolina',
+            SD: 'South Dakota',
+            TN: 'Tennessee',
+            TX: 'Texas',
+            UT: 'Utah',
+            VT: 'Vermont',
+            VA: 'Virginia',
+            WA: 'Washington',
+            WV: 'West Virginia',
+            WI: 'Wisconsin',
+            WY: 'Wyoming'
+        };
     
     var STATE_RATIOS = {
         SC: 0.799,
@@ -166,11 +284,11 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             </md-dialog>
         `;
 
-    var unitWrapper = function (unit) {
+    function unitWrapper (unit) {
         return '<small>' + unit + '</small>';
     }
 
-    var shortenNumber = function (num) {
+    function shortenNumber (num) {
         if (num >= 1000 && num < 1000000) {
             return (num / 1000).toFixed(2) + unitWrapper('k');
         } else if (num >= 1000000 && num < 1000000000) {
@@ -183,6 +301,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
     };
 
     this.init = function ($$scope) {
+
+
         $scope = $$scope.$new();
 
         if ($rootScope.canceller) { // cancel previous pending api calls     
@@ -190,10 +310,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
         }
         $rootScope.canceller = $q.defer();
 
-
-
         var colorTheme = {
-            colors: ["#00a4d3", "#72bb53", "#CDC114"]
+            colors: colors
         };
 
         //    colors: ["#14A2CD", "#48B312", "#CDC114"]
@@ -201,123 +319,9 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
 
         Highcharts.setOptions(colorTheme);
 
-        $scope.tagColors = ["tag-one", "tag-two", "tag-three"];
-
-        $scope.tabInfo = [
-            {
-                title: "Asset Under Management", colorId: 0,
-                formatter: shortenNumber,
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/aum"
-            },
-            {
-                title: "Net Worth", colorId: 0,
-                formatter: shortenNumber,
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/net_worth"
-            },
-            {
-                title: "Number of HNIs", colorId: 0,
-                formatter: (num) => { return num },
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/hni"
-            },
-            {
-                title: "Conversion Rate", colorId: 1,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/conversion_rate"
-            },
-            {
-                title: "Average Conversion Time", colorId: 1,
-                formatter: (num) => { return (num / 24).toFixed(1) + unitWrapper('days') },
-                text_worst: 'longest', text_best: 'shortest',
-                KPI_DOMAIN: "/avg_conversion_time"
-            },
-            {
-                title: "Retention Rate", colorId: 1,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/retention_rate"
-            },
-            {
-                title: "Weekly Client Logins", colorId: 1,
-                formatter: (num) => { return num },
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/weekly_logins"
-            },
-            {
-                title: "Annualized AUM Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum_growth"
-            },
-            {
-                title: "Annualized Clientele Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/clientele_growth"
-            },
-            {
-                title: "Annualized Net Worth Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2)  + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/net_worth_growth"
-            }
-        ];
-
-        $scope.STATE_NAMES = {
-            AL: 'Alabama',
-            AK: 'Alaska',
-            AZ: 'Arizona',
-            AR: 'Arkansas',
-            CA: 'California',
-            CO: 'Colorado',
-            CT: 'Connecticut',
-            DE: 'Delaware',
-            FL: 'Florida',
-            GA: 'Georgia',
-            HI: 'Hawaii',
-            ID: 'Idaho',
-            IL: 'Illinois',
-            IN: 'Indiana',
-            IA: 'Iowa',
-            KS: 'Kansas',
-            KY: 'Kentucky',
-            LA: 'Louisiana',
-            ME: 'Maine',
-            MD: 'Maryland',
-            MA: 'Massachusetts',
-            MI: 'Michigan',
-            MN: 'Minnesota',
-            MS: 'Mississippi',
-            MO: 'Missouri',
-            MT: 'Montana',
-            NE: 'Nebraska',
-            NV: 'Nevada',
-            NH: 'New Hampshire',
-            NJ: 'New Jersey',
-            NM: 'New Mexico',
-            NY: 'New York',
-            NC: 'North Carolina',
-            ND: 'North Dakota',
-            OH: 'Ohio',
-            OK: 'Oklahoma',
-            OR: 'Oregon',
-            PA: 'Pennsylvania',
-            RI: 'Rhode Island',
-            SC: 'South Carolina',
-            SD: 'South Dakota',
-            TN: 'Tennessee',
-            TX: 'Texas',
-            UT: 'Utah',
-            VT: 'Vermont',
-            VA: 'Virginia',
-            WA: 'Washington',
-            WV: 'West Virginia',
-            WI: 'Wisconsin',
-            WY: 'Wyoming'
-        };
+        $scope.tagColors = tagColors;
+        $scope.tabInfo = tabInfo;
+        $scope.STATE_NAMES = STATE_NAMES;
 
         $scope.tabOnSelected = function (tab) {
             $scope.currentTab = tab;
@@ -325,7 +329,6 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             var loading = document.getElementById("dialog-loading");
             loading.style['visibility'] = "";
 
-            var self = LeaderBoardDialogService.self;
             self.getData(self.currentTab);
         };
 
@@ -374,7 +377,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
                 });
 
 
-                LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
+                self.loadData(overall, state, firm, stateCode);
             }, 1000);
 
             return;
@@ -401,7 +404,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             var stateCode = kpi_details.stateCode;
             var advisorKpi = kpi_details.advisorKpi;
 
-            LeaderBoardDialogService.self.loadData(overall, state, firm, stateCode);
+            self.loadData(overall, state, firm, stateCode);
 
         }, function myError(response, error) {
             console.log("Error " + response.status + ": " + response.statusText + "!");
@@ -421,6 +424,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
 
 
     this.show = function (ev, tab, $$scope) {
+
+
         this.init($$scope);
         $scope.currentTab = tab;
 

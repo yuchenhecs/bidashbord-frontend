@@ -259,7 +259,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
                 KPI_DOMAIN: "/clientele_growth"
             },
             {
-                title: "Annualized Worth Growth", colorId: 2,
+                title: "Annualized Net Worth Growth", colorId: 2,
                 formatter: (num) => { return (num / 1).toFixed(2)  + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/net_worth_growth"

@@ -10,7 +10,13 @@ function SessionService() {
     // this.name = 'John Doe';
     // this.id = 1347;
 
-    //
+    
+//     {
+//     "status": "success",
+//     "data": {
+//         "avatar": "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D"
+//     }
+// }
 
 
     this.level = 0;

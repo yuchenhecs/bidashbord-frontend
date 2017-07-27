@@ -262,6 +262,9 @@ function chartData($http, $log) {
 
 	chartData.createOptions = function(chartType, chartId, apiData) {
 		var currentOptions = {
+			credits: {
+                enabled: false
+            },
 			chart: {
 				type: chartType
 			},

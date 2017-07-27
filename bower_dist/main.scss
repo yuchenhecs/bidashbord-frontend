@@ -85,13 +85,14 @@ ul {
 
 .avatar-wrapper {
 	height: 80px;
-    width: 68.5px;
+    width: 80px;
     margin-right: 20px;
 }
 
 .avatar-image {
 	height: 100%;
-	width: 100%;
+    width: 100%;
+    border-radius: 50%;
 }
 
 .lb-header {

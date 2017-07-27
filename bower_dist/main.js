@@ -50,7 +50,7 @@ function routesConfig($stateProvider) {
 		})
 		.state('leaderBoard', {
 			url: '/leaderBoard',
-			template:'<div id="main-container"><div class="page"><div layout="row" id="top-row"><div flex="100" style="overflow:auto"><div class="tile-outer"><div class="lb-tile-inner"><div layout="row" layout-align="space-between center" class="lb-header"><div layout="row"><div class="avatar-wrapper"><img class="avatar-image" ng-src="{{ logo }}" alt="avatar image"></div><div layout="column"><div class="lb-upper-row">{{ kpi.name }}</div><div class="lb-lower-row">{{ kpi.points }} Points <i class="fa fa-info-circle"><md-tooltip>Points shown are calculated by ...</md-tooltip></i></div></div></div><div layout="row"><div layout="column"><div class="lb-upper-row"><div class="lb-right-text">{{ rank }}</div></div><div class="lb-lower-row"><div class="lb-right-text">Percentile in {{ scope }}</div></div></div></div></div><div layout="row" layout-align="end none" id="button-group"><div id="horizontal-line"></div><div class="btn-group btn-group-justified md-whiteframe-2dp scope"><div class="btn-group"><button type="button" class="btn btn-secondary lb-btn {{ lbOverall }}" ng-click="changeScope(\'overall\')" style="border-right-color:white">Overall</button></div><div class="btn-group"><button type="button" class="btn btn-secondary lb-btn {{ lbState }}" ng-click="changeScope(\'state\')" style="border-right-color:white; border-left-color:white">State</button></div><div class="btn-group"><button type="button" class="btn btn-secondary lb-btn {{ lbFirm }}" ng-click="changeScope(\'firm\')" style="border-left-color:white">Firm</button></div></div></div><div id="leaderboardCarousel" class="carousel slide" data-ride="carousel" data-interval="7000" ng-if="showPOTB"><ol class="carousel-indicators"><li ng-repeat="kpi in textList" data-target="#leaderboardCarousel" data-slide-to="{{ kpi.index }}" class="{{ kpi.active }}"></li></ol><div class="carousel-inner" role="listbox"><div id="text" layout="row" ng-repeat="kpi in textList" class="carousel-item {{ kpi.active }}"><div flex="15"></div><div class="POTBText" flex="70" style="text-align:center;"><p><strong>{{ kpi.text }}</strong></p></div><div flex="15"></div></div></div></div><div layout="row" layout-sm="column" class="lb-body"><div flex="33" layout="column" layout-align="none center" class="lb-one-third"><div class="sup-cat-icon"><i class="fa fa-usd lb-icon1"></i> <i class="fa fa-circle icon-background1"></i></div><md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 0)"><div flex="70" class="kpi-text kpi-name">Assets Under Management</div><div flex="30" class="kpi-text">{{ kpi.aum }}</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 1)"><div flex="70" class="kpi-text kpi-name">Net Worth</div><div flex="30" class="kpi-text">{{ kpi.netWorth }}</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 2)"><div flex="70" class="kpi-text kpi-name">Number of HNIs</div><div flex="30" class="kpi-text">{{ kpi.hni }}</div></md-button></div><div flex="33" layout="column" layout-align="none center" class="lb-one-third"><div class="row sup-cat-icon"><i class="fa fa-handshake-o lb-icon2"></i> <i class="fa fa-circle icon-background2"></i></div><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 3)"><div flex="70" class="kpi-text kpi-name">Conversion Rate</div><div flex="30" class="kpi-text">{{ kpi.conversionRate }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 4)"><div flex="70" class="kpi-text kpi-name">Average Conversion Time</div><div flex="30" class="kpi-text">{{ kpi.avgConversionTime }} Days</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 5)"><div flex="70" class="kpi-text kpi-name">Retention Rate</div><div flex="30" class="kpi-text">{{ kpi.retentionRate }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 6)"><div flex="70" class="kpi-text kpi-name">Weekly Client Logins</div><div flex="30" class="kpi-text">{{ kpi.weeklyLogins }}</div></md-button></div><div flex="33" layout="column" layout-align="none center" class="lb-one-third"><div class="row sup-cat-icon"><i class="fa fa-line-chart lb-icon3"></i> <i class="fa fa-circle icon-background3"></i></div><md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 7)"><div flex="70" class="kpi-text kpi-name">Annualized AUM Growth</div><div flex="30" class="kpi-text">{{ kpi.aumGrowth }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 8)"><div flex="70" class="kpi-text kpi-name">Annualized Clientele Growth</div><div flex="30" class="kpi-text">{{ kpi.clienteleGrowth }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 9)"><div flex="70" class="kpi-text kpi-name">Annualized Net Worth Growth</div><div flex="30" class="kpi-text">{{ kpi.netWorthGrowth }} %</div></md-button></div></div></div></div></div></div></div></div>',
+			template:'<div id="main-container"><div class="page"><div layout="row" id="top-row"><div flex="100" style="overflow:auto"><div class="tile-outer"><div class="lb-tile-inner"><div layout="row" layout-align="space-between center" class="lb-header"><div layout="row"><div class="avatar-wrapper"><img class="avatar-image" ng-src="{{ avatar }}" alt="avatar image"></div><div layout="column"><div class="lb-upper-row">{{ kpi.name }}</div><div class="lb-lower-row">{{ kpi.points }} Points <i class="fa fa-info-circle"><md-tooltip>Points shown are calculated by ...</md-tooltip></i></div></div></div><div layout="row"><div layout="column"><div class="lb-upper-row"><div class="lb-right-text">{{ rank }}</div></div><div class="lb-lower-row"><div class="lb-right-text">Percentile in {{ scope }}</div></div></div></div></div><div layout="row" layout-align="end none" id="button-group"><div id="horizontal-line"></div><div class="btn-group btn-group-justified md-whiteframe-2dp scope"><div class="btn-group"><button type="button" class="btn btn-secondary lb-btn {{ lbOverall }}" ng-click="changeScope(\'overall\')" style="border-right-color:white">Overall</button></div><div class="btn-group"><button type="button" class="btn btn-secondary lb-btn {{ lbState }}" ng-click="changeScope(\'state\')" style="border-right-color:white; border-left-color:white">State</button></div><div class="btn-group"><button type="button" class="btn btn-secondary lb-btn {{ lbFirm }}" ng-click="changeScope(\'firm\')" style="border-left-color:white">Firm</button></div></div></div><div id="leaderboardCarousel" class="carousel slide" data-ride="carousel" data-interval="7000" ng-if="showPOTB"><ol class="carousel-indicators"><li ng-repeat="kpi in textList" data-target="#leaderboardCarousel" data-slide-to="{{ kpi.index }}" class="{{ kpi.active }}"></li></ol><div class="carousel-inner" role="listbox"><div id="text" layout="row" ng-repeat="kpi in textList" class="carousel-item {{ kpi.active }}"><div flex="15"></div><div class="POTBText" flex="70" style="text-align:center;"><p><strong>{{ kpi.text }}</strong></p></div><div flex="15"></div></div></div></div><div layout="row" layout-sm="column" class="lb-body"><div flex="33" layout="column" layout-align="none center" class="lb-one-third"><div class="sup-cat-icon"><i class="fa fa-usd lb-icon1"></i> <i class="fa fa-circle icon-background1"></i></div><md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 0)"><div flex="70" class="kpi-text kpi-name">Assets Under Management</div><div flex="30" class="kpi-text">{{ kpi.aum }}</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 1)"><div flex="70" class="kpi-text kpi-name">Net Worth</div><div flex="30" class="kpi-text">{{ kpi.netWorth }}</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi financials md-whiteframe-4dp" ng-click="showChart($event , 2)"><div flex="70" class="kpi-text kpi-name">Number of HNIs</div><div flex="30" class="kpi-text">{{ kpi.hni }}</div></md-button></div><div flex="33" layout="column" layout-align="none center" class="lb-one-third"><div class="row sup-cat-icon"><i class="fa fa-handshake-o lb-icon2"></i> <i class="fa fa-circle icon-background2"></i></div><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 3)"><div flex="70" class="kpi-text kpi-name">Conversion Rate</div><div flex="30" class="kpi-text">{{ kpi.conversionRate }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 4)"><div flex="70" class="kpi-text kpi-name">Average Conversion Time</div><div flex="30" class="kpi-text">{{ kpi.avgConversionTime }} Days</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 5)"><div flex="70" class="kpi-text kpi-name">Retention Rate</div><div flex="30" class="kpi-text">{{ kpi.retentionRate }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi client-management md-whiteframe-4dp" ng-click="showChart($event , 6)"><div flex="70" class="kpi-text kpi-name">Weekly Client Logins</div><div flex="30" class="kpi-text">{{ kpi.weeklyLogins }}</div></md-button></div><div flex="33" layout="column" layout-align="none center" class="lb-one-third"><div class="row sup-cat-icon"><i class="fa fa-line-chart lb-icon3"></i> <i class="fa fa-circle icon-background3"></i></div><md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 7)"><div flex="70" class="kpi-text kpi-name">Annualized AUM Growth</div><div flex="30" class="kpi-text">{{ kpi.aumGrowth }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 8)"><div flex="70" class="kpi-text kpi-name">Annualized Clientele Growth</div><div flex="30" class="kpi-text">{{ kpi.clienteleGrowth }} %</div></md-button><md-button layout="row" layout-align="space-between center" class="kpi growth md-whiteframe-4dp" ng-click="showChart($event , 9)"><div flex="70" class="kpi-text kpi-name">Annualized Net Worth Growth</div><div flex="30" class="kpi-text">{{ kpi.netWorthGrowth }} %</div></md-button></div></div></div></div></div></div></div></div>',
 			controller: 'LeaderBoardController',
 			controllerAs: 'leaderBoard'
 		});
@@ -649,455 +649,12 @@ function AUMController($scope, AUMService) {
 }
 
 angular
-    .module('app.biDashboard')
-    .controller('GoalsController', GoalsController)
-    .service('GoalsService', GoalsService);
-
-function GoalsService(MetricsService) {
-    this.init = function(){
-        // most code is written in MetricsController
-        var base = new MetricsService();
-        // constants
-        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-        base.SUB_DOMAIN = "/bi/goals";
-        base.USE_DUMMY_DATA = false;
-        base.controllerName = "goals";
-
-        base.data1 = {
-            "firms": [{
-                "name": "firm 1",
-                "total": 40,
-                "goals": {
-                    "custom": 3,
-                    "college": 8,
-                    "retirement": 15,
-                    "insurance": 4,
-                    "home": 10
-                }
-            },
-            {
-                "total": 25,
-                "name": "firm 2",
-                "goals": {
-                    "custom": 3,
-                    "college": 8,
-                    "retirement": 0,
-                    "insurance": 4,
-                    "home": 10
-                }
-            },
-            {
-                "total": 34,
-                "name": "firm 3",
-                "goals": {
-                    "custom": 3,
-                    "College": 2,
-                    "retirement": 15,
-                    "insurance": 4,
-                    "home": 10
-                }
-            }]
-        };
-
-
-        base.data2 = {
-            "advisors": [{
-                "name": "advisor 1",
-                "total": 23,
-                "goals": {
-                    "custom": 10,
-                    "college": 4,
-                    "retirement": 6,
-                    "insurance": 2,
-                    "home": 1
-                }
-            },
-            {
-                "total": 24,
-                "name": "advisor 2",
-                "goals": {
-                    "custom": 1,
-                    "college": 14,
-                    "retirement": 6,
-                    "insurance": 2,
-                    "home": 1
-                }
-            },
-            {
-                "total": 14,
-                "name": "advisor 3",
-                "goals": {
-                    "custom": 1,
-                    "college": 4,
-                    "retirement": 6,
-                    "insurance": 2,
-                    "home": 1
-                }
-            }]
-        };
-
-
-        base.data3 = {
-            "clients": [{
-                "name": "client 1",
-                "total": 14,
-                "goals": {
-                    "custom": 1,
-                    "college": 4,
-                    "retirement": 6,
-                    "insurance": 2,
-                    "home": 1
-                }
-            },
-            {
-                "total": 14,
-                "name": "client 2",
-                "goals": {
-                    "custom": 1,
-                    "college": 4,
-                    "retirement": 6,
-                    "insurance": 2,
-                    "home": 1
-                }
-            },
-            {
-                "total": 8,
-                "name": "client 3",
-                "goals": {
-                    "custom": 1,
-                    "college": 4,
-                    "retirement": 0,
-                    "insurance": 2,
-                    "home": 1
-                }
-            }]
-        };
-
-        return base;
-    }
-}
-
-
-function GoalsController($scope, GoalsService) {
-    var service = GoalsService.init();
-
-    this.startDate = service.startDate;
-    this.endDate = service.endDate;
-    this.today = new Date();
-    this.isRequired = service.isRequired;
-
-    this.checkDate = function () {
-        service.startDate = this.startDate; // bind data to service
-        service.endDate = this.endDate;
-
-        try {
-            service.checkDate();
-        }
-        catch (err) {
-            console.log("Error when checking date!");
-        }
-
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    };
-
-
-    this.assignYTD = function () {
-
-
-        try {
-            service.assignYTD();
-        }
-        catch (err) {
-            console.log("Error when assigning YTD!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
-
-    this.clearDate = function () {
-
-        try {
-            service.clearDate();
-        }
-        catch (err) {
-            console.log("Error when clearing dates!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
-    service.launch($scope);
-}
-
-
-
-describe('Goals Controller:', function () {
-    var $scope, GoalsController, GoalsService, $q, $httpBackend, $http;
-    var url = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals/firms?&page=0';
-
-    var data1 = {
-        "data": {
-            "last": true,
-            "firms": [{
-                "name": "firm 1",
-                "total": 40,
-                "goals": {
-                    "custom": 3,
-                    "college": 8,
-                    "retirement": 15,
-                    "insurance": 4,
-                    "home": 10
-                }
-            },
-            {
-                "total": 25,
-                "name": "firm 2",
-                "goals": {
-                    "custom": 3,
-                    "college": 8,
-                    "retirement": 0,
-                    "insurance": 4,
-                    "home": 10
-                }
-            },
-            {
-                "total": 34,
-                "name": "firm 3",
-                "goals": {
-                    "custom": 3,
-                    "College": 2,
-                    "retirement": 15,
-                    "insurance": 4,
-                    "home": 10
-                }
-            }]
-        }
-    };
-
-    //Before each test load our app module
-    beforeEach(angular.mock.module('app.biDashboard'));
-
-    //Inject the $controller service to create instances of the controller (HomeController) we want to test,
-    //Injecting _chartData_ for our factory
-    beforeEach(inject(function ($controller, $rootScope, _GoalsService_, _$q_, _$httpBackend_, _$http_) {
-        GoalsService = _GoalsService_;
-        $q = _$q_;
-        $httpBackend = _$httpBackend_;
-        $scope = $rootScope.$new();
-        $http = _$http_;
-        GoalsController = function () {
-            return $controller('GoalsController', {
-                $scope: $scope,
-                GoalsService: GoalsService
-            });
-        };
-
-    }));
-
-    //Verify our controller exists
-    it('GoalsController should exist', function () {
-        var goals = GoalsController();
-        expect(goals).toBeDefined();
-    });
-
-    //Verify our factory is defined
-    it('GoalsService should be defined', function () {
-        expect(GoalsService).toBeDefined();
-    });
-
-    describe('getDataForLevel()', function () {
-
-        var name = "asd";
-        var id = 123;
-        var page = 0;
-        var level = 0;
-        var args;
-        var data;
-        var service;
-
-        beforeEach(function () {
-            service = GoalsService.init();
-            //spyOn() takes in the directive + method name, the specified method's code will not be run
-            spyOn(service, "getDataForLevel").and.callThrough();
-            spyOn(service, "getDataFromApi");
-        });
-
-        it('should return correct url', function () {
-             expect(service.getDataForLevel(name, id, page, level, args)).toEqual(url);
-        });
-    });
-
-    //testing api call
-    describe('getDataFromApi()', function () {
-        var result = {};
-        var name = "asd";
-        var id = 123;
-        var page = 0;
-        var level = 0;
-        var args = [];
-        var data;
-        var service;
-
-        beforeEach(function () {
-            service = GoalsService.init();
-            //spyOn() takes in the directive + method name, the specified method's code will not be run
-            spyOn(service, "getDataFromApi").and.callThrough();
-            spyOn(service, "loadData");
-        });
-
-        it('should return a json object with data', function () {
-            var newUrl = url.slice(0, url.lastIndexOf("=") + 1) + page;
-            //  console.log(newUrl);
-
-
-
-            $httpBackend.whenGET(newUrl).respond(200, data1);
-
-            expect(service.getDataFromApi).not.toHaveBeenCalled();
-            expect(result).toEqual({});
-
-            service.getDataFromApi(url, name, id, page, level, args, data).then(function (data) {
-                result = data;
-            });
-
-
-            $httpBackend.flush();
-
-            expect(service.getDataFromApi).toHaveBeenCalledWith(url, name, id, page, level, args, data);
-            expect(result.firms[0].total).toEqual(40);
-        });
-    });
-
-});
-
-angular
-    .module('app.biDashboard')
-    .controller('LeaderBoardController', LeaderBoardController)
-    .service('LeaderBoardService', LeaderBoardService);
-
-function LeaderBoardService(LeaderBoardDialogService) {
-    
-    this.init = function () {
-
-    };
-}
-
-
-function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService) {
-
-    $scope.showChart = function (ev, tab) {
-        LeaderBoardDialogService.show(ev, tab, $scope);
-    };
-
-    $scope.showPOTB = true;
-    var advisorId = 332;
-
-    var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
-    var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
-
-    var preprocessing = function (data, type) {
-
-        if (type === "POTB") {
-            var textList = [];
-            var i = 0;
-            for (var key in data) {
-                if (key === "id" || key === "advisorId" || key === "region") { continue; }
-                if (data[key] !== null) {
-                    textList.push({ text: data[key], index: i });
-                    i++;
-                }
-            }
-            //set one to be the active slide to show
-            if (textList[0] != null) {
-                $scope.showPOTB= true;
-                textList[0].active = "active";
-            }else{
-                $scope.showPOTB=false;
-            }
-            $scope.textList = textList;
-        } else if (type === "kpi") {
-            data.aum = shortenNumber(data.aum);
-            data.netWorth = shortenNumber(data.netWorth);
-            data.avgConversionTime = (data.avgConversionTime / 24).toFixed(2);
-            data.retentionRate = (data.retentionRate / 1).toFixed(2);
-            data.conversionRate = (data.conversionRate / 1).toFixed(2);
-        }
-    };
-
-    var highlightButton = function (scope) {
-        $scope.lbOverall = 'offFocus';
-        $scope.lbState = 'offFocus';
-        $scope.lbFirm = 'offFocus';
-
-        if (scope === 'overall') {
-            $scope.lbOverall = 'onFocus';
-            $scope.scope = scope;
-            POTBApi(POTBUrlBase + $scope.scope);
-        } else if (scope === 'state') {
-            $scope.lbState = 'onFocus';
-            $scope.scope = scope;
-            POTBApi(POTBUrlBase + $scope.scope);
-        } else {
-            $scope.lbFirm = 'onFocus';
-            $scope.scope = scope;
-            POTBApi(POTBUrlBase + $scope.scope);
-        }
-    };
-
-    var shortenNumber = function (num) {
-        if (num >= 1000 && num < 1000000) {
-            return (num / 1000).toFixed(2) + 'k';
-        } else if (num >= 1000000 && num < 1000000000) {
-            return (num / 1000000).toFixed(2) + 'M';
-        } else if (num >= 1000000000 && num < 1000000000000) {
-            return (num / 1000000000).toFixed(2) + 'B';
-        } else if (num >= 1000000000000) {
-            return (num / 1000000000000).toFixed(2) + 'T';
-        } else return num.toFixed(2);
-    };
-
-    $scope.changeScope = function (scope) {
-        if (scope === 'overall') {
-            $scope.rank = $scope.kpi.percentileOverall;
-        } else if (scope === 'state') {
-            $scope.rank = $scope.kpi.percentileState;
-        } else {
-            $scope.rank = $scope.kpi.percentileFirm;
-        }
-        highlightButton(scope);
-    };
-
-    var kpiApi = function (url) {
-        return $http.get(url).then(function mySuccess(response) {
-            $scope.kpi = response["data"]["data"];
-            preprocessing($scope.kpi, "kpi");
-            $scope.changeScope('state'); //have the default scope set to state
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
-        }
-    };
-
-    var POTBApi = function (url) {
-        return $http.get(url).then(function mySuccess(response) {
-            preprocessing(response["data"]["data"], "POTB");
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
-        }
-    };
-
-    kpiApi(kpiUrl);
-}
-
-angular
 	.module('app.biDashboard')
 	.controller('HomeController', HomeController)
 	.factory('chartData', chartData);
 
 //factory object with methods
-function chartData($http, $log) {
+function chartData($http, $log, SessionService) {
 	var chartData = {};
 
 
@@ -1105,7 +662,7 @@ function chartData($http, $log) {
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		} else {
-				return $http.get(url).then(function mySuccess(response) {
+				return $http.get(url , { headers: { 'Authorization': SessionService.access_token }}).then(function mySuccess(response) {
 				var apiData = response["data"];
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData["data"]);
@@ -1355,6 +912,9 @@ function chartData($http, $log) {
 
 	chartData.createOptions = function(chartType, chartId, apiData) {
 		var currentOptions = {
+			credits: {
+                enabled: false
+            },
 			chart: {
 				type: chartType
 			},
@@ -1415,13 +975,13 @@ function HomeController($scope, $http, $log, chartData) {
 	};
 
 	$scope.loginApi = function() {
-		return $http.get(clientUrl).then(function mySuccess(clientResponse) {
+		return $http.get(clientUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
 			$scope.clientData = clientResponse["data"]["data"]["client"];
 			$scope.clientData['changeInTotalLogins'] = $scope.addSign($scope.clientData['changeInTotalLogins']);
 			$scope.clientData['changeInUniqueLogins'] = $scope.addSign($scope.clientData['changeInUniqueLogins']);
 			$scope.clientData['changeInAvgSessionTime'] = $scope.addSign($scope.clientData['changeInAvgSessionTime']);
 		}).then(function () {
-			return $http.get(prospectUrl).then(function mySuccess1(prospectResponse) {
+			return $http.get(prospectUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess1(prospectResponse) {
 				$scope.prospectData = prospectResponse["data"]["data"]["prospect"];
 				$scope.prospectData['changeInTotalLogins'] = $scope.addSign($scope.prospectData['changeInTotalLogins']);
 				$scope.prospectData['changeInUniqueLogins'] = $scope.addSign($scope.prospectData['changeInUniqueLogins']);
@@ -1922,9 +1482,467 @@ describe('Home App Module:', function() {
 
 angular
     .module('app.biDashboard')
+    .controller('GoalsController', GoalsController)
+    .service('GoalsService', GoalsService);
+
+function GoalsService(MetricsService) {
+    this.init = function(){
+        // most code is written in MetricsController
+        var base = new MetricsService();
+        // constants
+        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        base.SUB_DOMAIN = "/bi/goals";
+        base.USE_DUMMY_DATA = false;
+        base.controllerName = "goals";
+
+        base.data1 = {
+            "firms": [{
+                "name": "firm 1",
+                "total": 40,
+                "goals": {
+                    "custom": 3,
+                    "college": 8,
+                    "retirement": 15,
+                    "insurance": 4,
+                    "home": 10
+                }
+            },
+            {
+                "total": 25,
+                "name": "firm 2",
+                "goals": {
+                    "custom": 3,
+                    "college": 8,
+                    "retirement": 0,
+                    "insurance": 4,
+                    "home": 10
+                }
+            },
+            {
+                "total": 34,
+                "name": "firm 3",
+                "goals": {
+                    "custom": 3,
+                    "College": 2,
+                    "retirement": 15,
+                    "insurance": 4,
+                    "home": 10
+                }
+            }]
+        };
+
+
+        base.data2 = {
+            "advisors": [{
+                "name": "advisor 1",
+                "total": 23,
+                "goals": {
+                    "custom": 10,
+                    "college": 4,
+                    "retirement": 6,
+                    "insurance": 2,
+                    "home": 1
+                }
+            },
+            {
+                "total": 24,
+                "name": "advisor 2",
+                "goals": {
+                    "custom": 1,
+                    "college": 14,
+                    "retirement": 6,
+                    "insurance": 2,
+                    "home": 1
+                }
+            },
+            {
+                "total": 14,
+                "name": "advisor 3",
+                "goals": {
+                    "custom": 1,
+                    "college": 4,
+                    "retirement": 6,
+                    "insurance": 2,
+                    "home": 1
+                }
+            }]
+        };
+
+
+        base.data3 = {
+            "clients": [{
+                "name": "client 1",
+                "total": 14,
+                "goals": {
+                    "custom": 1,
+                    "college": 4,
+                    "retirement": 6,
+                    "insurance": 2,
+                    "home": 1
+                }
+            },
+            {
+                "total": 14,
+                "name": "client 2",
+                "goals": {
+                    "custom": 1,
+                    "college": 4,
+                    "retirement": 6,
+                    "insurance": 2,
+                    "home": 1
+                }
+            },
+            {
+                "total": 8,
+                "name": "client 3",
+                "goals": {
+                    "custom": 1,
+                    "college": 4,
+                    "retirement": 0,
+                    "insurance": 2,
+                    "home": 1
+                }
+            }]
+        };
+
+        return base;
+    }
+}
+
+
+function GoalsController($scope, GoalsService) {
+    var service = GoalsService.init();
+
+    this.startDate = service.startDate;
+    this.endDate = service.endDate;
+    this.today = new Date();
+    this.isRequired = service.isRequired;
+
+    this.checkDate = function () {
+        service.startDate = this.startDate; // bind data to service
+        service.endDate = this.endDate;
+
+        try {
+            service.checkDate();
+        }
+        catch (err) {
+            console.log("Error when checking date!");
+        }
+
+
+        this.startDate = service.startDate;
+        this.endDate = service.endDate;
+    };
+
+
+    this.assignYTD = function () {
+
+
+        try {
+            service.assignYTD();
+        }
+        catch (err) {
+            console.log("Error when assigning YTD!");
+        }
+
+        this.startDate = service.startDate;
+        this.endDate = service.endDate;
+    }
+
+    this.clearDate = function () {
+
+        try {
+            service.clearDate();
+        }
+        catch (err) {
+            console.log("Error when clearing dates!");
+        }
+
+        this.startDate = service.startDate;
+        this.endDate = service.endDate;
+    }
+    service.launch($scope);
+}
+
+
+
+describe('Goals Controller:', function () {
+    var $scope, GoalsController, GoalsService, $q, $httpBackend, $http;
+    var url = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals/firms?&page=0';
+
+    var data1 = {
+        "data": {
+            "last": true,
+            "firms": [{
+                "name": "firm 1",
+                "total": 40,
+                "goals": {
+                    "custom": 3,
+                    "college": 8,
+                    "retirement": 15,
+                    "insurance": 4,
+                    "home": 10
+                }
+            },
+            {
+                "total": 25,
+                "name": "firm 2",
+                "goals": {
+                    "custom": 3,
+                    "college": 8,
+                    "retirement": 0,
+                    "insurance": 4,
+                    "home": 10
+                }
+            },
+            {
+                "total": 34,
+                "name": "firm 3",
+                "goals": {
+                    "custom": 3,
+                    "College": 2,
+                    "retirement": 15,
+                    "insurance": 4,
+                    "home": 10
+                }
+            }]
+        }
+    };
+
+    //Before each test load our app module
+    beforeEach(angular.mock.module('app.biDashboard'));
+
+    //Inject the $controller service to create instances of the controller (HomeController) we want to test,
+    //Injecting _chartData_ for our factory
+    beforeEach(inject(function ($controller, $rootScope, _GoalsService_, _$q_, _$httpBackend_, _$http_) {
+        GoalsService = _GoalsService_;
+        $q = _$q_;
+        $httpBackend = _$httpBackend_;
+        $scope = $rootScope.$new();
+        $http = _$http_;
+        GoalsController = function () {
+            return $controller('GoalsController', {
+                $scope: $scope,
+                GoalsService: GoalsService
+            });
+        };
+
+    }));
+
+    //Verify our controller exists
+    it('GoalsController should exist', function () {
+        var goals = GoalsController();
+        expect(goals).toBeDefined();
+    });
+
+    //Verify our factory is defined
+    it('GoalsService should be defined', function () {
+        expect(GoalsService).toBeDefined();
+    });
+
+    describe('getDataForLevel()', function () {
+
+        var name = "asd";
+        var id = 123;
+        var page = 0;
+        var level = 0;
+        var args;
+        var data;
+        var service;
+
+        beforeEach(function () {
+            service = GoalsService.init();
+            //spyOn() takes in the directive + method name, the specified method's code will not be run
+            spyOn(service, "getDataForLevel").and.callThrough();
+            spyOn(service, "getDataFromApi");
+        });
+
+        it('should return correct url', function () {
+             expect(service.getDataForLevel(name, id, page, level, args)).toEqual(url);
+        });
+    });
+
+    //testing api call
+    describe('getDataFromApi()', function () {
+        var result = {};
+        var name = "asd";
+        var id = 123;
+        var page = 0;
+        var level = 0;
+        var args = [];
+        var data;
+        var service;
+
+        beforeEach(function () {
+            service = GoalsService.init();
+            //spyOn() takes in the directive + method name, the specified method's code will not be run
+            spyOn(service, "getDataFromApi").and.callThrough();
+            spyOn(service, "loadData");
+        });
+
+        it('should return a json object with data', function () {
+            var newUrl = url.slice(0, url.lastIndexOf("=") + 1) + page;
+            //  console.log(newUrl);
+
+
+
+            $httpBackend.whenGET(newUrl).respond(200, data1);
+
+            expect(service.getDataFromApi).not.toHaveBeenCalled();
+            expect(result).toEqual({});
+
+            service.getDataFromApi(url, name, id, page, level, args, data).then(function (data) {
+                result = data;
+            });
+
+
+            $httpBackend.flush();
+
+            expect(service.getDataFromApi).toHaveBeenCalledWith(url, name, id, page, level, args, data);
+            expect(result.firms[0].total).toEqual(40);
+        });
+    });
+
+});
+
+angular
+    .module('app.biDashboard')
+    .controller('LeaderBoardController', LeaderBoardController)
+    .service('LeaderBoardService', LeaderBoardService);
+
+function LeaderBoardService(LeaderBoardDialogService) {
+
+    this.init = function () {
+
+    };
+}
+
+
+function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, SessionService) {
+
+    $scope.showChart = function (ev, tab) {
+        LeaderBoardDialogService.show(ev, tab, $scope);
+    };
+
+    $scope.showPOTB = true;
+    var advisorId = 332;
+
+    var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
+    var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
+    var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/avatar/get";
+
+    var preprocessing = function (data, type) {
+
+        if (type === "POTB") {
+            var textList = [];
+            var i = 0;
+            for (var key in data) {
+                if (key === "id" || key === "advisorId" || key === "region") { continue; }
+                if (data[key] !== null) {
+                    textList.push({ text: data[key], index: i });
+                    i++;
+                }
+            }
+            //set one to be the active slide to show
+            if (textList[0] != null) {
+                $scope.showPOTB = true;
+                textList[0].active = "active";
+            } else {
+                $scope.showPOTB = false;
+            }
+            $scope.textList = textList;
+        } else if (type === "kpi") {
+            data.aum = shortenNumber(data.aum);
+            data.netWorth = shortenNumber(data.netWorth);
+            data.avgConversionTime = (data.avgConversionTime / 24).toFixed(2);
+            data.retentionRate = (data.retentionRate / 1).toFixed(2);
+            data.conversionRate = (data.conversionRate / 1).toFixed(2);
+        }
+    };
+
+    var highlightButton = function (scope) {
+        $scope.lbOverall = 'offFocus';
+        $scope.lbState = 'offFocus';
+        $scope.lbFirm = 'offFocus';
+
+        if (scope === 'overall') {
+            $scope.lbOverall = 'onFocus';
+            $scope.scope = scope;
+            POTBApi(POTBUrlBase + $scope.scope);
+        } else if (scope === 'state') {
+            $scope.lbState = 'onFocus';
+            $scope.scope = scope;
+            POTBApi(POTBUrlBase + $scope.scope);
+        } else {
+            $scope.lbFirm = 'onFocus';
+            $scope.scope = scope;
+            POTBApi(POTBUrlBase + $scope.scope);
+        }
+    };
+
+    var shortenNumber = function (num) {
+        if (num >= 1000 && num < 1000000) {
+            return (num / 1000).toFixed(2) + 'k';
+        } else if (num >= 1000000 && num < 1000000000) {
+            return (num / 1000000).toFixed(2) + 'M';
+        } else if (num >= 1000000000 && num < 1000000000000) {
+            return (num / 1000000000).toFixed(2) + 'B';
+        } else if (num >= 1000000000000) {
+            return (num / 1000000000000).toFixed(2) + 'T';
+        } else return num.toFixed(2);
+    };
+
+    $scope.changeScope = function (scope) {
+        if (scope === 'overall') {
+            $scope.rank = $scope.kpi.percentileOverall;
+        } else if (scope === 'state') {
+            $scope.rank = $scope.kpi.percentileState;
+        } else {
+            $scope.rank = $scope.kpi.percentileFirm;
+        }
+        highlightButton(scope);
+    };
+
+    var kpiApi = function (url) {
+        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            $scope.kpi = response["data"]["data"];
+            preprocessing($scope.kpi, "kpi");
+            $scope.changeScope('state'); //have the default scope set to state
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
+    };
+
+    var POTBApi = function (url) {
+        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            preprocessing(response["data"]["data"], "POTB");
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
+    };
+
+    var avatarApi = function (url) {
+        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            if (response.data.data) {
+                $scope.avatar = response.data.data.avatar;
+            } else {
+                $scope.avatar = "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D";
+            }
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
+
+    };
+
+    kpiApi(kpiUrl);
+    avatarApi(avatarUrl);
+}
+
+angular
+    .module('app.biDashboard')
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
-function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
+function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionService) {
     var self = this;
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
@@ -2305,7 +2323,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             return;
         }
 
-        return $http.get(url, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
+        return $http.get(url, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token }  }).then(function mySuccess(response) {
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
            
             var kpi_details = response.data.data;
@@ -3091,7 +3109,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -3904,18 +3922,24 @@ angular
     .service('SessionService', SessionService);
 
 function SessionService() {
-    var access_token = "Bearer 18df8fdf-bae0-453d-b3aa-dca4dd4a7674";
-    var roles = ["Metrics_SummaryGoalsAll_Enable", "Metrics_SummaryGoalsFirm_Enable", "Metrics_SummaryGoalsManaged_Enable"];
     
     // this.level = 2;
     // this.name = 'John Doe';
     // this.id = 1347;
 
-    //
+    
+//     {
+//     "status": "success",
+//     "data": {
+//         "avatar": "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D"
+//     }
+// }
 
-
+    this.access_token = "Bearer dkSBs5YT4swynQXYEdYAuXJcZpaoJgld9xVjX8O92YrMS2nDvv1-p2tn0vCTWGbYQCrKRYdO26TAiv-Snyn-xgG7p81dq7UNv2aEUbwbK0YbhD2wquQr5ryekQ3PGhT0kZN2F5J46yWgsJEizwPSnI8OkPxzJeg6v8OUfwohUCcaaadusVJ99XhWW1cBl-EbeBLiY2r0oyPsc5AhYow38yU5BStPLVMnmkfw_uIiX0nj2wnFiGHL87OoafbDXeOtCHhGUoYlxv8e-5NR7H17yAGTGupjLk1sluCPotiip9f7bcNvaBgM7v3NxoJb14jAngTP7XUveTGe_ZmvpJuJGFXEorCeDj2ag8r8QIj7P7R7bdRQG6eDaqXeGoWX-YcjQFZVcQ";
+    this.roles = ["Metrics_SummaryGoalsAll_Enable", "Metrics_SummaryGoalsFirm_Enable", "Metrics_SummaryGoalsManaged_Enable"];
     this.level = 0;
     this.name = 'Oranj';
+    this.firm = 'mattfirm';
     this.id = -1;
 
     this.hasPermission = function (permission) {

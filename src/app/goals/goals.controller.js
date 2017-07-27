@@ -133,7 +133,7 @@ function GoalsController($scope, GoalsService) {
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
-    this.today = new Date();
+    this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
 
     this.checkDate = function () {

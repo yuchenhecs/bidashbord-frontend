@@ -23,6 +23,13 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.showDatepicker = true;
         this.chart_id = 'chart';
 
+        this.start_text = "Start Date";
+        this.end_text = "End Date";
+
+        this.firstDay = new Date(new Date().getFullYear(), 0, 1);
+        this.yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
         };
@@ -36,7 +43,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.endDate = null;
         this.isRequired = false;
         this.current_level = 0;
-        this.doUpdate = false;
         this.lastInitial = '';
 
         //chart option template
@@ -254,7 +260,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -678,7 +684,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                     self.pathOnClick(this);
                 };
             }
-            
+
             pathBlocks[(self.current_level) * 2 + 1].classList.add("curr-path-link");
         }
 
@@ -718,8 +724,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                  <div layout="row"  layout-align="center center">
                     <form name="startForm">
                     <md-input-container style="margin-bottom: 0px !important;">
-                        <label>Start date</label>
-                        <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.today"
+                        <label>` + this.start_text + `</label>
+                        <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
                         ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
                         <div ng-messages="startForm.dateField.$error">
@@ -733,9 +739,9 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
                     <form name="endForm">
                     <md-input-container style="margin-bottom: 0px !important;">
-                        <label>End date</label>
+                        <label>`+ this.end_text + `</label>
                         <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-                        md-max-date="`+ ctrl + `.today" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                        md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
                         <div ng-messages="endForm.dateField.$error">
                         <div ng-message="valid">The entered value is not a date!</div>
@@ -756,8 +762,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         }
 
         this.assignYTD = function () {
-            this.startDate = new Date(new Date().getFullYear(), 0, 1);
-            this.endDate = new Date();
+            this.startDate = new Date(this.firstDay);
+            this.endDate = new Date(this.yesterday);
             this.validateLevel(this.current_level);
         }
 

@@ -13,9 +13,13 @@ function AUMService(MetricsService) {
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
-        base.startDate = new Date(new Date().getFullYear(), 0, 1);
-        base.endDate = new Date();
+        base.startDate = new Date(base.firstDay);
+        base.endDate = new Date(base.yesterday);
+
         base.TITLE_TEMPLATE = "Asset Under Management by ";
+
+        base.start_text = "Previous";
+        base.end_text = "Current";
 
         base.data1 = {
             "firms": [
@@ -343,7 +347,7 @@ function AUMController($scope, AUMService) {
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
-    this.today = new Date();
+    this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
 
     this.checkDate = function () {

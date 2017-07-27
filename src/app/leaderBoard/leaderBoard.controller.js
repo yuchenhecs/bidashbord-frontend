@@ -4,14 +4,14 @@ angular
     .service('LeaderBoardService', LeaderBoardService);
 
 function LeaderBoardService(LeaderBoardDialogService) {
-    
+
     this.init = function () {
 
     };
 }
 
 
-function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService) {
+function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, SessionService) {
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);
@@ -22,6 +22,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
     var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
+    var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/avatar/get";
 
     var preprocessing = function (data, type) {
 
@@ -37,10 +38,10 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
             }
             //set one to be the active slide to show
             if (textList[0] != null) {
-                $scope.showPOTB= true;
+                $scope.showPOTB = true;
                 textList[0].active = "active";
-            }else{
-                $scope.showPOTB=false;
+            } else {
+                $scope.showPOTB = false;
             }
             $scope.textList = textList;
         } else if (type === "kpi") {
@@ -96,7 +97,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     var kpiApi = function (url) {
-        return $http.get(url).then(function mySuccess(response) {
+        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             $scope.kpi = response["data"]["data"];
             preprocessing($scope.kpi, "kpi");
             $scope.changeScope('state'); //have the default scope set to state
@@ -106,12 +107,27 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     var POTBApi = function (url) {
-        return $http.get(url).then(function mySuccess(response) {
+        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             preprocessing(response["data"]["data"], "POTB");
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");
         }
     };
 
+    var avatarApi = function (url) {
+        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            if (response.data.data) {
+                $scope.avatar = response.data.data.avatar;
+            } else {
+                $scope.avatar = "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D";
+
+            }
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
+
+    };
+
     kpiApi(kpiUrl);
+    avatarApi(avatarUrl);
 }

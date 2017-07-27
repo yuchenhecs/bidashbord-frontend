@@ -254,7 +254,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;

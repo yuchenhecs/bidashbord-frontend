@@ -2,7 +2,7 @@ angular
     .module('app')
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
-function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
+function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionService) {
     var self = this;
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
@@ -383,7 +383,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             return;
         }
 
-        return $http.get(url, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
+        return $http.get(url, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token }  }).then(function mySuccess(response) {
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
            
             var kpi_details = response.data.data;

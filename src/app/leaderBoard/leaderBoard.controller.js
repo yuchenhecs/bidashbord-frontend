@@ -120,7 +120,6 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
                 $scope.avatar = response.data.data.avatar;
             } else {
                 $scope.avatar = "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D";
-
             }
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");

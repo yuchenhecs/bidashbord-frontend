@@ -136,6 +136,10 @@ function GoalsController($scope, GoalsService) {
     this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
 
+    this.querySearch = service.querySearch;
+
+
+    
     this.checkDate = function () {
         service.startDate = this.startDate; // bind data to service
         service.endDate = this.endDate;

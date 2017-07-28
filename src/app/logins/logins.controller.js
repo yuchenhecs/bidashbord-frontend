@@ -15,7 +15,7 @@ function LoginsService(MetricsService, $compile) {
         base.showDatepicker = false;
         base.startDate = null;
         base.endDate = null;
-        base.TITLE_TEMPLATE = "Login Statistics for ";
+        base.TITLE_TEMPLATE = "Session Stats for ";
 
         base.isWeek = true;
         base.isProspect = true;

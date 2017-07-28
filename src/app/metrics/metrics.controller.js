@@ -13,6 +13,186 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         $rootScope.canceller = $q.defer();
 
 
+        this.itemList = [
+            {
+                title: "Old Man's War",
+                author: {
+                    firstName: "John",
+                    lastName: "Scalzi"
+                }
+            },
+            {
+                title: "The Lock Artist",
+                author: {
+                    firstName: "Steve",
+                    lastName: "Hamilton"
+                }
+            },
+            {
+                title: "HTML5",
+                author: {
+                    firstName: "Remy",
+                    lastName: "Sharp"
+                }
+            },
+            {
+                title: "Right Ho Jeeves",
+                author: {
+                    firstName: "P.D",
+                    lastName: "Woodhouse"
+                }
+            },
+            {
+                title: "The Code of the Wooster",
+                author: {
+                    firstName: "P.D",
+                    lastName: "Woodhouse"
+                }
+            },
+            {
+                title: "Thank You Jeeves",
+                author: {
+                    firstName: "P.D",
+                    lastName: "Woodhouse"
+                }
+            },
+            {
+                title: "The DaVinci Code",
+                author: {
+                    firstName: "Dan",
+                    lastName: "Brown"
+                }
+            },
+            {
+                title: "Angels & Demons",
+                author: {
+                    firstName: "Dan",
+                    lastName: "Brown"
+                }
+            },
+            {
+                title: "The Silmarillion",
+                author: {
+                    firstName: "J.R.R",
+                    lastName: "Tolkien"
+                }
+            },
+            {
+                title: "Syrup",
+                author: {
+                    firstName: "Max",
+                    lastName: "Barry"
+                }
+            },
+            {
+                title: "The Lost Symbol",
+                author: {
+                    firstName: "Dan",
+                    lastName: "Brown"
+                }
+            },
+            {
+                title: "The Book of Lies",
+                author: {
+                    firstName: "Brad",
+                    lastName: "Meltzer"
+                }
+            },
+            {
+                title: "Lamb",
+                author: {
+                    firstName: "Christopher",
+                    lastName: "Moore"
+                }
+            },
+            {
+                title: "Fool",
+                author: {
+                    firstName: "Christopher",
+                    lastName: "Moore"
+                }
+            },
+            {
+                title: "Incompetence",
+                author: {
+                    firstName: "Rob",
+                    lastName: "Grant"
+                }
+            },
+            {
+                title: "Fat",
+                author: {
+                    firstName: "Rob",
+                    lastName: "Grant"
+                }
+            },
+            {
+                title: "Colony",
+                author: {
+                    firstName: "Rob",
+                    lastName: "Grant"
+                }
+            },
+            {
+                title: "Backwards, Red Dwarf",
+                author: {
+                    firstName: "Rob",
+                    lastName: "Grant"
+                }
+            },
+            {
+                title: "The Grand Design",
+                author: {
+                    firstName: "Stephen",
+                    lastName: "Hawking"
+                }
+            },
+            {
+                title: "The Book of Samson",
+                author: {
+                    firstName: "David",
+                    lastName: "Maine"
+                }
+            },
+            {
+                title: "The Preservationist",
+                author: {
+                    firstName: "David",
+                    lastName: "Maine"
+                }
+            },
+            {
+                title: "Fallen",
+                author: {
+                    firstName: "David",
+                    lastName: "Maine"
+                }
+            },
+            {
+                title: "Monster 1959",
+                author: {
+                    firstName: "David",
+                    lastName: "Maine"
+                }
+            }
+        ];
+
+
+        var options = {
+            shouldSort: true,
+            threshold: 0.6,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: [
+                "title",
+                "author.firstName"
+            ]
+        };
+        var fuse = new Fuse(self.itemList, options); // "list" is the item array
+
+
         // constants
         this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
@@ -341,7 +521,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createChart = function () {
-
+console.log(this.level_list[this.current_level]['option']);
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
@@ -409,7 +589,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.titleSelector = function (name) {
 
             var title = {
-                text: this.TITLE_TEMPLATE + name
+                text: this.TITLE_TEMPLATE + name,
+                y: 20
             };
 
             return title;
@@ -438,15 +619,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.xAxisFormatter = function () {
 
             var label = this.axis.defaultLabelFormatter.call(this);
-
             this.axis.autoRotation = null;
 
             if (this.axis.tickInterval > 1) {
-
                 var initial = label.charAt(0).toUpperCase();
-
                 if (initial === self.lastInitial) {
-
                     return '';
                 }
 
@@ -630,19 +807,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         //---------------------------------- Widgets -----------------------------------------------------------------
 
         this.createWidgets = function (chart) {
@@ -662,13 +826,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             //note.element.classList.add("chart-legend");
 
 
-
-
             var pathHTML = this.generatePathSelectorHTML();
             var text = chart.renderer.text(pathHTML).add();
             var textBBox = text.getBBox();
             var x = chart.plotLeft * 0.25;
-            var y = textBBox.height;
+            var y = textBBox.height * 0.7;
             text.attr({ x: x, y: y });
 
             var pathBlocks = text.element.children;
@@ -689,12 +851,10 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         }
 
         this.pathOnClick = function (element) {
-
             var level = parseInt(element.dataset.level);
 
             //drill up
             self.drillToLevel(level);
-
         }
 
         this.generatePathSelectorHTML = function () {
@@ -711,9 +871,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createOffChartWidgets = function (scope) {
-
-            if (this.showDatepicker)
+            if (this.showDatepicker) {
                 this.createDatepicker(scope);
+            }
+
+            this.createSearchBar(scope);
         }
 
         //datepicker
@@ -723,37 +885,39 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             var datePickerHTML = `
                  <div layout="row"  layout-align="center center">
                     <form name="startForm">
-                    <md-input-container style="margin-bottom: 0px !important;">
-                        <label>` + this.start_text + `</label>
-                        <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
-                        ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                            <md-input-container style="margin-bottom: 0px !important;">
+                                <label>` + this.start_text + `</label>
+                                <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
+                                ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-                        <div ng-messages="startForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
-                    </form>
+                                <div ng-messages="startForm.dateField.$error">
+                                <div ng-message="valid">The entered value is not a date!</div>
+                                <div ng-message="required">This date is required!</div>
+                                <div ng-message="mindate">Date is too early!</div>
+                                <div ng-message="maxdate">Date is too late!</div>
+                                </div>
+                            </md-input-container>
+                        </form>
 
-                    <form name="endForm">
-                    <md-input-container style="margin-bottom: 0px !important;">
-                        <label>`+ this.end_text + `</label>
-                        <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-                        md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                        <form name="endForm">
+                            <md-input-container style="margin-bottom: 0px !important;">
+                                <label>`+ this.end_text + `</label>
+                                <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
+                                md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-                        <div ng-messages="endForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
-                    </form>
+                                <div ng-messages="endForm.dateField.$error">
+                                <div ng-message="valid">The entered value is not a date!</div>
+                                <div ng-message="required">This date is required!</div>
+                                <div ng-message="mindate">Date is too early!</div>
+                                <div ng-message="maxdate">Date is too late!</div>
+                                </div>
+                            </md-input-container>
 
-                    <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-                    <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+
+                        </form>
+
+                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
+                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
                 </div>
             `;
 
@@ -761,9 +925,37 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             chartHTML.append($compile(datePickerHTML)(scope));
         }
 
+
+        this.createSearchBar = function (scope) {
+            var ctrl = this.controllerName;
+            var searchBarHTML = `
+                 <div layout="row"  layout-align="start center">
+                        <md-autocomplete 
+                            md-no-cache="'true'"
+                            md-selected-item="`+ ctrl + `.selectedItem" 
+                            md-search-text="`+ ctrl + `.searchText" 
+                            md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
+                            md-item-text="item.title"
+                            md-min-length="0"
+                            placeholder="What is your favorite US state?">
+                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="^i">{{item.title}}</span>
+                        </md-autocomplete>
+                </div>
+            `;
+
+            var chartHTML = angular.element(document.getElementById("chart-container"));
+            chartHTML.append($compile(searchBarHTML)(scope));
+        }
+
+
+        this.querySearch = function (query) {
+            return fuse.search(query);
+        }
+
         this.assignYTD = function () {
             this.startDate = new Date(this.firstDay);
             this.endDate = new Date(this.yesterday);
+            console.log(this.startDate);
             this.validateLevel(this.current_level);
         }
 

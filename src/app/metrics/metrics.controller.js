@@ -13,186 +13,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         $rootScope.canceller = $q.defer();
 
 
-        this.itemList = [
-            {
-                title: "Old Man's War",
-                author: {
-                    firstName: "John",
-                    lastName: "Scalzi"
-                }
-            },
-            {
-                title: "The Lock Artist",
-                author: {
-                    firstName: "Steve",
-                    lastName: "Hamilton"
-                }
-            },
-            {
-                title: "HTML5",
-                author: {
-                    firstName: "Remy",
-                    lastName: "Sharp"
-                }
-            },
-            {
-                title: "Right Ho Jeeves",
-                author: {
-                    firstName: "P.D",
-                    lastName: "Woodhouse"
-                }
-            },
-            {
-                title: "The Code of the Wooster",
-                author: {
-                    firstName: "P.D",
-                    lastName: "Woodhouse"
-                }
-            },
-            {
-                title: "Thank You Jeeves",
-                author: {
-                    firstName: "P.D",
-                    lastName: "Woodhouse"
-                }
-            },
-            {
-                title: "The DaVinci Code",
-                author: {
-                    firstName: "Dan",
-                    lastName: "Brown"
-                }
-            },
-            {
-                title: "Angels & Demons",
-                author: {
-                    firstName: "Dan",
-                    lastName: "Brown"
-                }
-            },
-            {
-                title: "The Silmarillion",
-                author: {
-                    firstName: "J.R.R",
-                    lastName: "Tolkien"
-                }
-            },
-            {
-                title: "Syrup",
-                author: {
-                    firstName: "Max",
-                    lastName: "Barry"
-                }
-            },
-            {
-                title: "The Lost Symbol",
-                author: {
-                    firstName: "Dan",
-                    lastName: "Brown"
-                }
-            },
-            {
-                title: "The Book of Lies",
-                author: {
-                    firstName: "Brad",
-                    lastName: "Meltzer"
-                }
-            },
-            {
-                title: "Lamb",
-                author: {
-                    firstName: "Christopher",
-                    lastName: "Moore"
-                }
-            },
-            {
-                title: "Fool",
-                author: {
-                    firstName: "Christopher",
-                    lastName: "Moore"
-                }
-            },
-            {
-                title: "Incompetence",
-                author: {
-                    firstName: "Rob",
-                    lastName: "Grant"
-                }
-            },
-            {
-                title: "Fat",
-                author: {
-                    firstName: "Rob",
-                    lastName: "Grant"
-                }
-            },
-            {
-                title: "Colony",
-                author: {
-                    firstName: "Rob",
-                    lastName: "Grant"
-                }
-            },
-            {
-                title: "Backwards, Red Dwarf",
-                author: {
-                    firstName: "Rob",
-                    lastName: "Grant"
-                }
-            },
-            {
-                title: "The Grand Design",
-                author: {
-                    firstName: "Stephen",
-                    lastName: "Hawking"
-                }
-            },
-            {
-                title: "The Book of Samson",
-                author: {
-                    firstName: "David",
-                    lastName: "Maine"
-                }
-            },
-            {
-                title: "The Preservationist",
-                author: {
-                    firstName: "David",
-                    lastName: "Maine"
-                }
-            },
-            {
-                title: "Fallen",
-                author: {
-                    firstName: "David",
-                    lastName: "Maine"
-                }
-            },
-            {
-                title: "Monster 1959",
-                author: {
-                    firstName: "David",
-                    lastName: "Maine"
-                }
-            }
-        ];
-
-
-        var options = {
-            shouldSort: true,
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: [
-                "title",
-                "author.firstName"
-            ]
-        };
-        var fuse = new Fuse(self.itemList, options); // "list" is the item array
-
-
         // constants
         this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
@@ -209,7 +29,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.firstDay = new Date(new Date().getFullYear(), 0, 1);
         this.yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
 
-
+        var fuse;
+        var $scope;
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
         };
@@ -262,7 +83,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
-
+            $scope = scope;
             var root = SessionService.name;  // dummy root name, should be returned by Oranj API
             var rootId = SessionService.id;
 
@@ -521,7 +342,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createChart = function () {
-console.log(this.level_list[this.current_level]['option']);
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
@@ -713,6 +533,7 @@ console.log(this.level_list[this.current_level]['option']);
         // chart onload event
         this.chartOnLoad = function () {
             self.createWidgets(this);
+            self.updateSearchlist();
         }
 
 
@@ -925,21 +746,61 @@ console.log(this.level_list[this.current_level]['option']);
             chartHTML.append($compile(datePickerHTML)(scope));
         }
 
+        this.updateSearchlist = function () {
+
+            var list = self.level_list[self.current_level].option.xAxis.categories;
+
+            var objList = list.map(function (x, i) {
+                var series = self.level_list[self.current_level].option.series.map(function (obj) {
+                    return {
+                        name: obj.name,
+                        data: obj.data[i].y
+                    };
+                });
+                return {
+                    value: x.toLowerCase(),
+                    display: x,
+                    series: series
+                };
+            });
+
+            var options = {
+                shouldSort: true,
+                threshold: 0.6,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                    "value"
+                ]
+            };
+            fuse = new Fuse(objList, options); // "list" is the item array
+        }
 
         this.createSearchBar = function (scope) {
             var ctrl = this.controllerName;
             var searchBarHTML = `
-                 <div layout="row"  layout-align="start center">
+                <div layout="column">
+                    <div layout="row"  layout-align="start center">
+                        <h6>Search:&nbsp;&nbsp; </h6>
                         <md-autocomplete 
+                            class="oranj-default"
+                            md-autoselect="'true'"
                             md-no-cache="'true'"
+                            md-selected-item-change="`+ ctrl + `.selectedItemChange(item)"
                             md-selected-item="`+ ctrl + `.selectedItem" 
                             md-search-text="`+ ctrl + `.searchText" 
                             md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
-                            md-item-text="item.title"
+                            md-item-text="item.display"
                             md-min-length="0"
-                            placeholder="What is your favorite US state?">
-                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="^i">{{item.title}}</span>
+                            placeholder="Input name here">
+                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="^i">{{item.display}}</span>
                         </md-autocomplete>
+                    </div>
+
+                    <div id="search-result" layout="row"  layout-align="space-between center" layout-padding>
+                    </div>
                 </div>
             `;
 
@@ -947,8 +808,35 @@ console.log(this.level_list[this.current_level]['option']);
             chartHTML.append($compile(searchBarHTML)(scope));
         }
 
+        this.createSearchResult = function (item) {
+            var searchPrefix = item ? 
+                `<div style="text-align: center">
+                    <h5 >`+ item.display + ` </h5>
+                </div>
+                <div class="vertical-line">
+                </div>
+                ` : "" ;
+
+            var searchResultHTML = item ? item.series.map(function (obj, i) {
+                return `<div style="text-align: center">
+                        <h1 style="color:`+ Highcharts.getOptions().colors[i]+`">`+ obj.data + ` </h1>
+                        <h6> `+ obj.name + `</h6>
+                    </div>`;
+            }).join("") : "";
+
+            var chartHTML = angular.element(document.getElementById("search-result"));
+            chartHTML.html($compile(searchPrefix + searchResultHTML)($scope));
+
+        }
+
+        this.selectedItemChange = function (item) {
+            self.createSearchResult(item);
+        }
 
         this.querySearch = function (query) {
+            if (!fuse) {
+                return [];
+            }
             return fuse.search(query);
         }
 

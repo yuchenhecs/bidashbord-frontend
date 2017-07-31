@@ -137,6 +137,7 @@ function GoalsController($scope, GoalsService) {
     this.isRequired = service.isRequired;
 
     this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
 
 
     

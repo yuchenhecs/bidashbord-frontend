@@ -214,7 +214,7 @@ function AUMService(MetricsService) {
         base.subtitleSelector = function () {
             var subtitle = {
                 text: "Note: lighter bar - previous quarter, darker bar - current quarter",
-                y:40
+                y: 40
             };
             return subtitle;
         }

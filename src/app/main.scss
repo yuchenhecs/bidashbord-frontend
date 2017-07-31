@@ -900,6 +900,11 @@ md-tabs .md-tab.md-active{
     color:black;
 }
 
+.vertical-line {
+    height:80px;
+    border-right:1px solid $lb-grey
+}
+
 #dialog-loading {
     position: absolute;
     top:0;

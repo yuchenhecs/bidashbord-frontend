@@ -269,13 +269,20 @@ function AUMService(MetricsService) {
                 }
             }
 
+            for (var key in aumMaps[1]) {
+                if (!aumMaps[0][key]) {
+                    aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
+                }
+            }
+
             // combine all points for each series into lists
             var series = [];
 
             aumMaps.forEach(function (aumMap, p) {
                 var counter = 0;
-                for (var key in aumMap) {
-                    var dataDrillDown = aumMap[key].map(function (x, i) {
+
+                Object.entries(aumMap).sort().forEach(function (entry) {
+                    var dataDrillDown = entry[1].map(function (x, i) {
                         var self = base;
                         var name = 'firmId';
                         if (self.current_level === 0) {
@@ -289,7 +296,7 @@ function AUMService(MetricsService) {
                         return { id: input[i][name], y: x };
                     });
                     var points = {
-                        name: key,
+                        name: entry[0],
                         data: dataDrillDown,
                         stack: "stack" + p,
                         color: p === 0 ? lighten(base.COLOR_ARRAY[counter]) : base.COLOR_ARRAY[counter],
@@ -298,9 +305,8 @@ function AUMService(MetricsService) {
                     };
                     series.push(points);
                     counter++;
-                }
+                });
             });
-
 
             return series;
         }
@@ -350,6 +356,9 @@ function AUMController($scope, AUMService) {
     this.endDate = service.endDate;
     this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
+
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
 
     this.checkDate = function () {
         service.startDate = this.startDate; // bind data to service

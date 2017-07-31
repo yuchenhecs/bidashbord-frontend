@@ -345,7 +345,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
-            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level]['option']);
+            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level].option);
             console.timeEnd('Chart');
 
         }
@@ -747,7 +747,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         }
 
         this.updateSearchlist = function () {
-
             var list = self.level_list[self.current_level].option.xAxis.categories;
 
             var objList = list.map(function (x, i) {
@@ -799,7 +798,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                         </md-autocomplete>
                     </div>
 
-                    <div id="search-result" layout="row"  layout-align="space-between center" layout-padding>
+                    <div id="search-result" layout="row"  layout-align="space-between stretch" layout-padding>
                     </div>
                 </div>
             `;
@@ -808,25 +807,28 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             chartHTML.append($compile(searchBarHTML)(scope));
         }
 
-        this.createSearchResult = function (item) {
-            var searchPrefix = item ? 
+        this.createSearchResultHTML = function (item) {
+            var searchPrefix = item ?
                 `<div style="text-align: center">
-                    <h5 >`+ item.display + ` </h5>
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
                 </div>
-                <div class="vertical-line">
-                </div>
-                ` : "" ;
+                <div class="vertical-line"></div>
+                ` : "";
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 return `<div style="text-align: center">
-                        <h1 style="color:`+ Highcharts.getOptions().colors[i]+`">`+ obj.data + ` </h1>
+                        <h1 style="color:`+ self.chart.series[i].color + `">` + obj.data + ` </h1>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
             }).join("") : "";
 
-            var chartHTML = angular.element(document.getElementById("search-result"));
-            chartHTML.html($compile(searchPrefix + searchResultHTML)($scope));
+            return searchPrefix + searchResultHTML;
+        }
 
+        this.createSearchResult = function (item) {
+            var html = this.createSearchResultHTML(item);
+            var chartHTML = angular.element(document.getElementById("search-result"));
+            chartHTML.html($compile(html)($scope));
         }
 
         this.selectedItemChange = function (item) {
@@ -843,7 +845,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.assignYTD = function () {
             this.startDate = new Date(this.firstDay);
             this.endDate = new Date(this.yesterday);
-            console.log(this.startDate);
+
             this.validateLevel(this.current_level);
         }
 

@@ -323,6 +323,8 @@ function LoginsService(MetricsService, $compile) {
 
         base.createOffChartWidgets = function (scope) {
             this.createSwitch(scope);
+
+            this.createSearchBar(scope);
         }
 
 
@@ -375,6 +377,10 @@ function LoginsController($scope, LoginsService) {
 
     this.isWeek = service.isWeek;
     this.isProspect = service.isProspect;
+
+
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
 
 
 

@@ -16,7 +16,7 @@ function SessionService() {
 //         }
 //     }
 
-    this.access_token = "Bearer dkSBs5YT4swynQXYEdYAuXJcZpaoJgld9xVjX8O92YrMS2nDvv1-p2tn0vCTWGbYQCrKRYdO26TAiv-Snyn-xgG7p81dq7UNv2aEUbwbK0YbhD2wquQr5ryekQ3PGhT0kZN2F5J46yWgsJEizwPSnI8OkPxzJeg6v8OUfwohUCcaaadusVJ99XhWW1cBl-EbeBLiY2r0oyPsc5AhYow38yU5BStPLVMnmkfw_uIiX0nj2wnFiGHL87OoafbDXeOtCHhGUoYlxv8e-5NR7H17yAGTGupjLk1sluCPotiip9f7bcNvaBgM7v3NxoJb14jAngTP7XUveTGe_ZmvpJuJGFXEorCeDj2ag8r8QIj7P7R7bdRQG6eDaqXeGoWX-YcjQFZVcQ";
+    this.access_token = "Bearer p-GvCGqZlvbDrRkqc-bXTkq13TBafcCBT7wuAKGmzGNrKLaWcl4WPV6BdgOQLFtMvCE9FLSW8friXu4SJrFttB9kCc0K4mkvHzRqhkIHW8wpBWgBIIalHQp6i0leqHFgpQZWWKmzCvE0UMxm40vGbiWzgSQz3ebZucYOmL8n0ofRleye-lFa_KOEKP9xPscUY6y2T6CxeZ4p9q3LSzBC8NjG4OCm6Awstj7mHE4HcB2EP8nGWCDjP6EI_Uz_WQ0JLYGBYlKR-_hbpNHof_wY78zlK7oFXVGb7Bu29J-MqNSyej1bNNGK1Uxp6IjpCKjwVMMRvt9TnBKmt8xEYtz2c96pSqvpxJJ4IcWHQJTsVFg5cPyAj3-ma6o1Gmcopd3U8JazBw";
     this.roles = ["Metrics_SummaryGoalsAll_Enable", "Metrics_SummaryGoalsFirm_Enable", "Metrics_SummaryGoalsManaged_Enable"];
     this.level = 0;
     this.name = 'Oranj';

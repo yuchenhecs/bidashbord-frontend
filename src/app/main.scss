@@ -84,8 +84,8 @@ ul {
 
 
 .avatar-wrapper {
-	height: 80px;
-    width: 80px;
+	height: 90px;
+    width: 90px;
     margin-right: 20px;
     border-radius: 50%;
     border: 2px solid $lb-grey;
@@ -916,4 +916,21 @@ md-tabs .md-tab.md-active{
     right:0;
     z-index: 1;
     background:rgba(255,255,255,0.5);
+}
+
+[md-highlight-text]{
+    color:grey !important;
+}
+
+.highlight{
+    color:black !important;
+}
+
+md-autocomplete-wrap:before {
+  font-family: 'FontAwesome';
+   content: "\f002";
+  line-height: 1;
+  padding: 8px 0px 0px 8px;
+  font-weight: normal;
+  font-size: 24px;
 }

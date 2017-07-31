@@ -22,7 +22,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
     var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
-    var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/avatar/get";
+    var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/get/avatar";
 
     var preprocessing = function (data, type) {
 
@@ -114,12 +114,12 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         }
     };
 
-    var avatarApi = function (url) {
+    var avatarApi = function (url) {            
         return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             if (response.data.data) {
-                $scope.avatar = response.data.data.avatar;
+                $scope.avatar = response.data.data.avatarCompleteUrl;
             } else {
-                $scope.avatar = "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D";
+                $scope.avatar = $scope.logo;
             }
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");

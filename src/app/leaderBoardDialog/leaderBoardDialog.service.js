@@ -5,9 +5,9 @@ angular
 function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionService) {
     var self = this;
 
-    //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var $scope;
-    var DOMAIN = "http://10.1.15.177:8080";
+    //var DOMAIN = "http://10.1.15.177:8080";
     var SUB_DOMAIN = "/bi/gamification";
     var advisorId = 9714;
     var USE_DUMMY_DATA = false;

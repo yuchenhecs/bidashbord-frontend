@@ -341,6 +341,33 @@ function AUMService(MetricsService) {
 
         }
 
+        base.createSearchResultHTML = function (item) {
+
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var length = item ? item.series.length : 0;
+
+            var searchResultHTML = "";
+            for (var i = 0; i < length / 2; i++) {
+                searchResultHTML += `<div style="text-align: center">
+                        <h1> 
+                        <span style="color:`+ base.chart.series[i].color + `">` + item.series[i].data + `</span>
+                        <small>|</small>
+                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + item.series[i + length / 2].data + `</span>  
+                        </h1>
+                        <h6> `+ item.series[i].name + `</h6>
+                    </div>`;
+            };
+
+            return searchPrefix + searchResultHTML;
+
+        };
+
 
         return base;
     }

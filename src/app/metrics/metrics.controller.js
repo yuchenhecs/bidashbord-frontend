@@ -782,7 +782,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             var searchBarHTML = `
                 <div layout="column">
                     <div layout="row"  layout-align="start center">
-                        <h6>Search:&nbsp;&nbsp; </h6>
                         <md-autocomplete 
                             class="oranj-default"
                             md-autoselect="'true'"
@@ -793,8 +792,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                             md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
                             md-item-text="item.display"
                             md-min-length="0"
-                            placeholder="Input name here">
-                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                            placeholder="Search">
+                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
                         </md-autocomplete>
                     </div>
 

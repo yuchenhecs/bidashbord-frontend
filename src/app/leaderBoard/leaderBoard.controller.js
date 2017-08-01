@@ -18,7 +18,9 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     $scope.showPOTB = true;
-    var advisorId = 332;
+    //var advisorId = 332;
+    var advisorId = 5098;
+
 
     var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
     var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
@@ -73,17 +75,19 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         }
     };
 
-    var shortenNumber = function (num) {
+    function shortenNumber(num){
+        num = num ? num : 0 ;
+        
         if (num >= 1000 && num < 1000000) {
-            return (num / 1000).toFixed(2) + 'k';
+            return (num / 1000).toFixed(2) +'k';
         } else if (num >= 1000000 && num < 1000000000) {
             return (num / 1000000).toFixed(2) + 'M';
         } else if (num >= 1000000000 && num < 1000000000000) {
             return (num / 1000000000).toFixed(2) + 'B';
         } else if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(2) + 'T';
-        } else return num.toFixed(2);
-    };
+        } else return (num).toFixed(2);
+    }
 
     $scope.changeScope = function (scope) {
         if (scope === 'overall') {
@@ -97,21 +101,72 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     var kpiApi = function (url) {
-        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            $scope.kpi = response["data"]["data"];
-            preprocessing($scope.kpi, "kpi");
-            $scope.changeScope('state'); //have the default scope set to state
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        
+        var response = {
+            "data": {
+                "id": 80,
+                "advisorId": 510,
+                "aum": 46189396,
+                "netWorth": 1406872689582.8,
+                "hni": 5,
+                "conversionRate": 40.2778,
+                "avgConversionTime": 1304.43,
+                "retentionRate": 90.2778,
+                "weeklyLogins": 2,
+                "aumGrowth": 1,
+                "netWorthGrowth": 0.206,
+                "clienteleGrowth": 2300,
+                "updateDate": 1499981783000,
+                "name": "Some Body",
+                "points": 89283,
+                "percentileOverall": 88,
+                "percentileState": 90,
+                "percentileFirm": 95
+            }
         }
+        $scope.kpi = response["data"];
+        preprocessing($scope.kpi, "kpi");
+        $scope.changeScope('state'); //have the default scope set to state
+
+        // return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        //     $scope.kpi = response["data"]["data"];
+        //     preprocessing($scope.kpi, "kpi");
+        //     $scope.changeScope('state'); //have the default scope set to state
+        // }), function myError(response) {
+        //     $log.error("Error " + response.status + ": " + response.statusText + "!");
+        // }
     };
 
     var POTBApi = function (url) {
-        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            preprocessing(response["data"]["data"], "POTB");
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        var response = 
+        {
+            "data": {
+                "id": 3,
+                "advisorId": 510,
+                "region": "firm",
+                "aumAchievement": "You are Ranked 1st in AUM among all advisors in the firm",
+                "netWorthAchievement": "Your NET WORTH is above the firm average",
+                "hniAchievement": null,
+                "conversionRateAchievement": null,
+                "avgConversionRateAchievement": null,
+                "retentionRateAchievement": "Your RETENTION RATE is above the firm average",
+                "weeklyClientLoginsAchievement": null,
+                "aumGrowthAchievement": null,
+                "netWorthGrowthAchievement": null,
+                "clienteleGrowthAchievement": null
+            }
         }
+
+        preprocessing(response["data"], "POTB");
+        
+
+
+
+        // return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        //     preprocessing(response["data"]["data"], "POTB");
+        // }), function myError(response) {
+        //     $log.error("Error " + response.status + ": " + response.statusText + "!");
+        // }
     };
 
     var avatarApi = function (url) {            

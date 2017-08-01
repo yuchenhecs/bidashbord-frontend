@@ -26,6 +26,7 @@ gulp.task('bowerbuild:js', function () {
         .pipe(iife())
         .pipe(replace(".module('" + conf.ngModule, ".module('" + conf.ngModule + "." + conf.bowerModule))
         .pipe(replace(".state('" + conf.ngModule, ".state('" + conf.ngModule + "." + conf.bowerModule))
+        .pipe(replace("$state.go('" + conf.ngModule, "$state.go('" + conf.ngModule + "." + conf.bowerModule))
         .pipe(gulp.dest(conf.path.bowerDist()));
 });
 gulp.task('bowerbuild:css', function () {

@@ -9,7 +9,9 @@
     "angular-messages": "~1.5.3",
     "angular-material": "~1.1.4",
     "oranj-navigation": "git@bitbucket.org:runoranj/oranj-navigation.git#^1.0.1",
-    "oranj-ui-components": "git@bitbucket.org:runoranj/oranjweb-ui-components.git#^1.0.0"
+    "oranj-ui-components": "git@bitbucket.org:runoranj/oranjweb-ui-components.git#^1.0.0",
+    "bootstrap":"v4.0.0-alpha.6",
+    "fuse":"v1.1.7"
   },
   "authors": [
     "Nate Smith <nsmith@runoranj.com>"

@@ -23,6 +23,14 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.showDatepicker = true;
         this.chart_id = 'chart';
 
+        this.start_text = "Start Date";
+        this.end_text = "End Date";
+
+        this.firstDay = new Date(new Date().getFullYear(), 0, 1);
+        this.yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+        var fuse;
+        var $scope;
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
         };
@@ -36,7 +44,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.endDate = null;
         this.isRequired = false;
         this.current_level = 0;
-        this.doUpdate = false;
         this.lastInitial = '';
 
         //chart option template
@@ -76,7 +83,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
-
+            $scope = scope;
             var root = SessionService.name;  // dummy root name, should be returned by Oranj API
             var rootId = SessionService.id;
 
@@ -254,7 +261,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -335,11 +342,10 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createChart = function () {
-
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
-            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level]['option']);
+            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level].option);
             console.timeEnd('Chart');
 
         }
@@ -403,7 +409,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.titleSelector = function (name) {
 
             var title = {
-                text: this.TITLE_TEMPLATE + name
+                text: this.TITLE_TEMPLATE + name,
+                y: 20
             };
 
             return title;
@@ -432,15 +439,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.xAxisFormatter = function () {
 
             var label = this.axis.defaultLabelFormatter.call(this);
-
             this.axis.autoRotation = null;
 
             if (this.axis.tickInterval > 1) {
-
                 var initial = label.charAt(0).toUpperCase();
-
                 if (initial === self.lastInitial) {
-
                     return '';
                 }
 
@@ -530,6 +533,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         // chart onload event
         this.chartOnLoad = function () {
             self.createWidgets(this);
+            self.updateSearchlist();
         }
 
 
@@ -624,19 +628,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         //---------------------------------- Widgets -----------------------------------------------------------------
 
         this.createWidgets = function (chart) {
@@ -656,13 +647,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             //note.element.classList.add("chart-legend");
 
 
-
-
             var pathHTML = this.generatePathSelectorHTML();
             var text = chart.renderer.text(pathHTML).add();
             var textBBox = text.getBBox();
             var x = chart.plotLeft * 0.25;
-            var y = textBBox.height;
+            var y = textBBox.height * 0.7;
             text.attr({ x: x, y: y });
 
             var pathBlocks = text.element.children;
@@ -678,17 +667,15 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                     self.pathOnClick(this);
                 };
             }
-            
+
             pathBlocks[(self.current_level) * 2 + 1].classList.add("curr-path-link");
         }
 
         this.pathOnClick = function (element) {
-
             var level = parseInt(element.dataset.level);
 
             //drill up
             self.drillToLevel(level);
-
         }
 
         this.generatePathSelectorHTML = function () {
@@ -705,9 +692,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createOffChartWidgets = function (scope) {
-
-            if (this.showDatepicker)
+            if (this.showDatepicker) {
                 this.createDatepicker(scope);
+            }
+
+            this.createSearchBar(scope);
         }
 
         //datepicker
@@ -717,37 +706,39 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             var datePickerHTML = `
                  <div layout="row"  layout-align="center center">
                     <form name="startForm">
-                    <md-input-container style="margin-bottom: 0px !important;">
-                        <label>Start date</label>
-                        <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.today"
-                        ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                            <md-input-container style="margin-bottom: 0px !important;">
+                                <label>` + this.start_text + `</label>
+                                <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
+                                ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-                        <div ng-messages="startForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
-                    </form>
+                                <div ng-messages="startForm.dateField.$error">
+                                <div ng-message="valid">The entered value is not a date!</div>
+                                <div ng-message="required">This date is required!</div>
+                                <div ng-message="mindate">Date is too early!</div>
+                                <div ng-message="maxdate">Date is too late!</div>
+                                </div>
+                            </md-input-container>
+                        </form>
 
-                    <form name="endForm">
-                    <md-input-container style="margin-bottom: 0px !important;">
-                        <label>End date</label>
-                        <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-                        md-max-date="`+ ctrl + `.today" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                        <form name="endForm">
+                            <md-input-container style="margin-bottom: 0px !important;">
+                                <label>`+ this.end_text + `</label>
+                                <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
+                                md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-                        <div ng-messages="endForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
-                    </form>
+                                <div ng-messages="endForm.dateField.$error">
+                                <div ng-message="valid">The entered value is not a date!</div>
+                                <div ng-message="required">This date is required!</div>
+                                <div ng-message="mindate">Date is too early!</div>
+                                <div ng-message="maxdate">Date is too late!</div>
+                                </div>
+                            </md-input-container>
 
-                    <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-                    <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+
+                        </form>
+
+                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
+                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
                 </div>
             `;
 
@@ -755,9 +746,105 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             chartHTML.append($compile(datePickerHTML)(scope));
         }
 
+        this.updateSearchlist = function () {
+            var list = self.level_list[self.current_level].option.xAxis.categories;
+
+            var objList = list.map(function (x, i) {
+                var series = self.level_list[self.current_level].option.series.map(function (obj) {
+                    return {
+                        name: obj.name,
+                        data: obj.data[i].y
+                    };
+                });
+                return {
+                    value: x.toLowerCase(),
+                    display: x,
+                    series: series
+                };
+            });
+
+            var options = {
+                shouldSort: true,
+                threshold: 0.6,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                    "value"
+                ]
+            };
+            fuse = new Fuse(objList, options); // "list" is the item array
+        }
+
+        this.createSearchBar = function (scope) {
+            var ctrl = this.controllerName;
+            var searchBarHTML = `
+                <div layout="column">
+                    <div layout="row"  layout-align="start center">
+                        <md-autocomplete 
+                            class="oranj-default"
+                            md-autoselect="'true'"
+                            md-no-cache="'true'"
+                            md-selected-item-change="`+ ctrl + `.selectedItemChange(item)"
+                            md-selected-item="`+ ctrl + `.selectedItem" 
+                            md-search-text="`+ ctrl + `.searchText" 
+                            md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
+                            md-item-text="item.display"
+                            md-min-length="0"
+                            placeholder="Search">
+                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
+                        </md-autocomplete>
+                    </div>
+
+                    <div id="search-result" layout="row"  layout-align="space-between stretch" layout-padding>
+                    </div>
+                </div>
+            `;
+
+            var chartHTML = angular.element(document.getElementById("chart-container"));
+            chartHTML.append($compile(searchBarHTML)(scope));
+        }
+
+        this.createSearchResultHTML = function (item) {
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var searchResultHTML = item ? item.series.map(function (obj, i) {
+                return `<div style="text-align: center">
+                        <h1 style="color:`+ self.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h6> `+ obj.name + `</h6>
+                    </div>`;
+            }).join("") : "";
+
+            return searchPrefix + searchResultHTML;
+        }
+
+        this.createSearchResult = function (item) {
+            var html = this.createSearchResultHTML(item);
+            var chartHTML = angular.element(document.getElementById("search-result"));
+            chartHTML.html($compile(html)($scope));
+        }
+
+        this.selectedItemChange = function (item) {
+            self.createSearchResult(item);
+        }
+
+        this.querySearch = function (query) {
+            if (!fuse) {
+                return [];
+            }
+            return fuse.search(query);
+        }
+
         this.assignYTD = function () {
-            this.startDate = new Date(new Date().getFullYear(), 0, 1);
-            this.endDate = new Date();
+            this.startDate = new Date(this.firstDay);
+            this.endDate = new Date(this.yesterday);
+
             this.validateLevel(this.current_level);
         }
 

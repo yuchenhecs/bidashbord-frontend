@@ -13,9 +13,13 @@ function AUMService(MetricsService) {
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
-        base.startDate = new Date(new Date().getFullYear(), 0, 1);
-        base.endDate = new Date();
+        base.startDate = new Date(base.firstDay);
+        base.endDate = new Date(base.yesterday);
+
         base.TITLE_TEMPLATE = "Asset Under Management by ";
+
+        base.start_text = "Previous";
+        base.end_text = "Current";
 
         base.data1 = {
             "firms": [
@@ -209,7 +213,8 @@ function AUMService(MetricsService) {
 
         base.subtitleSelector = function () {
             var subtitle = {
-                text: "Note: lighter bar - previous quarter, darker bar - current quarter"
+                text: "Note: lighter bar - previous quarter, darker bar - current quarter",
+                y: 40
             };
             return subtitle;
         }
@@ -264,13 +269,20 @@ function AUMService(MetricsService) {
                 }
             }
 
+            for (var key in aumMaps[1]) {
+                if (!aumMaps[0][key]) {
+                    aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
+                }
+            }
+
             // combine all points for each series into lists
             var series = [];
 
             aumMaps.forEach(function (aumMap, p) {
                 var counter = 0;
-                for (var key in aumMap) {
-                    var dataDrillDown = aumMap[key].map(function (x, i) {
+
+                Object.entries(aumMap).sort().forEach(function (entry) {
+                    var dataDrillDown = entry[1].map(function (x, i) {
                         var self = base;
                         var name = 'firmId';
                         if (self.current_level === 0) {
@@ -284,7 +296,7 @@ function AUMService(MetricsService) {
                         return { id: input[i][name], y: x };
                     });
                     var points = {
-                        name: key,
+                        name: entry[0],
                         data: dataDrillDown,
                         stack: "stack" + p,
                         color: p === 0 ? lighten(base.COLOR_ARRAY[counter]) : base.COLOR_ARRAY[counter],
@@ -293,9 +305,8 @@ function AUMService(MetricsService) {
                     };
                     series.push(points);
                     counter++;
-                }
+                });
             });
-
 
             return series;
         }
@@ -330,6 +341,33 @@ function AUMService(MetricsService) {
 
         }
 
+        base.createSearchResultHTML = function (item) {
+
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var length = item ? item.series.length : 0;
+
+            var searchResultHTML = "";
+            for (var i = 0; i < length / 2; i++) {
+                searchResultHTML += `<div style="text-align: center">
+                        <h1> 
+                        <span style="color:`+ base.chart.series[i].color + `">` + item.series[i].data + `</span>
+                        <small>|</small>
+                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + item.series[i + length / 2].data + `</span>  
+                        </h1>
+                        <h6> `+ item.series[i].name + `</h6>
+                    </div>`;
+            };
+
+            return searchPrefix + searchResultHTML;
+
+        };
+
 
         return base;
     }
@@ -343,8 +381,11 @@ function AUMController($scope, AUMService) {
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
-    this.today = new Date();
+    this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
+
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
 
     this.checkDate = function () {
         service.startDate = this.startDate; // bind data to service

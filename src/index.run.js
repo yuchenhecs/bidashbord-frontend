@@ -105,7 +105,7 @@ function runBlock($location, $rootScope) {
                     state: 'netWorth'
                 },
                 {
-                    name: 'Login Stats',
+                    name: 'Session Stats',
                     state: 'logins'
                 }
             ]

@@ -4,15 +4,15 @@ angular
 	.factory('chartData', chartData);
 
 //factory object with methods
-function chartData($http, $log) {
+function chartData($http, $log, SessionService) {
 	var chartData = {};
 
 
-	chartData.callApi = function(chartType, chartId, url) {
+	chartData.callApi = function (chartType, chartId, url) {
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		} else {
-				return $http.get(url).then(function mySuccess(response) {
+			return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 				var apiData = response["data"];
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData["data"]);
@@ -25,38 +25,46 @@ function chartData($http, $log) {
 		}
 	};
 
-	chartData.titleSelector = function(chartId, apiData) {
+	chartData.titleSelector = function (chartId, apiData) {
 		var title;
-			if (chartId === "goalsContainer") {
-				title = {
-					text: "Total Goals Created"
-				};
-			} else if (chartId === "aumContainer") {
-				var first, last;
-				first = apiData[0].date;
-				last = apiData[apiData.length - 1].date;
-				title = {
-					text: "Assets Under Management from " + first + " to " + last
-				};
-			} else if (chartId === "netWorthContainer") {
-				title = {
-					text: "Net Worth and Client Change"
-				};
+		if (chartId === "goalsContainer") {
+			var total = 0;
+
+			for (var i = 0; i < apiData.length; i++) {
+				total += apiData[i].count;
 			}
 
-			return title;
+			title = {
+				useHTML: true,
+				text: "<h1>" + total + "</h1>",
+				y: 130,
+				floating: true
+			};
+		} else if (chartId === "aumContainer") {
+			var first, last;
+			first = apiData[0].date;
+			last = apiData[apiData.length - 1].date;
+			title = {
+				text: "Assets Under Management from " + first + " to " + last
+			};
+		} else if (chartId === "netWorthContainer") {
+			title = {
+				text: "Net Worth and Client Change"
+			};
+		}
+
+		return title;
 	};
 
-	chartData.subtitleSelector = function(chartId, apiData) {
+	chartData.subtitleSelector = function (chartId, apiData) {
 		var subtitle;
-		var total = 0;
 
 		if (chartId === "goalsContainer") {
-			for (var i = 0; i < apiData.length; i++) {
-				total+= apiData[i].count;
-			}
 			subtitle = {
-				text: "Total Goals: " + total
+				useHTML: true,
+				text: "<h6> total goals </h6>",
+				y: 170,
+				floating: true
 			};
 		} else if (chartId === "aumContainer") {
 			subtitle = null;
@@ -67,7 +75,7 @@ function chartData($http, $log) {
 		return subtitle;
 	};
 
-	chartData.xAxisSelector = function(chartId, apiData) {
+	chartData.xAxisSelector = function (chartId, apiData) {
 		var xAxis;
 		if (chartId === "goalsContainer") {
 			xAxis = null;
@@ -82,7 +90,7 @@ function chartData($http, $log) {
 			};
 		} else if (chartId === "netWorthContainer") {
 			var categories = [];
-			apiData.summary.forEach(function(x){
+			apiData.summary.forEach(function (x) {
 				categories.push(x.date);
 			});
 			xAxis = {
@@ -93,7 +101,7 @@ function chartData($http, $log) {
 		return xAxis;
 	};
 
-	chartData.yAxisSelector = function(chartId, apiData) {
+	chartData.yAxisSelector = function (chartId, apiData) {
 		var yAxis;
 		if (chartId === "goalsContainer") {
 			yAxis = null;
@@ -136,7 +144,7 @@ function chartData($http, $log) {
 		return yAxis;
 	};
 
-	chartData.tooltipSelector = function(chartId) {
+	chartData.tooltipSelector = function (chartId) {
 		var tooltip;
 		if (chartId === "goalsContainer") {
 			tooltip = {
@@ -146,7 +154,7 @@ function chartData($http, $log) {
 			tooltip = {
 				split: true
 			};
-		} else if (chartId ==="netWorthContainer") {
+		} else if (chartId === "netWorthContainer") {
 			tooltip = {
 				split: true
 			};
@@ -155,7 +163,7 @@ function chartData($http, $log) {
 		return tooltip;
 	};
 
-	chartData.plotOptionsSelector = function(chartId) {
+	chartData.plotOptionsSelector = function (chartId) {
 		var options;
 		if (chartId === "goalsContainer") {
 			options = {
@@ -180,7 +188,7 @@ function chartData($http, $log) {
 					}
 				}
 			};
-		} else if (chartId ==="netWorthContainer") {
+		} else if (chartId === "netWorthContainer") {
 			options = {
 
 			};
@@ -189,7 +197,7 @@ function chartData($http, $log) {
 		return options;
 	};
 
-	chartData.seriesSelector = function(chartId, apiData) {
+	chartData.seriesSelector = function (chartId, apiData) {
 		var series;
 		if (chartId === "goalsContainer") {
 			var seriesData = [];
@@ -198,12 +206,13 @@ function chartData($http, $log) {
 					name: apiData[i].type,
 					y: apiData[i].count
 				};
-			seriesData.push(obj);
+				seriesData.push(obj);
 			}
 
 			series = [{
 				name: "Goals",
-				data: seriesData
+				data: seriesData,
+				innerSize: '75%',
 			}];
 		} else if (chartId === "aumContainer") {
 			var assetsMap = {};
@@ -237,13 +246,13 @@ function chartData($http, $log) {
 
 				series.push(points);
 			}
-		} else if (chartId ==="netWorthContainer") {
+		} else if (chartId === "netWorthContainer") {
 			apiData = apiData.summary;
 			var data = [];
 			var clientsDiff = [];
-			apiData.forEach(function(x){
-					data.push(x.absNet);
-					clientsDiff.push(x.clientsDiff);
+			apiData.forEach(function (x) {
+				data.push(x.absNet);
+				clientsDiff.push(x.clientsDiff);
 			});
 
 
@@ -260,8 +269,11 @@ function chartData($http, $log) {
 		return series;
 	};
 
-	chartData.createOptions = function(chartType, chartId, apiData) {
+	chartData.createOptions = function (chartType, chartId, apiData) {
 		var currentOptions = {
+			credits: {
+				enabled: false
+			},
 			chart: {
 				type: chartType
 			},
@@ -279,7 +291,7 @@ function chartData($http, $log) {
 
 	return chartData;
 
-	chartData.addSign = function(num) {
+	chartData.addSign = function (num) {
 		console.log('un function');
 		if (num >= 0) {
 			return '+' + num;
@@ -303,7 +315,7 @@ function HomeController($scope, $http, $log, chartData) {
 
 	var toggle = true;
 
-	$scope.toggleLoginData = function() {
+	$scope.toggleLoginData = function () {
 		$scope.showData = toggle ? $scope.clientData : $scope.prospectData;
 
 		$scope.totalSign = $scope.showData['changeInTotalLogins'] < 0 ? 'neg' : 'pos';
@@ -313,7 +325,7 @@ function HomeController($scope, $http, $log, chartData) {
 		toggle = !toggle;
 	};
 
-	$scope.addSign = function(num) {
+	$scope.addSign = function (num) {
 		if (num >= 0) {
 			return '+' + num;
 		}
@@ -321,14 +333,14 @@ function HomeController($scope, $http, $log, chartData) {
 		return num;
 	};
 
-	$scope.loginApi = function() {
-		return $http.get(clientUrl).then(function mySuccess(clientResponse) {
+	$scope.loginApi = function () {
+		return $http.get(clientUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
 			$scope.clientData = clientResponse["data"]["data"]["client"];
 			$scope.clientData['changeInTotalLogins'] = $scope.addSign($scope.clientData['changeInTotalLogins']);
 			$scope.clientData['changeInUniqueLogins'] = $scope.addSign($scope.clientData['changeInUniqueLogins']);
 			$scope.clientData['changeInAvgSessionTime'] = $scope.addSign($scope.clientData['changeInAvgSessionTime']);
 		}).then(function () {
-			return $http.get(prospectUrl).then(function mySuccess1(prospectResponse) {
+			return $http.get(prospectUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess1(prospectResponse) {
 				$scope.prospectData = prospectResponse["data"]["data"]["prospect"];
 				$scope.prospectData['changeInTotalLogins'] = $scope.addSign($scope.prospectData['changeInTotalLogins']);
 				$scope.prospectData['changeInUniqueLogins'] = $scope.addSign($scope.prospectData['changeInUniqueLogins']);

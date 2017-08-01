@@ -7,6 +7,11 @@ const gulpif         = require('gulp-if');
 const insert         = require('gulp-insert');
 const conf           = require('../conf/gulp.conf');
 let jsSources = ['./src/*.js', './src/app/*.js', './src/app/**/*.js', '!./src/devConfig.js', '!./src/devRun.js'];
+
+const filter = require('gulp-filter');
+const path = require('path');
+
+
 if (conf.excludeRoutes) {
     jsSources.push('!./src/routes.js')
 }
@@ -21,6 +26,7 @@ gulp.task('bowerbuild:js', function () {
         .pipe(iife())
         .pipe(replace(".module('" + conf.ngModule, ".module('" + conf.ngModule + "." + conf.bowerModule))
         .pipe(replace(".state('" + conf.ngModule, ".state('" + conf.ngModule + "." + conf.bowerModule))
+        .pipe(replace("$state.go('" + conf.ngModule, "$state.go('" + conf.ngModule + "." + conf.bowerModule))
         .pipe(gulp.dest(conf.path.bowerDist()));
 });
 gulp.task('bowerbuild:css', function () {
@@ -33,6 +39,21 @@ gulp.task('bowerbuild:scss', function () {
         .pipe(concat('main.scss'))
         .pipe(gulp.dest(conf.path.bowerDist()));
 });
+
+// gulp.task('bowerbuild:other', function () {
+//   const fileFilter = filter(file => file.stat.isFile());
+
+//   return gulp.src([
+//     path.join(conf.paths.src, '/**/*'),
+//     path.join(`!${conf.paths.src}`, '/**/*.{scss,js,html}')
+//   ])
+//     .pipe(fileFilter)
+//     .pipe(gulp.dest(conf.paths.bowerDist));
+// });
+
+
+
+
 gulp.task('bowerbuild', gulp.series('bowerbuild:js', 'bowerbuild:css', 'bowerbuild:scss'));
 // const gulp           = require('gulp');
 // const concat         = require('gulp-concat');

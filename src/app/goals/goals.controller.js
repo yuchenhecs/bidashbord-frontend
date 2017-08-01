@@ -4,7 +4,7 @@ angular
     .service('GoalsService', GoalsService);
 
 function GoalsService(MetricsService) {
-    this.init = function(){
+    this.init = function () {
         // most code is written in MetricsController
         var base = new MetricsService();
         // constants
@@ -123,6 +123,33 @@ function GoalsService(MetricsService) {
             }]
         };
 
+        base.createSearchResultHTML = function (item) {
+            var total = 0;
+
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var searchResultHTML = item ? item.series.map(function (obj, i) {
+                total += obj.data;
+                return `<div style="text-align: center">
+                        <h1 style="color:`+ base.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h6> `+ obj.name + `</h6>
+                    </div>`;
+            }).join("") : "";
+
+            var searchSuffix = item ?
+                `<div style="text-align: center">
+                    <h1>` + total + ` </h1>
+                    <h6> Total </h6>
+                </div>`: "";
+
+            return searchPrefix + searchResultHTML + searchSuffix;
+        };
+
         return base;
     }
 }
@@ -133,8 +160,13 @@ function GoalsController($scope, GoalsService) {
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
-    this.today = new Date();
+    this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
+
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
+
+
 
     this.checkDate = function () {
         service.startDate = this.startDate; // bind data to service

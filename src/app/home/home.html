@@ -66,7 +66,7 @@
                     <div class="tile-inner">
                         <div layout="row" class="tile-header">
                             <div flex="75">
-                                Login
+                                Session Stats
                             </div>
                             <div flex="25">
                                 <div class="more">
@@ -76,7 +76,7 @@
                         </div>
                         <div layout="row">
                             <div class="subtitle" flex="100">
-                            Login Metrics from the Last 7 Days
+                            Session Stats from the Last 7 Days
                             </div>
                         </div>
                         <div layout="row">
@@ -85,7 +85,7 @@
                                         {{ showData['totalLogins'] }}
                                     </div>
                                     <div layout="row">
-                                        <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong> from previous week
+                                        <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong> &nbsp;&nbsp; from previous week
                                     </div>
                                     <div layout="row" class="loginText">
                                         Total Logins
@@ -96,7 +96,7 @@
                                         {{ showData['uniqueLogins'] }}
                                     </div>
                                     <div layout="row">
-                                        <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> from previous week
+                                        <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> &nbsp;&nbsp; from previous week
                                     </div>
                                     <div layout="row" class="loginText">
                                         Unique Logins
@@ -107,7 +107,7 @@
                                         {{ showData['avgSessionTime'] }}
                                     </div>
                                     <div layout="row">
-                                        <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> from previous week
+                                        <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> &nbsp;&nbsp; from previous week
                                     </div>
                                     <div layout="row" class="loginText">
                                         Average User Session (min)
@@ -118,7 +118,7 @@
                             <div class="oranj-toggle medium-one-color">
                                 <input id="login" type="checkbox"  ng-model="ngModel" ng-change="toggleLoginData()">
                                 <label for="login">
-                                    <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
+                                    <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects" style="margin:auto"></div>
                                 </label>
                             </div>
                         </div>

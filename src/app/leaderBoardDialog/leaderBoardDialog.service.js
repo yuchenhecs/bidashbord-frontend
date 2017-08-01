@@ -2,14 +2,14 @@ angular
     .module('app')
     .service('LeaderBoardDialogService', LeaderBoardDialogService);
 
-function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
+function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionService) {
     var self = this;
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var $scope;
-    var DOMAIN = "http://10.1.15.177:8080";
+    var DOMAIN = "http://10.1.15.102:8080";
     var SUB_DOMAIN = "/bi/gamification";
-    var advisorId = 9714;
+    var advisorId = 5493;
     var USE_DUMMY_DATA = false;
     var tagColors = ["tag-one", "tag-two", "tag-three"];
     var colors = ["#00a4d3", "#72bb53", "#CDC114"];
@@ -28,49 +28,49 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             },
             {
                 title: "Number of HNIs", colorId: 0,
-                formatter: (num) => { return num },
+                formatter: (num) => { return num? num : 0  },
                 text_worst: 'least', text_best: 'most',
                 KPI_DOMAIN: "/hni"
             },
             {
                 title: "Conversion Rate", colorId: 1,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/conversion_rate"
             },
             {
                 title: "Average Conversion Time", colorId: 1,
-                formatter: (num) => { return (num / 24).toFixed(1) + unitWrapper('days') },
+                formatter: (num) => { return ((num? num : 0 ) / 24).toFixed(1) + unitWrapper('days') },
                 text_worst: 'longest', text_best: 'shortest',
                 KPI_DOMAIN: "/avg_conversion_time"
             },
             {
                 title: "Retention Rate", colorId: 1,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/retention_rate"
             },
             {
                 title: "Weekly Client Logins", colorId: 1,
-                formatter: (num) => { return num },
+                formatter: (num) => { return num? num : 0  },
                 text_worst: 'least', text_best: 'most',
                 KPI_DOMAIN: "/weekly_logins"
             },
             {
                 title: "Annualized AUM Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/aum_growth"
             },
             {
                 title: "Annualized Clientele Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/clientele_growth"
             },
             {
                 title: "Annualized Net Worth Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2)  + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2)  + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/net_worth_growth"
             }
@@ -288,7 +288,9 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
         return '<small>' + unit + '</small>';
     }
 
-    function shortenNumber (num) {
+    function shortenNumber(num){
+        num = num ? num : 0 ;
+        
         if (num >= 1000 && num < 1000000) {
             return (num / 1000).toFixed(2) + unitWrapper('k');
         } else if (num >= 1000000 && num < 1000000000) {
@@ -297,8 +299,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             return (num / 1000000000).toFixed(2) + unitWrapper('B');
         } else if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(2) + unitWrapper('T');
-        } else return num.toFixed(2);
-    };
+        } else return (num).toFixed(2);
+    }
 
     this.init = function ($$scope) {
 
@@ -350,13 +352,13 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
                 var overall = 10;
                 var state = 70;
                 var firm = 80;
-                var stateCode = 'OR';
+                var stateCode = 'IL';
                 var advisorKpi = 80000000;
 
                 $scope.$apply(function () {  // async function that is outside angular framework, e.g. setTimeout
                     var formatter = $scope.tabInfo[$scope.currentTab].formatter;
                     $scope.kpi_details = {
-                        advisorKpi: formatter(80000000),
+                        advisorKpi: formatter(2400),
                         overall: {
                             percentile: overall,
                             best: formatter(999),
@@ -383,7 +385,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope) {
             return;
         }
 
-        return $http.get(url, { timeout: $rootScope.canceller.promise }).then(function mySuccess(response) {
+        return $http.get(url, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token }  }).then(function mySuccess(response) {
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
            
             var kpi_details = response.data.data;

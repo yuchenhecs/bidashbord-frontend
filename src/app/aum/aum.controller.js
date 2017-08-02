@@ -371,7 +371,8 @@ function AUMService(MetricsService) {
                 searchResultHTML += `<div style="text-align: center">
                         <h1> 
                         <span style="color:`+ base.chart.series[i].color + `">` + item.series[i].data + `</span>
-                        <small>|</small>
+                        </h1>
+                        <h1>
                         <span style="color:`+ base.chart.series[i + length / 2].color + `">` + item.series[i + length / 2].data + `</span>  
                         </h1>
                         <h6> `+ item.series[i].name + `</h6>

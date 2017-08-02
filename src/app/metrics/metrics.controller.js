@@ -18,6 +18,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.MAX_COLUMN_NUM = 15;
         this.SUB_DOMAIN = "/bi/goals";
         this.TITLE_TEMPLATE = "Total Goals Created by ";
+        this.Y_AXIS_TITLE = "Number of goals";
+
         this.USE_DUMMY_DATA = true;
         this.controllerName = null;
         this.showDatepicker = true;
@@ -458,8 +460,9 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.yAxisSelector = function () {
             var yAxis = {
                 min: 0,
+                allowDecimals: false,
                 title: {
-                    text: 'Number of goals'
+                    text: this.Y_AXIS_TITLE
                 }
             }
 
@@ -781,7 +784,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             var ctrl = this.controllerName;
             var searchBarHTML = `
                 <div layout="column">
-                    <div layout="row"  layout-align="start center">
+                    <div layout="row"  layout-align="end center">
                         <md-autocomplete 
                             class="oranj-default"
                             md-autoselect="'true'"

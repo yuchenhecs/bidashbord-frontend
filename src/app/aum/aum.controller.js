@@ -9,7 +9,7 @@ function AUMService(MetricsService) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
-        base.USE_DUMMY_DATA = false;
+        base.USE_DUMMY_DATA = true;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
@@ -17,6 +17,7 @@ function AUMService(MetricsService) {
         base.endDate = new Date(base.yesterday);
 
         base.TITLE_TEMPLATE = "Asset Under Management by ";
+        base.Y_AXIS_TITLE = "Asset in Dollars";
 
         base.start_text = "Previous";
         base.end_text = "Current";
@@ -217,6 +218,17 @@ function AUMService(MetricsService) {
                 y: 40
             };
             return subtitle;
+        }
+
+
+        base.yAxisSelector = function () {
+            var yAxis = {
+                min: 0,
+                title: {
+                    text: this.Y_AXIS_TITLE
+                }
+            }
+            return yAxis;
         }
 
 

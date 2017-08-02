@@ -242,8 +242,17 @@ function AUMService(MetricsService) {
 
             this.series.chart.series.forEach(function (series) {
                 if (currentStack === series.userOptions['stackId'] && series.data[this.point.index].y) {
-                    s += '<br/>' + series.name + ': ' + base.unit_prefix + series.data[this.point.index].y;
+                    s += '<br/> <span style="color:' + series.color + '">● </span>';
+                
+                    if(this.series.index === series.index){
+                        s += '<b>' + series.name + ':' + base.unit_prefix + series.data[this.point.index].y + '</b>';
+                    }else {
+                        s += series.name + ':' + base.unit_prefix + series.data[this.point.index].y;
+                    }
                 }
+
+
+
 
             }, this);
 
@@ -370,10 +379,10 @@ function AUMService(MetricsService) {
             for (var i = 0; i < length / 2; i++) {
                 searchResultHTML += `<div style="text-align: center">
                         <h1> 
-                        <span style="color:`+ base.chart.series[i].color + `">` + item.series[i].data + `</span>
+                        <span style="color:`+ base.chart.series[i].color + `">` + base.unit_prefix + item.series[i].data + `</span>
                         </h1>
                         <h1>
-                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + item.series[i + length / 2].data + `</span>  
+                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + base.unit_prefix + item.series[i + length / 2].data + `</span>  
                         </h1>
                         <h6> `+ item.series[i].name + `</h6>
                     </div>`;

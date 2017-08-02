@@ -554,7 +554,12 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
             allSeries.forEach(function (series) {
                 if (series.data[this.point.index] && series.data[this.point.index].y) {
-                    s += '<br/>' + series.name + ': ' + self.unit_prefix + series.data[this.point.index].y;
+                    s += '<br/> <span style="color:' + series.color + '">● </span>';
+                    if(this.series.index === series.index){
+                        s += '<b>' + series.name + ':' + self.unit_prefix + series.data[this.point.index].y + '</b>';
+                    }else {
+                        s += series.name + ':' + self.unit_prefix + series.data[this.point.index].y;
+                    }
                 }
 
             }, this);
@@ -827,7 +832,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 return `<div style="text-align: center">
-                        <h1 style="color:`+ self.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h1 style="color:`+ self.chart.series[i].color + `">` + self.unit_prefix + obj.data + ` </h1>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
             }).join("") : "";

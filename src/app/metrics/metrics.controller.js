@@ -7,11 +7,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
     return function () {
         var self = this;
 
-        if ($rootScope.canceller) { // cancel previous pending api calls     
-            $rootScope.canceller.resolve();
-        }
-        $rootScope.canceller = $q.defer();
-
+        SessionService.refreshCanceller();
 
         // constants
         this.DOMAIN = $rootScope.domain;
@@ -87,12 +83,18 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
             $scope = scope;
-            var root = SessionService.name;  // dummy root name, should be returned by Oranj API
-            var rootId = SessionService.id;
+               
+            SessionService.role_promise.then(function mySuccess() {
+                var root = SessionService.name;  // dummy root name, should be returned by Oranj API
+                var rootId = SessionService.id;
 
-            this.getData(root, rootId, 0);
+                self.getData(root, rootId, 0);
+                self.createOffChartWidgets(scope);
 
-            this.createOffChartWidgets(scope);
+            });
+
+
+           
 
         };
 
@@ -264,7 +266,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -555,9 +557,9 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             allSeries.forEach(function (series) {
                 if (series.data[this.point.index] && series.data[this.point.index].y) {
                     s += '<br/> <span style="color:' + series.color + '">● </span>';
-                    if(this.series.index === series.index){
+                    if (this.series.index === series.index) {
                         s += '<b>' + series.name + ':' + self.unit_prefix + series.data[this.point.index].y + '</b>';
-                    }else {
+                    } else {
                         s += series.name + ':' + self.unit_prefix + series.data[this.point.index].y;
                     }
                 }

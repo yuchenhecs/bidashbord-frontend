@@ -12,6 +12,8 @@ function LeaderBoardService(LeaderBoardDialogService) {
 
 
 function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, SessionService) {
+    SessionService.refreshCanceller();
+
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);
@@ -128,7 +130,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         preprocessing($scope.kpi, "kpi");
         $scope.changeScope('state'); //have the default scope set to state
 
-        // return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        // return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
         //     $scope.kpi = response["data"]["data"];
         //     preprocessing($scope.kpi, "kpi");
         //     $scope.changeScope('state'); //have the default scope set to state
@@ -162,7 +164,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
 
 
-        // return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        // return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
         //     preprocessing(response["data"]["data"], "POTB");
         // }), function myError(response) {
         //     $log.error("Error " + response.status + ": " + response.statusText + "!");
@@ -170,7 +172,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     var avatarApi = function (url) {            
-        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             if (response.data.data) {
                 $scope.avatar = response.data.data.avatarCompleteUrl;
             } else {

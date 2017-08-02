@@ -250,10 +250,6 @@ function AUMService(MetricsService) {
                         s += series.name + ':' + base.unit_prefix + series.data[this.point.index].y;
                     }
                 }
-
-
-
-
             }, this);
 
             return s;

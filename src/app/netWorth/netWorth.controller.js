@@ -21,6 +21,8 @@ function NetWorthService(MetricsService) {
     base.startDate = null;
     base.endDate = null;
     base.TITLE_TEMPLATE = "Average and Absolute Net Worth across ";
+    base.unit_prefix = '$';
+
 
     base.data1 = {
       "avgAdvisor": 123,

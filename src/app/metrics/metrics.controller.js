@@ -24,6 +24,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.controllerName = null;
         this.showDatepicker = true;
         this.chart_id = 'chart';
+        this.unit_prefix = '';
 
         this.start_text = "Start Date";
         this.end_text = "End Date";
@@ -553,14 +554,12 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
             allSeries.forEach(function (series) {
                 if (series.data[this.point.index] && series.data[this.point.index].y) {
-                    s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
+                    s += '<br/>' + series.name + ': ' + self.unit_prefix + series.data[this.point.index].y;
                 }
 
             }, this);
 
             return s;
-
-
         }
 
         //construct categories data for chart template
@@ -805,7 +804,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                             md-item-text="item.display"
                             md-min-length="0"
                             placeholder="Search">
-                            <i id="search-icon" class="fa" ng-class="` + ctrl + `.self.icon" aria-hidden="true" style="margin:3px"></i><span  md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
+                            <i id="search-icon" class="fa" ng-class="` + ctrl + `.self.icon" aria-hidden="true" style="margin:3px"></i><span  md-highlight-text="` + ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
                         </md-autocomplete>
                     </div>
 

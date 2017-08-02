@@ -15,6 +15,8 @@ function AUMService(MetricsService) {
         base.isRequired = true; //datepicker date required
         base.startDate = new Date(base.firstDay);
         base.endDate = new Date(base.yesterday);
+        base.unit_prefix = '$';
+
 
         base.TITLE_TEMPLATE = "Asset Under Management by ";
         base.Y_AXIS_TITLE = "Asset in Dollars";
@@ -240,7 +242,7 @@ function AUMService(MetricsService) {
 
             this.series.chart.series.forEach(function (series) {
                 if (currentStack === series.userOptions['stackId'] && series.data[this.point.index].y) {
-                    s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
+                    s += '<br/>' + series.name + ': ' + base.unit_prefix + series.data[this.point.index].y;
                 }
 
             }, this);
@@ -388,7 +390,7 @@ function AUMService(MetricsService) {
 
 
 function AUMController($scope, AUMService) {
-    
+
 
     // this.startDate = service.startDate;
     // this.endDate = service.endDate;

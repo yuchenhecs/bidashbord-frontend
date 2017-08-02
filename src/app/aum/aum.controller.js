@@ -9,7 +9,7 @@ function AUMService(MetricsService) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         base.SUB_DOMAIN = "/bi/aums";
-        base.USE_DUMMY_DATA = true;
+        base.USE_DUMMY_DATA = false;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
@@ -388,58 +388,59 @@ function AUMService(MetricsService) {
 
 
 function AUMController($scope, AUMService) {
-    var service = AUMService.init();
+    
+
+    // this.startDate = service.startDate;
+    // this.endDate = service.endDate;
+    // this.yesterday = service.yesterday;
+    // this.isRequired = service.isRequired;
+
+    // this.querySearch = service.querySearch;
+    // this.selectedItemChange = service.selectedItemChange;
+
+    // this.checkDate = function () {
+    //     service.startDate = this.startDate; // bind data to service
+    //     service.endDate = this.endDate;
+
+    //     try {
+    //         service.checkDate();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when checking date!");
+    //     }
 
 
-    this.startDate = service.startDate;
-    this.endDate = service.endDate;
-    this.yesterday = service.yesterday;
-    this.isRequired = service.isRequired;
-
-    this.querySearch = service.querySearch;
-    this.selectedItemChange = service.selectedItemChange;
-
-    this.checkDate = function () {
-        service.startDate = this.startDate; // bind data to service
-        service.endDate = this.endDate;
-
-        try {
-            service.checkDate();
-        }
-        catch (err) {
-            console.log("Error when checking date!");
-        }
+    //     this.startDate = service.startDate;
+    //     this.endDate = service.endDate;
+    // };
 
 
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    };
+    // this.assignYTD = function () {
+    //     try {
+    //         service.assignYTD();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when assigning YTD!");
+    //     }
+
+    //     this.startDate = service.startDate;
+    //     this.endDate = service.endDate;
+    // }
+
+    // this.clearDate = function () {
+    //     try {
+    //         service.clearDate();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when clearing dates!");
+    //     }
+
+    //     this.startDate = service.startDate;
+    //     this.endDate = service.endDate;
+
+    // }
+    this.self = AUMService.init();
 
 
-    this.assignYTD = function () {
-        try {
-            service.assignYTD();
-        }
-        catch (err) {
-            console.log("Error when assigning YTD!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
-
-    this.clearDate = function () {
-        try {
-            service.clearDate();
-        }
-        catch (err) {
-            console.log("Error when clearing dates!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-
-    }
-
-    service.launch($scope);
+    this.self.launch($scope);
 }

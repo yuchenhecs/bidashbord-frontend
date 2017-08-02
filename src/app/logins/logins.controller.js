@@ -334,7 +334,7 @@ function LoginsService(MetricsService, $compile) {
             var switchHTML = `
                         <div class="row">
                             <div class="oranj-toggle medium-one-color">
-                                <input id="user-switch" type="checkbox"  ng-model="`+ ctrl + `.isProspect" ng-change="` + ctrl + `.checkUserType()">
+                                <input id="user-switch" type="checkbox"  ng-model="`+ ctrl + `.self.isProspect" ng-change="` + ctrl + `.self.checkUserType()">
                                 <label for="user-switch">
                                     <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
                                 </label>
@@ -373,28 +373,28 @@ function LoginsService(MetricsService, $compile) {
 
 
 function LoginsController($scope, LoginsService) {
-    var service = LoginsService.init();
-
-    this.isWeek = service.isWeek;
-    this.isProspect = service.isProspect;
-
-
-    this.querySearch = service.querySearch;
-    this.selectedItemChange = service.selectedItemChange;
+    
+    // this.isWeek = service.isWeek;
+    // this.isProspect = service.isProspect;
 
 
+    // this.querySearch = service.querySearch;
+    // this.selectedItemChange = service.selectedItemChange;
 
-    this.checkUserType = function () {
-        this.isWeek = service.isWeek;
-        service.isProspect = this.isProspect;
 
-        try {
-            service.checkUserType();
-        }
-        catch (err) {
-            console.log("Error when clearing dates!");
-        }
-    }
 
-    service.launch($scope);
+    // this.checkUserType = function () {
+    //     this.isWeek = service.isWeek;
+    //     service.isProspect = this.isProspect;
+
+    //     try {
+    //         service.checkUserType();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when clearing dates!");
+    //     }
+    // }
+
+    this.self = LoginsService.init();
+    this.self .launch($scope);
 }

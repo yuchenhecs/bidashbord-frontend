@@ -156,60 +156,6 @@ function GoalsService(MetricsService) {
 
 
 function GoalsController($scope, GoalsService) {
-    var service = GoalsService.init();
-
-    this.startDate = service.startDate;
-    this.endDate = service.endDate;
-    this.yesterday = service.yesterday;
-    this.isRequired = service.isRequired;
-
-    this.querySearch = service.querySearch;
-    this.selectedItemChange = service.selectedItemChange;
-
-
-
-    this.checkDate = function () {
-        service.startDate = this.startDate; // bind data to service
-        service.endDate = this.endDate;
-
-        try {
-            service.checkDate();
-        }
-        catch (err) {
-            console.log("Error when checking date!");
-        }
-
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    };
-
-
-    this.assignYTD = function () {
-
-
-        try {
-            service.assignYTD();
-        }
-        catch (err) {
-            console.log("Error when assigning YTD!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
-
-    this.clearDate = function () {
-
-        try {
-            service.clearDate();
-        }
-        catch (err) {
-            console.log("Error when clearing dates!");
-        }
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
-    service.launch($scope);
+    this.self = GoalsService.init();
+    this.self.launch($scope);
 }

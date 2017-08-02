@@ -711,8 +711,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                     <form name="startForm">
                             <md-input-container style="margin-bottom: 0px !important;">
                                 <label>` + this.start_text + `</label>
-                                <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
-                                ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                                <md-datepicker ng-model="`+ ctrl + `.self.startDate" name="dateField" md-max-date="` + ctrl + `.self.yesterday"
+                                ng-change="`+ ctrl + `.self.checkDate()" md-open-on-focus ng-required="` + ctrl + `.self.isRequired"></md-datepicker>
 
                                 <div ng-messages="startForm.dateField.$error">
                                 <div ng-message="valid">The entered value is not a date!</div>
@@ -726,8 +726,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                         <form name="endForm">
                             <md-input-container style="margin-bottom: 0px !important;">
                                 <label>`+ this.end_text + `</label>
-                                <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-                                md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                                <md-datepicker ng-model="`+ ctrl + `.self.endDate" name="dateField" md-min-date="` + ctrl + `.self.startDate"
+                                md-max-date="`+ ctrl + `.self.yesterday" ng-change="` + ctrl + `.self.checkDate()" md-open-on-focus ng-required="` + ctrl + `.self.isRequired"></md-datepicker>
 
                                 <div ng-messages="endForm.dateField.$error">
                                 <div ng-message="valid">The entered value is not a date!</div>
@@ -740,8 +740,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
                         </form>
 
-                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.self.clearDate()" ng-hide="` + ctrl + `.self.isRequired">Clear</md-button>
+                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.self.assignYTD()">YTD</md-button>
                 </div>
             `;
 
@@ -750,7 +750,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         }
 
         this.updateSearchlist = function () {
-            var list = self.level_list[self.current_level].option.xAxis.categories;
+            var list = this.level_list[this.current_level].option.xAxis.categories;
 
             var objList = list.map(function (x, i) {
                 var series = self.level_list[self.current_level].option.series.map(function (obj) {
@@ -778,6 +778,15 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 ]
             };
             fuse = new Fuse(objList, options); // "list" is the item array
+
+
+            if (this.current_level === 0) {
+                this.icon = 'fa-building';
+            } else if (self.current_level === 1) {
+                this.icon = 'fa-black-tie';
+            } else {
+                this.icon = 'fa-user';
+            }
         }
 
         this.createSearchBar = function (scope) {
@@ -789,14 +798,14 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                             class="oranj-default"
                             md-autoselect="'true'"
                             md-no-cache="'true'"
-                            md-selected-item-change="`+ ctrl + `.selectedItemChange(item)"
+                            md-selected-item-change="`+ ctrl + `.self.selectedItemChange(item)"
                             md-selected-item="`+ ctrl + `.selectedItem" 
                             md-search-text="`+ ctrl + `.searchText" 
-                            md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
+                            md-items="item in `+ ctrl + `.self.querySearch(` + ctrl + `.searchText)" 
                             md-item-text="item.display"
                             md-min-length="0"
                             placeholder="Search">
-                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
+                            <i id="search-icon" class="fa" ng-class="` + ctrl + `.self.icon" aria-hidden="true" style="margin:3px"></i><span  md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
                         </md-autocomplete>
                     </div>
 

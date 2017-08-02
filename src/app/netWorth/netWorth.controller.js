@@ -255,11 +255,7 @@ function NetWorthService(MetricsService) {
 
 
 function NetWorthController($scope, NetWorthService) {
-  var service = NetWorthService.init();
+  this.self = NetWorthService.init();
 
-
-  this.querySearch = service.querySearch;
-  this.selectedItemChange = service.selectedItemChange;
-
-  service.launch($scope);
+  this.self.launch($scope);
 }

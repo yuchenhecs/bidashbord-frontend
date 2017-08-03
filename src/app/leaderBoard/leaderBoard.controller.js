@@ -14,7 +14,7 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     SessionService.refreshCanceller();
 
     var DOMAIN = $rootScope.domain;
-
+//asdasd
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);

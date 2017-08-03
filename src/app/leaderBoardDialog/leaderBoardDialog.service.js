@@ -5,14 +5,14 @@ angular
 function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionService) {
     var self = this;
 
-    //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var $scope;
     //var DOMAIN = "http://10.1.15.102:8080";
-    var DOMAIN = $rootScope.domain;
+    //var DOMAIN = $rootScope.domain;
     
     var SUB_DOMAIN = "/bi/gamification";
     var advisorId = 5493;
-    var USE_DUMMY_DATA = false;
+    var USE_DUMMY_DATA = true;
     var tagColors = ["tag-one", "tag-two", "tag-three"];
     var colors = ["#00a4d3", "#72bb53", "#CDC114"];
     var tabInfo = [
@@ -308,11 +308,6 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
 
         $scope = $$scope.$new();
-
-        if ($rootScope.canceller) { // cancel previous pending api calls     
-            $rootScope.canceller.resolve();
-        }
-        $rootScope.canceller = $q.defer();
 
         var colorTheme = {
             colors: colors

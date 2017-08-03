@@ -7,8 +7,6 @@ angular
 function chartData($http, $log, SessionService) {
 	var chartData = {};
 
-	//http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/
-
 	
     SessionService.refreshCanceller();
 
@@ -311,7 +309,9 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	HomeController.self = this; // singleton
 	$scope.$http = $http;
 	this.$log = $log;
-	this.DOMAIN = $scope.domain;
+	//var DOMAIN = $scope.domain;
+	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
+
 	this.total = 0;
 
 	var colorTheme = {
@@ -358,13 +358,13 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		});
 	};
 
-	var clientUrl = this.DOMAIN + '/bi/stats?user=client';
-	var prospectUrl = this.DOMAIN + '/bi/stats?user=prospect';
+	var clientUrl = DOMAIN + '/bi/stats?user=client';
+	var prospectUrl = DOMAIN + '/bi/stats?user=prospect';
 
 	this.chart = Highcharts.setOptions(colorTheme);
-	chartData.callApi('pie', 'goalsContainer', this.DOMAIN + '/bi/goals');
-	chartData.callApi('area', 'aumContainer', this.DOMAIN + '/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', this.DOMAIN + '/bi/networth');
+	chartData.callApi('pie', 'goalsContainer', DOMAIN + '/bi/goals');
+	chartData.callApi('area', 'aumContainer', DOMAIN + '/bi/aums');
+	chartData.callApi('line', 'netWorthContainer', DOMAIN + '/bi/networth');
 	$scope.loginApi();
 
 };

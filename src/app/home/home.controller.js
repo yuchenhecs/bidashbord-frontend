@@ -6,12 +6,9 @@ angular
 //factory object with methods
 function chartData($http, $log, SessionService) {
 	var chartData = {};
-
-	
-    SessionService.refreshCanceller();
-
-
+    
 	chartData.callApi = function (chartType, chartId, show, url) {
+		if(!(SessionService.curr_page === "home")) return;
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		} if (!show) {
@@ -307,9 +304,13 @@ function chartData($http, $log, SessionService) {
 }
 
 function HomeController($scope, $http, $log, $rootScope, chartData, SessionService) {
+
 	HomeController.self = this; // singleton
 	$scope.$http = $http;
 	this.$log = $log;
+
+	SessionService.refreshCanceller();
+	SessionService.curr_page = "home";
 	//var DOMAIN = $scope.domain;
 	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
 

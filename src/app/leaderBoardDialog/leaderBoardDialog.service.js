@@ -341,7 +341,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
 
     this.getDataFromApi = function (url) {
-
+        if(!(SessionService.curr_page === "LeaderBoard")) return;
+        
         console.log(url);
 
         if (USE_DUMMY_DATA) {

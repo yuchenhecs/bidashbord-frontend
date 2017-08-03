@@ -63,7 +63,6 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         };
 
 
-
         // 1. Initial launch pipeline 
         //      launch -> getData -> loadData -> createChart
         // 2. When-click-on-bars pipeline
@@ -83,8 +82,11 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
             $scope = scope;
-               
+
+            SessionService.curr_page = this.controllerName;
+
             SessionService.role_promise.then(function mySuccess() {
+                
                 var root = SessionService.name;  // dummy root name, should be returned by Oranj API
                 var rootId = SessionService.id;
 
@@ -225,6 +227,10 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         }
 
         this.getDataFromApi = function (newUrl, name, id, page, level, args, data) {
+
+            if(!(SessionService.curr_page === this.controllerName)) return;
+        
+            
             var type;
 
             var role_level = level + SessionService.level;

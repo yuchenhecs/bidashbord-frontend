@@ -173,7 +173,7 @@ function NetWorthService(MetricsService) {
         yAxis[1]['plotLines'] =
           [{
             value: avgFirm,
-            color: 'red',
+            color: Highcharts.getOptions().colors[1],
             dashStyle: 'shortdash',
             marker: {
               enabled: false
@@ -239,7 +239,7 @@ function NetWorthService(MetricsService) {
             name: 'Avg Firm',
             type: 'spline',
             dashStyle: 'shortdash',
-            color: 'red',
+            color: Highcharts.getOptions().colors[1],
             yAxis: 1,
             marker: {
               enabled: false

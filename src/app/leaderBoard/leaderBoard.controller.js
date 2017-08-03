@@ -10,8 +10,10 @@ function LeaderBoardService(LeaderBoardDialogService) {
 }
 
 
-function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionService) {
+function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionService, $log) {
     SessionService.refreshCanceller();
+
+        SessionService.curr_page = "LeaderBoard";
 
    // var DOMAIN = $scope.domain;
 
@@ -19,7 +21,6 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
 
 
     $scope.showChart = function (ev, tab) {
-        console.log(LeaderBoardDialogService);
         LeaderBoardDialogService.show(ev, tab, $scope);
     };
 
@@ -108,6 +109,8 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
 
     var kpiApi = function (url) {
         console.log(url);         
+if(!(SessionService.curr_page === "LeaderBoard")) return;
+        
         
         var response = {
             "data": {
@@ -146,6 +149,8 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
 
     var POTBApi = function (url) {
         console.log(url);         
+if(!(SessionService.curr_page === "LeaderBoard")) return;
+        
         
         var response = 
         {
@@ -179,15 +184,17 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
     };
 
     var avatarApi = function (url) {   
+        if(!(SessionService.curr_page === "LeaderBoard")) return;
+
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             if (response.data.data) {
                 $scope.avatar = response.data.data.avatarCompleteUrl;
             } else {
                 $scope.avatar = $scope.logo;
             }
-        }), function myError(response) {
+        }, function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");
-        }
+        });
 
     };
 

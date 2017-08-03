@@ -3,7 +3,7 @@ angular
     .factory('MetricsService', MetricsService);
 
 
-function MetricsService($http, $rootScope, $compile, SessionService) {
+function MetricsService($http, $rootScope, $compile, SessionService, $q) {
     return function () {
         var self = this;
 
@@ -85,14 +85,15 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
 
             SessionService.curr_page = this.controllerName;
 
-            SessionService.role_promise.then(function mySuccess() {
-                
+            $q.race([SessionService.role_promise, SessionService.canceller.promise]).then(function mySuccess() {
+
                 var root = SessionService.name;  // dummy root name, should be returned by Oranj API
                 var rootId = SessionService.id;
 
                 self.getData(root, rootId, 0);
                 self.createOffChartWidgets(scope);
 
+            }, function myError(response) {
             });
 
 

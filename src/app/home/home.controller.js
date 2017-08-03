@@ -326,10 +326,15 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	$scope.saveToggle = false;
 
 	//default position
-	$scope.goalsGrid = {x: 0, y: 0, height: 7, width: 2, show:1};
-	$scope.aumGrid = {x: 4, y: 0, height: 7, width: 4, show:1};
-	$scope.netWorthGrid = {x: 0, y: 13, height: 7, width: 6, show:1};
-	$scope.loginsGrid = {x: 0, y: 7, height: 6, width: 6, show:1};
+	$scope.goalsGrid = {x: 0, y: 0, height: 7, width: 2};
+	$scope.aumGrid = {x: 4, y: 0, height: 7, width: 4};
+	$scope.netWorthGrid = {x: 0, y: 13, height: 7, width: 6};
+	$scope.loginsGrid = {x: 0, y: 7, height: 6, width: 6};
+
+	goalsGrid = $scope.goalsGrid;
+	aumGrid = $scope.aumGrid;
+	netWorthGrid = $scope.netWorthGrid;
+	loginsGrid = $scope.loginsGrid;
 
 	var storeGrid = function(items) {
 		for (var i=0;i<Object.keys(items).length;i++) {
@@ -370,13 +375,13 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		var aum = $('#aumContainer').highcharts();
 		var networth = $('#netWorthContainer').highcharts();
 
-		if ($scope.goalsGrid.show) {
+		if ($scope.goalsShow) {
 			goals.reflow();
 		}
-		if ($scope.aumGrid.show) {
+		if ($scope.aumShow) {
 			aum.reflow();
 		}
-		if ($scope.netWorthGrid.show){
+		if ($scope.netWorthShow){
 			networth.reflow();
 		}
 	};
@@ -384,8 +389,12 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 /////
 	$scope.toggle = function() {
 		$scope.saveToggle = !$scope.saveToggle;
-		document.getElementById("checkbox").checked = $scope.saveToggle;
 		console.log($scope.saveToggle);
+
+		$scope.goalsGrid = {x: 4, y: 0, height: 7, width: 2};
+		$scope.aumGrid = {x: 0, y: 0, height: 7, width: 4};
+		$scope.netWorthGrid = {x: 0, y: 13, height: 7, width: 6};
+		$scope.loginsGrid = {x: 0, y: 7, height: 6, width: 6};
 	};
 /////
 
@@ -393,15 +402,15 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		var grid = $('.grid-stack').data('gridstack');
 		var element = document.getElementById(id);
 		grid.removeWidget(element); //using provided api
-		if (id === 'goals') {
-			$scope.goalsGrid.show = 0;
-		} else if (id === 'aum') {
-			$scope.aumGrid.show = 0;
-		} else if (id === 'netWorth') {
-			$scope.netWorthGrid.show = 0;
-		} else if (id === 'logins') {
-			$scope.loginsGrid.show = 0;
-		}
+		// if (id === 'goals') {
+		// 	$scope.goalsShow = 0;
+		// } else if (id === 'aum') {
+		// 	$scope.aumShow = 0;
+		// } else if (id === 'netWorth') {
+		// 	$scope.netWorthShow = 0;
+		// } else if (id === 'logins') {
+		// 	$scope.loginsShow = 0;
+		// }
 	};
 
 	$scope.toggleLoginData = function () {
@@ -434,15 +443,55 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		});
 	};
 
+	$scope.getGridData = function() {
+		// return $http.get(DOMAIN + '/bi/grid-config/' + SessionService.self.user_id, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
+		return $http.get('http://10.1.15.102:8080/bi/grid-config/111').then(function mySuccess(response) {
+			$scope.goalsGrid = response.data.goals;
+			$scope.aumGrid = response.data.aum;
+			$scope.netWorthGrid = response.data.netWorth;
+			$scope.loginsGrid = response.data.logins;
+			if (response.data.goals === null) {$scope.goalsShow = 0;} else {$scope.goalsShow = 1;}
+			if (response.data.aum === null) {$scope.aumShow = 0;} else {$scope.aumShow = 1;}
+			if (response.data.netWorth === null) {$scope.netWorthShow = 0;} else {$scope.netWorthShow = 1;}
+			if (response.data.logins === null) {$scope.loginsShow = 0;} else {$scope.loginsShow = 1;}
+			chartData.callApi('pie', 'goalsContainer', $scope.goalsShow, DOMAIN + '/bi/goals');
+			chartData.callApi('area', 'aumContainer', $scope.aumShow, DOMAIN + '/bi/aums');
+			chartData.callApi('line', 'netWorthContainer', $scope.netWorthShow, DOMAIN + '/bi/networth');
+			if ($scope.loginsShow) {$scope.loginApi();}
+			if (!$scope.goalsShow) {$scope.remove('goals');}
+			if (!$scope.aumShow) {$scope.remove('aum');}
+			if (!$scope.netWorthShow) {$scope.remove('netWorth');}
+			if (!$scope.loginsShow) {$scope.remove('logins');}
+		}, function myError(response) {
+			$log.error("Error " + response.status + ": " + response.statusText + "!");
+		});
+	};
+
+	$scope.saveGridData = function() {
+		var gridData = {
+			userId: 111,
+			goals: goalsGrid,
+			aum: aumGrid,
+			netWorth: netWorthGrid,
+			logins: loginsGrid
+		};
+		return $http.post('http://10.1.15.102:8080/bi/grid-config', gridData).then(function mySuccess(response) {
+		}, function myError(response) {
+			$log.error("Error " + response.status + ": " + response.statusText + "!");
+		});
+	};
+
+	SessionService.role_promise.then(function mySuccess() {
+		$scope.getGridData();
+		console.log(SessionService.user_id);
+	});
+
 	var clientUrl = DOMAIN + '/bi/stats?user=client';
 	var prospectUrl = DOMAIN + '/bi/stats?user=prospect';
 
 
 	this.chart = Highcharts.setOptions(colorTheme);
-	chartData.callApi('pie', 'goalsContainer', $scope.goalsGrid.show, DOMAIN + '/bi/goals');
-	chartData.callApi('area', 'aumContainer', $scope.aumGrid.show, DOMAIN + '/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', $scope.netWorthGrid.show, DOMAIN + '/bi/networth');
-	$scope.loginApi();
+
 
 	//jQuery for gridstack
 	$(function () {
@@ -451,18 +500,10 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 			width: 6
 		};
 		$('.grid-stack').gridstack(gridOptions);
-		if (!$scope.goalsGrid.show) {
-			$scope.remove('goals');
-		}
-		if (!$scope.aumGrid.show) {
-			$scope.remove('aum');
-		}
-		if (!$scope.netWorthGrid.show) {
-			$scope.remove('netWorth');
-		}
-		if (!$scope.loginsGrid.show) {
-			$scope.remove('logins');
-		}
+		// if (!$scope.goalsGrid.show) {$scope.remove('goals');}
+		// if (!$scope.aumGrid.show) {$scope.remove('aum');}
+		// if (!$scope.netWorthGrid.show) {$scope.remove('netWorth');}
+		// if (!$scope.loginsGrid.show) {$scope.remove('logins');}
 		$('.grid-stack').on('change', function(event, items) {
 			redrawCharts(); //redraw highcharts to match new dimensions after every change
 			if (items !== undefined) {

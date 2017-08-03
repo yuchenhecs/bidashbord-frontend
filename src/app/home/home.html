@@ -4,13 +4,13 @@
             <div>
                 <!-- <input id="checkbox" type="checkbox" ng-model="all">
                 <header>{{ all }} // {{ saveToggle }}</header> -->
-                <md-button ng-disabled="all" style="background-color:#11BEDF">Save</md-button>
+                <md-button ng-click="saveGridData()" ng-disabled="all" style="background-color:#11BEDF">Save</md-button>
                 <md-button ng-click="toggle()" style="background-color:#11BEDF">Toggle!</md-button>
             </div>
         </div>
         <div layout="row">
             <div class="grid-stack" data-gs-width="6" id="grid">
-                <div  id="goals" ng-show="{{ goalsGrid.show }}" class="grid-stack-item" data-gs-x="{{ goalsGrid.x }}" data-gs-y="{{ goalsGrid.y }}" data-gs-height="{{ goalsGrid.height }}" data-gs-width="{{ goalsGrid.width }}" data-gs-min-height="7" data-gs-id="goalsContainer">
+                <div  id="goals" class="grid-stack-item" data-gs-x="{{ goalsGrid.x }}" data-gs-y="{{ goalsGrid.y }}" data-gs-height="{{ goalsGrid.height }}" data-gs-width="{{ goalsGrid.width }}" data-gs-min-height="7" data-gs-id="goalsContainer">
                     <div class="grid-stack-item-content">
                         <div class="tile-outer">
                             <i class="fa fa-times remove-tile" aria-hidden="true" ng-click="remove('goals')"></i>
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-            	<div  id="aum" ng-show="{{ aumGrid.show }}" class="grid-stack-item" data-gs-x="{{ aumGrid.x }}" data-gs-y="{{ aumGrid.y }}" data-gs-height="{{ aumGrid.height }}" data-gs-width="{{ aumGrid.width }}" data-gs-min-height="7" data-gs-id="aumContainer">
+            	<div  id="aum" class="grid-stack-item" data-gs-x="{{ aumGrid.x }}" data-gs-y="{{ aumGrid.y }}" data-gs-height="{{ aumGrid.height }}" data-gs-width="{{ aumGrid.width }}" data-gs-min-height="7" data-gs-id="aumContainer">
                     <div class="grid-stack-item-content">
                         <div class="tile-outer">
                             <i class="fa fa-times remove-tile" aria-hidden="true" ng-click="remove('aum')"></i>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-            	<div id="netWorth" ng-show="{{ netWorthGrid.show }}" class="grid-stack-item" data-gs-x="{{ netWorthGrid.x }}" data-gs-y="{{ netWorthGrid.y }}" data-gs-height="{{ netWorthGrid.height }}" data-gs-width="{{ netWorthGrid.width }}" data-gs-min-height="7" data-gs-id="netWorthContainer">
+            	<div id="netWorth" class="grid-stack-item" data-gs-x="{{ netWorthGrid.x }}" data-gs-y="{{ netWorthGrid.y }}" data-gs-height="{{ netWorthGrid.height }}" data-gs-width="{{ netWorthGrid.width }}" data-gs-min-height="7" data-gs-id="netWorthContainer">
                     <div class="grid-stack-item-content">
                         <div class="tile-outer">
                             <i class="fa fa-times remove-tile" aria-hidden="true" ng-click="remove('netWorth')"></i>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="logins" ng-show="{{ loginsGrid.show }}" class="grid-stack-item" data-gs-x="{{ loginsGrid.x }}" data-gs-y="{{ loginsGrid.y }}" data-gs-height="{{ loginsGrid.height }}" data-gs-width="{{ loginsGrid.width }}" data-gs-min-height="6" data-gs-id="loginsContainer">
+                <div id="logins" class="grid-stack-item" data-gs-x="{{ loginsGrid.x }}" data-gs-y="{{ loginsGrid.y }}" data-gs-height="{{ loginsGrid.height }}" data-gs-width="{{ loginsGrid.width }}" data-gs-min-height="6" data-gs-id="loginsContainer">
                     <div class="grid-stack-item-content">
                             <div class="tile-outer">
                                 <i class="fa fa-times remove-tile" aria-hidden="true" ng-click="remove('logins')"></i>

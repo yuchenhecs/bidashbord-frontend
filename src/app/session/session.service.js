@@ -28,11 +28,12 @@ function SessionService($http, $q) {
     this.role_promise = $http.get("https://dev-oauth.oranjsites.com/user/oranj", { headers: { 'Authorization': this.access_token } });
     this.role_promise.then(function mySuccess(response) {
         SessionService.self.roles = response.data.authorities;
+        SessionService.self.user_id = response.data.user_id;
     });
 
     this.canceller = $q.defer();
     this.refreshCanceller = function () {
-        if (this.canceller) { // cancel previous pending api calls     
+        if (this.canceller) { // cancel previous pending api calls
             this.canceller.resolve();
         }
         this.canceller = $q.defer();

@@ -15,8 +15,11 @@ function AUMService(MetricsService) {
         base.isRequired = true; //datepicker date required
         base.startDate = new Date(base.firstDay);
         base.endDate = new Date(base.yesterday);
+        base.unit_prefix = '$';
+
 
         base.TITLE_TEMPLATE = "Asset Under Management by ";
+        base.Y_AXIS_TITLE = "Asset in Dollars";
 
         base.start_text = "Previous";
         base.end_text = "Current";
@@ -220,6 +223,17 @@ function AUMService(MetricsService) {
         }
 
 
+        base.yAxisSelector = function () {
+            var yAxis = {
+                min: 0,
+                title: {
+                    text: this.Y_AXIS_TITLE
+                }
+            }
+            return yAxis;
+        }
+
+
         // tooltip formatter
         base.formatter = function () {
             var s = '<b>' + this.x + '</b>';
@@ -228,9 +242,14 @@ function AUMService(MetricsService) {
 
             this.series.chart.series.forEach(function (series) {
                 if (currentStack === series.userOptions['stackId'] && series.data[this.point.index].y) {
-                    s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
+                    s += '<br/> <span style="color:' + series.color + '">● </span>';
+                
+                    if(this.series.index === series.index){
+                        s += '<b>' + series.name + ':' + base.unit_prefix + series.data[this.point.index].y + '</b>';
+                    }else {
+                        s += series.name + ':' + base.unit_prefix + series.data[this.point.index].y;
+                    }
                 }
-
             }, this);
 
             return s;
@@ -356,9 +375,10 @@ function AUMService(MetricsService) {
             for (var i = 0; i < length / 2; i++) {
                 searchResultHTML += `<div style="text-align: center">
                         <h1> 
-                        <span style="color:`+ base.chart.series[i].color + `">` + item.series[i].data + `</span>
-                        <small>|</small>
-                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + item.series[i + length / 2].data + `</span>  
+                        <span style="color:`+ base.chart.series[i].color + `">` + base.unit_prefix + item.series[i].data + `</span>
+                        </h1>
+                        <h1>
+                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + base.unit_prefix + item.series[i + length / 2].data + `</span>  
                         </h1>
                         <h6> `+ item.series[i].name + `</h6>
                     </div>`;
@@ -376,58 +396,59 @@ function AUMService(MetricsService) {
 
 
 function AUMController($scope, AUMService) {
-    var service = AUMService.init();
 
 
-    this.startDate = service.startDate;
-    this.endDate = service.endDate;
-    this.yesterday = service.yesterday;
-    this.isRequired = service.isRequired;
+    // this.startDate = service.startDate;
+    // this.endDate = service.endDate;
+    // this.yesterday = service.yesterday;
+    // this.isRequired = service.isRequired;
 
-    this.querySearch = service.querySearch;
-    this.selectedItemChange = service.selectedItemChange;
+    // this.querySearch = service.querySearch;
+    // this.selectedItemChange = service.selectedItemChange;
 
-    this.checkDate = function () {
-        service.startDate = this.startDate; // bind data to service
-        service.endDate = this.endDate;
+    // this.checkDate = function () {
+    //     service.startDate = this.startDate; // bind data to service
+    //     service.endDate = this.endDate;
 
-        try {
-            service.checkDate();
-        }
-        catch (err) {
-            console.log("Error when checking date!");
-        }
-
-
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    };
+    //     try {
+    //         service.checkDate();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when checking date!");
+    //     }
 
 
-    this.assignYTD = function () {
-        try {
-            service.assignYTD();
-        }
-        catch (err) {
-            console.log("Error when assigning YTD!");
-        }
+    //     this.startDate = service.startDate;
+    //     this.endDate = service.endDate;
+    // };
 
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
-    }
 
-    this.clearDate = function () {
-        try {
-            service.clearDate();
-        }
-        catch (err) {
-            console.log("Error when clearing dates!");
-        }
+    // this.assignYTD = function () {
+    //     try {
+    //         service.assignYTD();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when assigning YTD!");
+    //     }
 
-        this.startDate = service.startDate;
-        this.endDate = service.endDate;
+    //     this.startDate = service.startDate;
+    //     this.endDate = service.endDate;
+    // }
 
-    }
+    // this.clearDate = function () {
+    //     try {
+    //         service.clearDate();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when clearing dates!");
+    //     }
 
-    service.launch($scope);
+    //     this.startDate = service.startDate;
+    //     this.endDate = service.endDate;
+
+    // }
+    this.self = AUMService.init();
+
+
+    this.self.launch($scope);
 }

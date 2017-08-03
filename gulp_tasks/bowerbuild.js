@@ -26,6 +26,7 @@ gulp.task('bowerbuild:js', function () {
         .pipe(iife())
         .pipe(replace(".module('" + conf.ngModule, ".module('" + conf.ngModule + "." + conf.bowerModule))
         .pipe(replace(".state('" + conf.ngModule, ".state('" + conf.ngModule + "." + conf.bowerModule))
+        .pipe(replace("$state.go('" + conf.ngModule, "$state.go('" + conf.ngModule + "." + conf.bowerModule))
         .pipe(gulp.dest(conf.path.bowerDist()));
 });
 gulp.task('bowerbuild:css', function () {
@@ -39,21 +40,21 @@ gulp.task('bowerbuild:scss', function () {
         .pipe(gulp.dest(conf.path.bowerDist()));
 });
 
-gulp.task('bowerbuild:other', function () {
-  const fileFilter = filter(file => file.stat.isFile());
+// gulp.task('bowerbuild:other', function () {
+//   const fileFilter = filter(file => file.stat.isFile());
 
-  return gulp.src([
-    path.join(conf.paths.src, '/**/*'),
-    path.join(`!${conf.paths.src}`, '/**/*.{scss,js,html}')
-  ])
-    .pipe(fileFilter)
-    .pipe(gulp.dest(conf.paths.bowerDist));
-});
-
-
+//   return gulp.src([
+//     path.join(conf.paths.src, '/**/*'),
+//     path.join(`!${conf.paths.src}`, '/**/*.{scss,js,html}')
+//   ])
+//     .pipe(fileFilter)
+//     .pipe(gulp.dest(conf.paths.bowerDist));
+// });
 
 
-gulp.task('bowerbuild', gulp.series('bowerbuild:js', 'bowerbuild:css', 'bowerbuild:scss', 'bowerbuild:other'));
+
+
+gulp.task('bowerbuild', gulp.series('bowerbuild:js', 'bowerbuild:css', 'bowerbuild:scss'));
 // const gulp           = require('gulp');
 // const concat         = require('gulp-concat');
 // const embedTemplates = require('gulp-angular-embed-templates');

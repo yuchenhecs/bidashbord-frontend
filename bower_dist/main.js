@@ -19,14 +19,14 @@ function routesConfig($stateProvider) {
   	$stateProvider
 		.state('home', {
 			url: '/home',
-			template:'<div id="main-container"><div class="page"><div layout="row"><div flex="33" layout-padding><div class="tile-outer"><div class="tile-inner"><div layout="row" class="tile-header"><div flex="75">Goals</div><div flex="25"><div class="more"><a href="/#/goals">More</a></div></div></div><div id="goalsContainer"></div></div></div></div><div flex="66" layout-padding><div class="tile-outer"><div class="tile-inner"><div layout="row" class="tile-header"><div flex="75">Assets Under Management</div><div flex="25"><div class="more"><a href="/#/aum">More</a></div></div></div><div id="aumContainer"></div></div></div></div></div><div layout="row"><div class="tile" flex="100"><div class="tile-outer"><div class="tile-inner"><div class="row tile-header"><div class="col-md-9">Net Worth</div><div class="col-md-3"><div class="more"><a href="/#/networth">More</a></div></div></div><div id="netWorthContainer"></div></div></div></div></div><div layout="row"><div class="tile" flex="100"><div class="tile-outer"><div class="tile-inner"><div layout="row" class="tile-header"><div flex="75">Login</div><div flex="25"><div class="more"><a href="/#/login">More</a></div></div></div><div layout="row"><div class="subtitle" flex="100">Login Metrics from the Last 7 Days</div></div><div layout="row"><div layout="column" flex="33" layout-align="center center"><div layout="row" class="loginNum">{{ showData[\'totalLogins\'] }}</div><div layout="row"><strong class="{{ totalSign }}">{{ showData[\'changeInTotalLogins\'] }}</strong> from previous week</div><div layout="row" class="loginText">Total Logins</div></div><div layout="column" flex="33" layout-align="center center"><div layout="row" class="loginNum">{{ showData[\'uniqueLogins\'] }}</div><div layout="row"><strong class="{{ uniqueSign }}">{{ showData[\'changeInUniqueLogins\'] }}</strong> from previous week</div><div layout="row" class="loginText">Unique Logins</div></div><div layout="column" flex="33" layout-align="center center"><div layout="row" class="loginNum">{{ showData[\'avgSessionTime\'] }}</div><div layout="row"><strong class="{{ timeSign }}">{{ showData[\'changeInAvgSessionTime\'] }}</strong> from previous week</div><div layout="row" class="loginText">Average User Session (min)</div></div></div><div layout="row"><div class="oranj-toggle medium-one-color"><input id="login" type="checkbox" ng-model="ngModel" ng-change="toggleLoginData()"> <label for="login"><div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div></label></div></div></div></div></div></div></div></div>',
+			template:'<div id="main-container"><div class="page"><div layout="row"><div flex="33" layout-padding><div class="tile-outer"><div class="tile-inner"><div layout="row" class="tile-header"><div flex="75">Goals</div><div flex="25"><div class="more"><a href="/#/goals">More</a></div></div></div><div id="goalsContainer"></div></div></div></div><div flex="66" layout-padding><div class="tile-outer"><div class="tile-inner"><div layout="row" class="tile-header"><div flex="75">Assets Under Management</div><div flex="25"><div class="more"><a href="/#/aum">More</a></div></div></div><div id="aumContainer"></div></div></div></div></div><div layout="row"><div class="tile" flex="100"><div class="tile-outer"><div class="tile-inner"><div class="row tile-header"><div class="col-md-9">Net Worth</div><div class="col-md-3"><div class="more"><a href="/#/networth">More</a></div></div></div><div id="netWorthContainer"></div></div></div></div></div><div layout="row"><div class="tile" flex="100"><div class="tile-outer"><div class="tile-inner"><div layout="row" class="tile-header"><div flex="75">Session Stats</div><div flex="25"><div class="more"><a href="/#/login">More</a></div></div></div><div layout="row"><div class="subtitle" flex="100">Session Stats from the Last 7 Days</div></div><div layout="row"><div layout="column" flex="33" layout-align="center center"><div layout="row" class="loginNum">{{ showData[\'totalLogins\'] }}</div><div layout="row"><strong class="{{ totalSign }}">{{ showData[\'changeInTotalLogins\'] }}</strong> &nbsp;&nbsp; from previous week</div><div layout="row" class="loginText">Total Logins</div></div><div layout="column" flex="33" layout-align="center center"><div layout="row" class="loginNum">{{ showData[\'uniqueLogins\'] }}</div><div layout="row"><strong class="{{ uniqueSign }}">{{ showData[\'changeInUniqueLogins\'] }}</strong> &nbsp;&nbsp; from previous week</div><div layout="row" class="loginText">Unique Logins</div></div><div layout="column" flex="33" layout-align="center center"><div layout="row" class="loginNum">{{ showData[\'avgSessionTime\'] }}</div><div layout="row"><strong class="{{ timeSign }}">{{ showData[\'changeInAvgSessionTime\'] }}</strong> &nbsp;&nbsp; from previous week</div><div layout="row" class="loginText">Average User Session (min)</div></div></div><div layout="row"><div class="oranj-toggle medium-one-color"><input id="login" type="checkbox" ng-model="ngModel" ng-change="toggleLoginData()"> <label for="login"><div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects" style="margin:auto"></div></label></div></div></div></div></div></div></div></div>',
 			controller: 'HomeController',
 			controllerAs: 'home',
 			authRequired: false
 		})
         .state('goals', {
 			url: '/goals',
-			template:'<div id="main-container"><div class="page"><div class="row" id="top-row"><div class="col-md-12" style="overflow:auto"><div class="tile-outer"><div class="tile-inner" id="chart-container"><div id="chart" layout="row" layout-align="center center"><div class="loader no-animate primary-loader loader--style3"><svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"></path><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></svg></div></div></div></div></div></div></div></div>',
+			template:'<div id="main-container"><div class="page"><div layout="row" id="top-row"><div flex="100" style="overflow:auto"><div class="tile-outer"><div class="tile-inner" id="chart-container"><div id="chart" layout="row" layout-align="center center"><div class="loader no-animate primary-loader loader--style3"><svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"></path><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></svg></div></div></div></div></div></div></div></div>',
 			controller: 'GoalsController',
 			controllerAs: 'goals'
 		})
@@ -163,7 +163,7 @@ function runBlock($location, $rootScope) {
                     state: 'netWorth'
                 },
                 {
-                    name: 'Login Stats',
+                    name: 'Session Stats',
                     state: 'logins'
                 }
             ]
@@ -270,9 +270,13 @@ function AUMService(MetricsService) {
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
         base.controllerName = "aum";
         base.isRequired = true; //datepicker date required
-        base.startDate = new Date(new Date().getFullYear(), 0, 1);
-        base.endDate = new Date();
+        base.startDate = new Date(base.firstDay);
+        base.endDate = new Date(base.yesterday);
+
         base.TITLE_TEMPLATE = "Asset Under Management by ";
+
+        base.start_text = "Previous";
+        base.end_text = "Current";
 
         base.data1 = {
             "firms": [
@@ -466,7 +470,8 @@ function AUMService(MetricsService) {
 
         base.subtitleSelector = function () {
             var subtitle = {
-                text: "Note: lighter bar - previous quarter, darker bar - current quarter"
+                text: "Note: lighter bar - previous quarter, darker bar - current quarter",
+                y: 40
             };
             return subtitle;
         }
@@ -521,13 +526,20 @@ function AUMService(MetricsService) {
                 }
             }
 
+            for (var key in aumMaps[1]) {
+                if (!aumMaps[0][key]) {
+                    aumMaps[0][key] = Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0);
+                }
+            }
+
             // combine all points for each series into lists
             var series = [];
 
             aumMaps.forEach(function (aumMap, p) {
                 var counter = 0;
-                for (var key in aumMap) {
-                    var dataDrillDown = aumMap[key].map(function (x, i) {
+
+                Object.entries(aumMap).sort().forEach(function (entry) {
+                    var dataDrillDown = entry[1].map(function (x, i) {
                         var self = base;
                         var name = 'firmId';
                         if (self.current_level === 0) {
@@ -541,7 +553,7 @@ function AUMService(MetricsService) {
                         return { id: input[i][name], y: x };
                     });
                     var points = {
-                        name: key,
+                        name: entry[0],
                         data: dataDrillDown,
                         stack: "stack" + p,
                         color: p === 0 ? lighten(base.COLOR_ARRAY[counter]) : base.COLOR_ARRAY[counter],
@@ -550,9 +562,8 @@ function AUMService(MetricsService) {
                     };
                     series.push(points);
                     counter++;
-                }
+                });
             });
-
 
             return series;
         }
@@ -587,6 +598,33 @@ function AUMService(MetricsService) {
 
         }
 
+        base.createSearchResultHTML = function (item) {
+
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var length = item ? item.series.length : 0;
+
+            var searchResultHTML = "";
+            for (var i = 0; i < length / 2; i++) {
+                searchResultHTML += `<div style="text-align: center">
+                        <h1> 
+                        <span style="color:`+ base.chart.series[i].color + `">` + item.series[i].data + `</span>
+                        <small>|</small>
+                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + item.series[i + length / 2].data + `</span>  
+                        </h1>
+                        <h6> `+ item.series[i].name + `</h6>
+                    </div>`;
+            };
+
+            return searchPrefix + searchResultHTML;
+
+        };
+
 
         return base;
     }
@@ -600,8 +638,11 @@ function AUMController($scope, AUMService) {
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
-    this.today = new Date();
+    this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
+
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
 
     this.checkDate = function () {
         service.startDate = this.startDate; // bind data to service
@@ -658,11 +699,11 @@ function chartData($http, $log, SessionService) {
 	var chartData = {};
 
 
-	chartData.callApi = function(chartType, chartId, url) {
+	chartData.callApi = function (chartType, chartId, url) {
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		} else {
-				return $http.get(url , { headers: { 'Authorization': SessionService.access_token }}).then(function mySuccess(response) {
+			return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 				var apiData = response["data"];
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData["data"]);
@@ -675,38 +716,46 @@ function chartData($http, $log, SessionService) {
 		}
 	};
 
-	chartData.titleSelector = function(chartId, apiData) {
+	chartData.titleSelector = function (chartId, apiData) {
 		var title;
-			if (chartId === "goalsContainer") {
-				title = {
-					text: "Total Goals Created"
-				};
-			} else if (chartId === "aumContainer") {
-				var first, last;
-				first = apiData[0].date;
-				last = apiData[apiData.length - 1].date;
-				title = {
-					text: "Assets Under Management from " + first + " to " + last
-				};
-			} else if (chartId === "netWorthContainer") {
-				title = {
-					text: "Net Worth and Client Change"
-				};
+		if (chartId === "goalsContainer") {
+			var total = 0;
+
+			for (var i = 0; i < apiData.length; i++) {
+				total += apiData[i].count;
 			}
 
-			return title;
+			title = {
+				useHTML: true,
+				text: "<h1>" + total + "</h1>",
+				y: 130,
+				floating: true
+			};
+		} else if (chartId === "aumContainer") {
+			var first, last;
+			first = apiData[0].date;
+			last = apiData[apiData.length - 1].date;
+			title = {
+				text: "Assets Under Management from " + first + " to " + last
+			};
+		} else if (chartId === "netWorthContainer") {
+			title = {
+				text: "Net Worth and Client Change"
+			};
+		}
+
+		return title;
 	};
 
-	chartData.subtitleSelector = function(chartId, apiData) {
+	chartData.subtitleSelector = function (chartId, apiData) {
 		var subtitle;
-		var total = 0;
 
 		if (chartId === "goalsContainer") {
-			for (var i = 0; i < apiData.length; i++) {
-				total+= apiData[i].count;
-			}
 			subtitle = {
-				text: "Total Goals: " + total
+				useHTML: true,
+				text: "<h6> total goals </h6>",
+				y: 170,
+				floating: true
 			};
 		} else if (chartId === "aumContainer") {
 			subtitle = null;
@@ -717,7 +766,7 @@ function chartData($http, $log, SessionService) {
 		return subtitle;
 	};
 
-	chartData.xAxisSelector = function(chartId, apiData) {
+	chartData.xAxisSelector = function (chartId, apiData) {
 		var xAxis;
 		if (chartId === "goalsContainer") {
 			xAxis = null;
@@ -732,7 +781,7 @@ function chartData($http, $log, SessionService) {
 			};
 		} else if (chartId === "netWorthContainer") {
 			var categories = [];
-			apiData.summary.forEach(function(x){
+			apiData.summary.forEach(function (x) {
 				categories.push(x.date);
 			});
 			xAxis = {
@@ -743,7 +792,7 @@ function chartData($http, $log, SessionService) {
 		return xAxis;
 	};
 
-	chartData.yAxisSelector = function(chartId, apiData) {
+	chartData.yAxisSelector = function (chartId, apiData) {
 		var yAxis;
 		if (chartId === "goalsContainer") {
 			yAxis = null;
@@ -786,7 +835,7 @@ function chartData($http, $log, SessionService) {
 		return yAxis;
 	};
 
-	chartData.tooltipSelector = function(chartId) {
+	chartData.tooltipSelector = function (chartId) {
 		var tooltip;
 		if (chartId === "goalsContainer") {
 			tooltip = {
@@ -796,7 +845,7 @@ function chartData($http, $log, SessionService) {
 			tooltip = {
 				split: true
 			};
-		} else if (chartId ==="netWorthContainer") {
+		} else if (chartId === "netWorthContainer") {
 			tooltip = {
 				split: true
 			};
@@ -805,7 +854,7 @@ function chartData($http, $log, SessionService) {
 		return tooltip;
 	};
 
-	chartData.plotOptionsSelector = function(chartId) {
+	chartData.plotOptionsSelector = function (chartId) {
 		var options;
 		if (chartId === "goalsContainer") {
 			options = {
@@ -830,7 +879,7 @@ function chartData($http, $log, SessionService) {
 					}
 				}
 			};
-		} else if (chartId ==="netWorthContainer") {
+		} else if (chartId === "netWorthContainer") {
 			options = {
 
 			};
@@ -839,7 +888,7 @@ function chartData($http, $log, SessionService) {
 		return options;
 	};
 
-	chartData.seriesSelector = function(chartId, apiData) {
+	chartData.seriesSelector = function (chartId, apiData) {
 		var series;
 		if (chartId === "goalsContainer") {
 			var seriesData = [];
@@ -848,12 +897,13 @@ function chartData($http, $log, SessionService) {
 					name: apiData[i].type,
 					y: apiData[i].count
 				};
-			seriesData.push(obj);
+				seriesData.push(obj);
 			}
 
 			series = [{
 				name: "Goals",
-				data: seriesData
+				data: seriesData,
+				innerSize: '75%',
 			}];
 		} else if (chartId === "aumContainer") {
 			var assetsMap = {};
@@ -887,13 +937,13 @@ function chartData($http, $log, SessionService) {
 
 				series.push(points);
 			}
-		} else if (chartId ==="netWorthContainer") {
+		} else if (chartId === "netWorthContainer") {
 			apiData = apiData.summary;
 			var data = [];
 			var clientsDiff = [];
-			apiData.forEach(function(x){
-					data.push(x.absNet);
-					clientsDiff.push(x.clientsDiff);
+			apiData.forEach(function (x) {
+				data.push(x.absNet);
+				clientsDiff.push(x.clientsDiff);
 			});
 
 
@@ -910,11 +960,11 @@ function chartData($http, $log, SessionService) {
 		return series;
 	};
 
-	chartData.createOptions = function(chartType, chartId, apiData) {
+	chartData.createOptions = function (chartType, chartId, apiData) {
 		var currentOptions = {
 			credits: {
-                enabled: false
-            },
+				enabled: false
+			},
 			chart: {
 				type: chartType
 			},
@@ -932,7 +982,7 @@ function chartData($http, $log, SessionService) {
 
 	return chartData;
 
-	chartData.addSign = function(num) {
+	chartData.addSign = function (num) {
 		console.log('un function');
 		if (num >= 0) {
 			return '+' + num;
@@ -956,7 +1006,7 @@ function HomeController($scope, $http, $log, chartData) {
 
 	var toggle = true;
 
-	$scope.toggleLoginData = function() {
+	$scope.toggleLoginData = function () {
 		$scope.showData = toggle ? $scope.clientData : $scope.prospectData;
 
 		$scope.totalSign = $scope.showData['changeInTotalLogins'] < 0 ? 'neg' : 'pos';
@@ -966,7 +1016,7 @@ function HomeController($scope, $http, $log, chartData) {
 		toggle = !toggle;
 	};
 
-	$scope.addSign = function(num) {
+	$scope.addSign = function (num) {
 		if (num >= 0) {
 			return '+' + num;
 		}
@@ -974,7 +1024,7 @@ function HomeController($scope, $http, $log, chartData) {
 		return num;
 	};
 
-	$scope.loginApi = function() {
+	$scope.loginApi = function () {
 		return $http.get(clientUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
 			$scope.clientData = clientResponse["data"]["data"]["client"];
 			$scope.clientData['changeInTotalLogins'] = $scope.addSign($scope.clientData['changeInTotalLogins']);
@@ -1486,7 +1536,7 @@ angular
     .service('GoalsService', GoalsService);
 
 function GoalsService(MetricsService) {
-    this.init = function(){
+    this.init = function () {
         // most code is written in MetricsController
         var base = new MetricsService();
         // constants
@@ -1605,6 +1655,33 @@ function GoalsService(MetricsService) {
             }]
         };
 
+        base.createSearchResultHTML = function (item) {
+            var total = 0;
+
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var searchResultHTML = item ? item.series.map(function (obj, i) {
+                total += obj.data;
+                return `<div style="text-align: center">
+                        <h1 style="color:`+ base.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h6> `+ obj.name + `</h6>
+                    </div>`;
+            }).join("") : "";
+
+            var searchSuffix = item ?
+                `<div style="text-align: center">
+                    <h1>` + total + ` </h1>
+                    <h6> Total </h6>
+                </div>`: "";
+
+            return searchPrefix + searchResultHTML + searchSuffix;
+        };
+
         return base;
     }
 }
@@ -1615,8 +1692,13 @@ function GoalsController($scope, GoalsService) {
 
     this.startDate = service.startDate;
     this.endDate = service.endDate;
-    this.today = new Date();
+    this.yesterday = service.yesterday;
     this.isRequired = service.isRequired;
+
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
+
+
 
     this.checkDate = function () {
         service.startDate = this.startDate; // bind data to service
@@ -1825,11 +1907,13 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     $scope.showPOTB = true;
-    var advisorId = 332;
+    //var advisorId = 332;
+    var advisorId = 5098;
+
 
     var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
     var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
-    var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/avatar/get";
+    var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/get/avatar";
 
     var preprocessing = function (data, type) {
 
@@ -1880,17 +1964,19 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
         }
     };
 
-    var shortenNumber = function (num) {
+    function shortenNumber(num){
+        num = num ? num : 0 ;
+        
         if (num >= 1000 && num < 1000000) {
-            return (num / 1000).toFixed(2) + 'k';
+            return (num / 1000).toFixed(2) +'k';
         } else if (num >= 1000000 && num < 1000000000) {
             return (num / 1000000).toFixed(2) + 'M';
         } else if (num >= 1000000000 && num < 1000000000000) {
             return (num / 1000000000).toFixed(2) + 'B';
         } else if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(2) + 'T';
-        } else return num.toFixed(2);
-    };
+        } else return (num).toFixed(2);
+    }
 
     $scope.changeScope = function (scope) {
         if (scope === 'overall') {
@@ -1904,29 +1990,80 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     };
 
     var kpiApi = function (url) {
-        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            $scope.kpi = response["data"]["data"];
-            preprocessing($scope.kpi, "kpi");
-            $scope.changeScope('state'); //have the default scope set to state
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        
+        var response = {
+            "data": {
+                "id": 80,
+                "advisorId": 510,
+                "aum": 46189396,
+                "netWorth": 1406872689582.8,
+                "hni": 5,
+                "conversionRate": 40.2778,
+                "avgConversionTime": 1304.43,
+                "retentionRate": 90.2778,
+                "weeklyLogins": 2,
+                "aumGrowth": 1,
+                "netWorthGrowth": 0.206,
+                "clienteleGrowth": 2300,
+                "updateDate": 1499981783000,
+                "name": "Some Body",
+                "points": 89283,
+                "percentileOverall": 88,
+                "percentileState": 90,
+                "percentileFirm": 95
+            }
         }
+        $scope.kpi = response["data"];
+        preprocessing($scope.kpi, "kpi");
+        $scope.changeScope('state'); //have the default scope set to state
+
+        // return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        //     $scope.kpi = response["data"]["data"];
+        //     preprocessing($scope.kpi, "kpi");
+        //     $scope.changeScope('state'); //have the default scope set to state
+        // }), function myError(response) {
+        //     $log.error("Error " + response.status + ": " + response.statusText + "!");
+        // }
     };
 
     var POTBApi = function (url) {
-        return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            preprocessing(response["data"]["data"], "POTB");
-        }), function myError(response) {
-            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        var response = 
+        {
+            "data": {
+                "id": 3,
+                "advisorId": 510,
+                "region": "firm",
+                "aumAchievement": "You are Ranked 1st in AUM among all advisors in the firm",
+                "netWorthAchievement": "Your NET WORTH is above the firm average",
+                "hniAchievement": null,
+                "conversionRateAchievement": null,
+                "avgConversionRateAchievement": null,
+                "retentionRateAchievement": "Your RETENTION RATE is above the firm average",
+                "weeklyClientLoginsAchievement": null,
+                "aumGrowthAchievement": null,
+                "netWorthGrowthAchievement": null,
+                "clienteleGrowthAchievement": null
+            }
         }
+
+        preprocessing(response["data"], "POTB");
+        
+
+
+
+        // return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+        //     preprocessing(response["data"]["data"], "POTB");
+        // }), function myError(response) {
+        //     $log.error("Error " + response.status + ": " + response.statusText + "!");
+        // }
     };
 
-    var avatarApi = function (url) {
+    var avatarApi = function (url) {            
         return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             if (response.data.data) {
-                $scope.avatar = response.data.data.avatar;
+                $scope.avatar = response.data.data.avatarCompleteUrl;
             } else {
-                $scope.avatar = "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D";
+                $scope.avatar = $scope.logo;
             }
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");
@@ -1947,9 +2084,9 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var $scope;
-    var DOMAIN = "http://10.1.15.177:8080";
+    var DOMAIN = "http://10.1.15.102:8080";
     var SUB_DOMAIN = "/bi/gamification";
-    var advisorId = 9714;
+    var advisorId = 5493;
     var USE_DUMMY_DATA = false;
     var tagColors = ["tag-one", "tag-two", "tag-three"];
     var colors = ["#00a4d3", "#72bb53", "#CDC114"];
@@ -1968,49 +2105,49 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
             },
             {
                 title: "Number of HNIs", colorId: 0,
-                formatter: (num) => { return num },
+                formatter: (num) => { return num? num : 0  },
                 text_worst: 'least', text_best: 'most',
                 KPI_DOMAIN: "/hni"
             },
             {
                 title: "Conversion Rate", colorId: 1,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/conversion_rate"
             },
             {
                 title: "Average Conversion Time", colorId: 1,
-                formatter: (num) => { return (num / 24).toFixed(1) + unitWrapper('days') },
+                formatter: (num) => { return ((num? num : 0 ) / 24).toFixed(1) + unitWrapper('days') },
                 text_worst: 'longest', text_best: 'shortest',
                 KPI_DOMAIN: "/avg_conversion_time"
             },
             {
                 title: "Retention Rate", colorId: 1,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/retention_rate"
             },
             {
                 title: "Weekly Client Logins", colorId: 1,
-                formatter: (num) => { return num },
+                formatter: (num) => { return num? num : 0  },
                 text_worst: 'least', text_best: 'most',
                 KPI_DOMAIN: "/weekly_logins"
             },
             {
                 title: "Annualized AUM Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/aum_growth"
             },
             {
                 title: "Annualized Clientele Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2) + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/clientele_growth"
             },
             {
                 title: "Annualized Net Worth Growth", colorId: 2,
-                formatter: (num) => { return (num / 1).toFixed(2)  + unitWrapper('%') },
+                formatter: (num) => { return (num? num : 0 ).toFixed(2)  + unitWrapper('%') },
                 text_worst: 'lowest', text_best: 'highest',
                 KPI_DOMAIN: "/net_worth_growth"
             }
@@ -2228,7 +2365,9 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
         return '<small>' + unit + '</small>';
     }
 
-    function shortenNumber (num) {
+    function shortenNumber(num){
+        num = num ? num : 0 ;
+        
         if (num >= 1000 && num < 1000000) {
             return (num / 1000).toFixed(2) + unitWrapper('k');
         } else if (num >= 1000000 && num < 1000000000) {
@@ -2237,8 +2376,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
             return (num / 1000000000).toFixed(2) + unitWrapper('B');
         } else if (num >= 1000000000000) {
             return (num / 1000000000000).toFixed(2) + unitWrapper('T');
-        } else return num.toFixed(2);
-    };
+        } else return (num).toFixed(2);
+    }
 
     this.init = function ($$scope) {
 
@@ -2290,13 +2429,13 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
                 var overall = 10;
                 var state = 70;
                 var firm = 80;
-                var stateCode = 'OR';
+                var stateCode = 'IL';
                 var advisorKpi = 80000000;
 
                 $scope.$apply(function () {  // async function that is outside angular framework, e.g. setTimeout
                     var formatter = $scope.tabInfo[$scope.currentTab].formatter;
                     $scope.kpi_details = {
-                        advisorKpi: formatter(80000000),
+                        advisorKpi: formatter(2400),
                         overall: {
                             percentile: overall,
                             best: formatter(999),
@@ -2475,7 +2614,7 @@ function LoginsService(MetricsService, $compile) {
         base.showDatepicker = false;
         base.startDate = null;
         base.endDate = null;
-        base.TITLE_TEMPLATE = "Login Statistics for ";
+        base.TITLE_TEMPLATE = "Session Stats for ";
 
         base.isWeek = true;
         base.isProspect = true;
@@ -2783,6 +2922,8 @@ function LoginsService(MetricsService, $compile) {
 
         base.createOffChartWidgets = function (scope) {
             this.createSwitch(scope);
+
+            this.createSearchBar(scope);
         }
 
 
@@ -2837,6 +2978,10 @@ function LoginsController($scope, LoginsService) {
     this.isProspect = service.isProspect;
 
 
+    this.querySearch = service.querySearch;
+    this.selectedItemChange = service.selectedItemChange;
+
+
 
     this.checkUserType = function () {
         this.isWeek = service.isWeek;
@@ -2878,6 +3023,14 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.showDatepicker = true;
         this.chart_id = 'chart';
 
+        this.start_text = "Start Date";
+        this.end_text = "End Date";
+
+        this.firstDay = new Date(new Date().getFullYear(), 0, 1);
+        this.yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+        var fuse;
+        var $scope;
         var colorTheme = {
             colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]
         };
@@ -2891,7 +3044,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.endDate = null;
         this.isRequired = false;
         this.current_level = 0;
-        this.doUpdate = false;
         this.lastInitial = '';
 
         //chart option template
@@ -2931,7 +3083,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
-
+            $scope = scope;
             var root = SessionService.name;  // dummy root name, should be returned by Oranj API
             var rootId = SessionService.id;
 
@@ -3109,7 +3261,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -3190,11 +3342,10 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createChart = function () {
-
             console.time('Chart');
             this.lastInitial = '';
             this.hideLoading();
-            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level]['option']);
+            this.chart = Highcharts.chart(this.chart_id, this.level_list[this.current_level].option);
             console.timeEnd('Chart');
 
         }
@@ -3258,7 +3409,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.titleSelector = function (name) {
 
             var title = {
-                text: this.TITLE_TEMPLATE + name
+                text: this.TITLE_TEMPLATE + name,
+                y: 20
             };
 
             return title;
@@ -3287,15 +3439,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.xAxisFormatter = function () {
 
             var label = this.axis.defaultLabelFormatter.call(this);
-
             this.axis.autoRotation = null;
 
             if (this.axis.tickInterval > 1) {
-
                 var initial = label.charAt(0).toUpperCase();
-
                 if (initial === self.lastInitial) {
-
                     return '';
                 }
 
@@ -3385,6 +3533,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         // chart onload event
         this.chartOnLoad = function () {
             self.createWidgets(this);
+            self.updateSearchlist();
         }
 
 
@@ -3479,19 +3628,6 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         //---------------------------------- Widgets -----------------------------------------------------------------
 
         this.createWidgets = function (chart) {
@@ -3511,13 +3647,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             //note.element.classList.add("chart-legend");
 
 
-
-
             var pathHTML = this.generatePathSelectorHTML();
             var text = chart.renderer.text(pathHTML).add();
             var textBBox = text.getBBox();
             var x = chart.plotLeft * 0.25;
-            var y = textBBox.height;
+            var y = textBBox.height * 0.7;
             text.attr({ x: x, y: y });
 
             var pathBlocks = text.element.children;
@@ -3533,17 +3667,15 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                     self.pathOnClick(this);
                 };
             }
-            
+
             pathBlocks[(self.current_level) * 2 + 1].classList.add("curr-path-link");
         }
 
         this.pathOnClick = function (element) {
-
             var level = parseInt(element.dataset.level);
 
             //drill up
             self.drillToLevel(level);
-
         }
 
         this.generatePathSelectorHTML = function () {
@@ -3560,9 +3692,11 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
 
         this.createOffChartWidgets = function (scope) {
-
-            if (this.showDatepicker)
+            if (this.showDatepicker) {
                 this.createDatepicker(scope);
+            }
+
+            this.createSearchBar(scope);
         }
 
         //datepicker
@@ -3572,37 +3706,39 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             var datePickerHTML = `
                  <div layout="row"  layout-align="center center">
                     <form name="startForm">
-                    <md-input-container style="margin-bottom: 0px !important;">
-                        <label>Start date</label>
-                        <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.today"
-                        ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                            <md-input-container style="margin-bottom: 0px !important;">
+                                <label>` + this.start_text + `</label>
+                                <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
+                                ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-                        <div ng-messages="startForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
-                    </form>
+                                <div ng-messages="startForm.dateField.$error">
+                                <div ng-message="valid">The entered value is not a date!</div>
+                                <div ng-message="required">This date is required!</div>
+                                <div ng-message="mindate">Date is too early!</div>
+                                <div ng-message="maxdate">Date is too late!</div>
+                                </div>
+                            </md-input-container>
+                        </form>
 
-                    <form name="endForm">
-                    <md-input-container style="margin-bottom: 0px !important;">
-                        <label>End date</label>
-                        <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-                        md-max-date="`+ ctrl + `.today" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                        <form name="endForm">
+                            <md-input-container style="margin-bottom: 0px !important;">
+                                <label>`+ this.end_text + `</label>
+                                <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
+                                md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
 
-                        <div ng-messages="endForm.dateField.$error">
-                        <div ng-message="valid">The entered value is not a date!</div>
-                        <div ng-message="required">This date is required!</div>
-                        <div ng-message="mindate">Date is too early!</div>
-                        <div ng-message="maxdate">Date is too late!</div>
-                        </div>
-                    </md-input-container>
-                    </form>
+                                <div ng-messages="endForm.dateField.$error">
+                                <div ng-message="valid">The entered value is not a date!</div>
+                                <div ng-message="required">This date is required!</div>
+                                <div ng-message="mindate">Date is too early!</div>
+                                <div ng-message="maxdate">Date is too late!</div>
+                                </div>
+                            </md-input-container>
 
-                    <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-                    <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+
+                        </form>
+
+                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
+                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
                 </div>
             `;
 
@@ -3610,9 +3746,105 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
             chartHTML.append($compile(datePickerHTML)(scope));
         }
 
+        this.updateSearchlist = function () {
+            var list = self.level_list[self.current_level].option.xAxis.categories;
+
+            var objList = list.map(function (x, i) {
+                var series = self.level_list[self.current_level].option.series.map(function (obj) {
+                    return {
+                        name: obj.name,
+                        data: obj.data[i].y
+                    };
+                });
+                return {
+                    value: x.toLowerCase(),
+                    display: x,
+                    series: series
+                };
+            });
+
+            var options = {
+                shouldSort: true,
+                threshold: 0.6,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                    "value"
+                ]
+            };
+            fuse = new Fuse(objList, options); // "list" is the item array
+        }
+
+        this.createSearchBar = function (scope) {
+            var ctrl = this.controllerName;
+            var searchBarHTML = `
+                <div layout="column">
+                    <div layout="row"  layout-align="start center">
+                        <md-autocomplete 
+                            class="oranj-default"
+                            md-autoselect="'true'"
+                            md-no-cache="'true'"
+                            md-selected-item-change="`+ ctrl + `.selectedItemChange(item)"
+                            md-selected-item="`+ ctrl + `.selectedItem" 
+                            md-search-text="`+ ctrl + `.searchText" 
+                            md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
+                            md-item-text="item.display"
+                            md-min-length="0"
+                            placeholder="Search">
+                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
+                        </md-autocomplete>
+                    </div>
+
+                    <div id="search-result" layout="row"  layout-align="space-between stretch" layout-padding>
+                    </div>
+                </div>
+            `;
+
+            var chartHTML = angular.element(document.getElementById("chart-container"));
+            chartHTML.append($compile(searchBarHTML)(scope));
+        }
+
+        this.createSearchResultHTML = function (item) {
+            var searchPrefix = item ?
+                `<div style="text-align: center">
+                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                </div>
+                <div class="vertical-line"></div>
+                ` : "";
+
+            var searchResultHTML = item ? item.series.map(function (obj, i) {
+                return `<div style="text-align: center">
+                        <h1 style="color:`+ self.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h6> `+ obj.name + `</h6>
+                    </div>`;
+            }).join("") : "";
+
+            return searchPrefix + searchResultHTML;
+        }
+
+        this.createSearchResult = function (item) {
+            var html = this.createSearchResultHTML(item);
+            var chartHTML = angular.element(document.getElementById("search-result"));
+            chartHTML.html($compile(html)($scope));
+        }
+
+        this.selectedItemChange = function (item) {
+            self.createSearchResult(item);
+        }
+
+        this.querySearch = function (query) {
+            if (!fuse) {
+                return [];
+            }
+            return fuse.search(query);
+        }
+
         this.assignYTD = function () {
-            this.startDate = new Date(new Date().getFullYear(), 0, 1);
-            this.endDate = new Date();
+            this.startDate = new Date(this.firstDay);
+            this.endDate = new Date(this.yesterday);
+
             this.validateLevel(this.current_level);
         }
 
@@ -3913,8 +4145,13 @@ function NetWorthService(MetricsService) {
 
 
 function NetWorthController($scope, NetWorthService) {
-  var netWorth = NetWorthService.init();
-  netWorth.launch($scope);
+  var service = NetWorthService.init();
+
+
+  this.querySearch = service.querySearch;
+  this.selectedItemChange = service.selectedItemChange;
+
+  service.launch($scope);
 }
 
 angular
@@ -3932,10 +4169,10 @@ function SessionService() {
 //     "status": "success",
 //     "data": {
 //         "avatar": "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D"
+//         }
 //     }
-// }
 
-    this.access_token = "Bearer dkSBs5YT4swynQXYEdYAuXJcZpaoJgld9xVjX8O92YrMS2nDvv1-p2tn0vCTWGbYQCrKRYdO26TAiv-Snyn-xgG7p81dq7UNv2aEUbwbK0YbhD2wquQr5ryekQ3PGhT0kZN2F5J46yWgsJEizwPSnI8OkPxzJeg6v8OUfwohUCcaaadusVJ99XhWW1cBl-EbeBLiY2r0oyPsc5AhYow38yU5BStPLVMnmkfw_uIiX0nj2wnFiGHL87OoafbDXeOtCHhGUoYlxv8e-5NR7H17yAGTGupjLk1sluCPotiip9f7bcNvaBgM7v3NxoJb14jAngTP7XUveTGe_ZmvpJuJGFXEorCeDj2ag8r8QIj7P7R7bdRQG6eDaqXeGoWX-YcjQFZVcQ";
+    this.access_token = "Bearer p-GvCGqZlvbDrRkqc-bXTkq13TBafcCBT7wuAKGmzGNrKLaWcl4WPV6BdgOQLFtMvCE9FLSW8friXu4SJrFttB9kCc0K4mkvHzRqhkIHW8wpBWgBIIalHQp6i0leqHFgpQZWWKmzCvE0UMxm40vGbiWzgSQz3ebZucYOmL8n0ofRleye-lFa_KOEKP9xPscUY6y2T6CxeZ4p9q3LSzBC8NjG4OCm6Awstj7mHE4HcB2EP8nGWCDjP6EI_Uz_WQ0JLYGBYlKR-_hbpNHof_wY78zlK7oFXVGb7Bu29J-MqNSyej1bNNGK1Uxp6IjpCKjwVMMRvt9TnBKmt8xEYtz2c96pSqvpxJJ4IcWHQJTsVFg5cPyAj3-ma6o1Gmcopd3U8JazBw";
     this.roles = ["Metrics_SummaryGoalsAll_Enable", "Metrics_SummaryGoalsFirm_Enable", "Metrics_SummaryGoalsManaged_Enable"];
     this.level = 0;
     this.name = 'Oranj';

@@ -7,6 +7,8 @@ angular
 function chartData($http, $log, SessionService) {
 	var chartData = {};
 
+    SessionService.refreshCanceller();
+
 
 	chartData.callApi = function (chartType, chartId, show, url) {
 		if (url === null) {
@@ -14,7 +16,7 @@ function chartData($http, $log, SessionService) {
 		} if (!show) {
 			return;
 		} else {
-			return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+			return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 				var apiData = response["data"];
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData["data"]);
@@ -303,11 +305,13 @@ function chartData($http, $log, SessionService) {
 	return chartData;
 }
 
-function HomeController($scope, $http, $log, chartData) {
+function HomeController($scope, $http, $log, $rootScope, chartData, SessionService) {
 	HomeController.self = this; // singleton
 	$scope.$http = $http;
 	this.$log = $log;
-	this.DOMAIN = $scope.domain;
+	//var DOMAIN = $scope.domain;
+	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
+
 	this.total = 0;
 
 	var colorTheme = {
@@ -411,13 +415,13 @@ function HomeController($scope, $http, $log, chartData) {
 	};
 
 	$scope.loginApi = function () {
-		return $http.get(clientUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
+		return $http.get(clientUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
 			$scope.clientData = clientResponse["data"]["data"]["client"];
 			$scope.clientData['changeInTotalLogins'] = addSign($scope.clientData['changeInTotalLogins']);
 			$scope.clientData['changeInUniqueLogins'] = addSign($scope.clientData['changeInUniqueLogins']);
 			$scope.clientData['changeInAvgSessionTime'] = addSign($scope.clientData['changeInAvgSessionTime']);
 		}).then(function () {
-			return $http.get(prospectUrl, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess1(prospectResponse) {
+			return $http.get(prospectUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess1(prospectResponse) {
 				$scope.prospectData = prospectResponse["data"]["data"]["prospect"];
 				$scope.prospectData['changeInTotalLogins'] = addSign($scope.prospectData['changeInTotalLogins']);
 				$scope.prospectData['changeInUniqueLogins'] = addSign($scope.prospectData['changeInUniqueLogins']);
@@ -430,14 +434,14 @@ function HomeController($scope, $http, $log, chartData) {
 		});
 	};
 
-	var clientUrl = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=client';
-	var prospectUrl = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=prospect';
+	var clientUrl = DOMAIN + '/bi/stats?user=client';
+	var prospectUrl = DOMAIN + '/bi/stats?user=prospect';
 
 
 	this.chart = Highcharts.setOptions(colorTheme);
-	chartData.callApi('pie', 'goalsContainer', $scope.goalsGrid.show, 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
-	chartData.callApi('area', 'aumContainer', $scope.aumGrid.show, 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', $scope.netWorthGrid.show, 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/networth');
+	chartData.callApi('pie', 'goalsContainer', $scope.goalsGrid.show, DOMAIN + '/bi/goals');
+	chartData.callApi('area', 'aumContainer', $scope.aumGrid.show, DOMAIN + '/bi/aums');
+	chartData.callApi('line', 'netWorthContainer', $scope.netWorthGrid.show, DOMAIN + '/bi/networth');
 	$scope.loginApi();
 
 	//jQuery for gridstack

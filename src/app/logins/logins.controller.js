@@ -4,7 +4,7 @@ angular
     .service('LoginsService', LoginsService);
 
 function LoginsService(MetricsService, $compile) {
-    this.init = function(){
+    this.init = function () {
         var base = new MetricsService();
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
@@ -79,14 +79,14 @@ function LoginsService(MetricsService, $compile) {
                     "name": "Robert2",
                     "totalLogins": 30,
                     "uniqueLogins": 30,
-                    "avgSessionTime":0.4,
+                    "avgSessionTime": 0.4,
                 },
                 {
                     "advisorId": 801,
                     "name": "Robert3",
                     "totalLogins": 50,
                     "uniqueLogins": 20,
-                    "avgSessionTime":1,
+                    "avgSessionTime": 1,
                 }
             ]
         };
@@ -148,7 +148,7 @@ function LoginsService(MetricsService, $compile) {
 
                 var name = this.level_list[level]['name'];
                 var id = this.level_list[level]['id'];
-               
+
 
                 this.getDataForLevel(name, id, 0, level);
                 return false;
@@ -173,6 +173,24 @@ function LoginsService(MetricsService, $compile) {
         }
 
         //---------------------------------- Pipeline helper ---------------------------------------------------------------
+
+
+        // tooltip formatter
+        // base.formatter = function () {
+        //     var s = '<b>' + this.x + '</b>';
+        //     var allSeries = this.series.chart.series;
+
+        //     allSeries.forEach(function (series) {
+        //         if (series.data[this.point.index] && series.data[this.point.index].y) {
+        //             s += '<br/>' + series.name + ': ' + base.unit_prefix + series.data[this.point.index].y;
+        //         }
+
+        //     }, this);
+
+        //     s += base.unit;
+
+        //     return s;
+        // }
 
         base.yAxisSelector = function () {
             var yAxis = [{
@@ -209,7 +227,7 @@ function LoginsService(MetricsService, $compile) {
                     style: {
                         color: Highcharts.getOptions().colors[2]
                     },
-                    format: '{value} '+ this.unit
+                    format: '{value} ' + this.unit
                 },
                 opposite: true
 
@@ -334,7 +352,7 @@ function LoginsService(MetricsService, $compile) {
             var switchHTML = `
                         <div class="row">
                             <div class="oranj-toggle medium-one-color">
-                                <input id="user-switch" type="checkbox"  ng-model="`+ ctrl + `.isProspect" ng-change="` + ctrl + `.checkUserType()">
+                                <input id="user-switch" type="checkbox"  ng-model="`+ ctrl + `.self.isProspect" ng-change="` + ctrl + `.self.checkUserType()">
                                 <label for="user-switch">
                                     <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
                                 </label>
@@ -373,28 +391,28 @@ function LoginsService(MetricsService, $compile) {
 
 
 function LoginsController($scope, LoginsService) {
-    var service = LoginsService.init();
 
-    this.isWeek = service.isWeek;
-    this.isProspect = service.isProspect;
-
-
-    this.querySearch = service.querySearch;
-    this.selectedItemChange = service.selectedItemChange;
+    // this.isWeek = service.isWeek;
+    // this.isProspect = service.isProspect;
 
 
+    // this.querySearch = service.querySearch;
+    // this.selectedItemChange = service.selectedItemChange;
 
-    this.checkUserType = function () {
-        this.isWeek = service.isWeek;
-        service.isProspect = this.isProspect;
 
-        try {
-            service.checkUserType();
-        }
-        catch (err) {
-            console.log("Error when clearing dates!");
-        }
-    }
 
-    service.launch($scope);
+    // this.checkUserType = function () {
+    //     this.isWeek = service.isWeek;
+    //     service.isProspect = this.isProspect;
+
+    //     try {
+    //         service.checkUserType();
+    //     }
+    //     catch (err) {
+    //         console.log("Error when clearing dates!");
+    //     }
+    // }
+
+    this.self = LoginsService.init();
+    this.self.launch($scope);
 }

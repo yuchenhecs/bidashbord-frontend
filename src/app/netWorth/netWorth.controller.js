@@ -21,6 +21,8 @@ function NetWorthService(MetricsService) {
     base.startDate = null;
     base.endDate = null;
     base.TITLE_TEMPLATE = "Average and Absolute Net Worth across ";
+    base.unit_prefix = '$';
+
 
     base.data1 = {
       "avgAdvisor": 123,
@@ -255,11 +257,7 @@ function NetWorthService(MetricsService) {
 
 
 function NetWorthController($scope, NetWorthService) {
-  var service = NetWorthService.init();
+  this.self = NetWorthService.init();
 
-
-  this.querySearch = service.querySearch;
-  this.selectedItemChange = service.selectedItemChange;
-
-  service.launch($scope);
+  this.self.launch($scope);
 }

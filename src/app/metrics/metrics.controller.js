@@ -3,25 +3,24 @@ angular
     .factory('MetricsService', MetricsService);
 
 
-function MetricsService($http, $rootScope, $compile, $q, SessionService) {
+function MetricsService($http, $rootScope, $compile, SessionService) {
     return function () {
         var self = this;
 
-        if ($rootScope.canceller) { // cancel previous pending api calls     
-            $rootScope.canceller.resolve();
-        }
-        $rootScope.canceller = $q.defer();
-
+        SessionService.refreshCanceller();
 
         // constants
         this.DOMAIN = $rootScope.domain;
         this.MAX_COLUMN_NUM = 15;
         this.SUB_DOMAIN = "/bi/goals";
         this.TITLE_TEMPLATE = "Total Goals Created by ";
+        this.Y_AXIS_TITLE = "Number of goals";
+
         this.USE_DUMMY_DATA = true;
         this.controllerName = null;
         this.showDatepicker = true;
         this.chart_id = 'chart';
+        this.unit_prefix = '';
 
         this.start_text = "Start Date";
         this.end_text = "End Date";
@@ -84,12 +83,18 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
             $scope = scope;
-            var root = SessionService.name;  // dummy root name, should be returned by Oranj API
-            var rootId = SessionService.id;
+               
+            SessionService.role_promise.then(function mySuccess() {
+                var root = SessionService.name;  // dummy root name, should be returned by Oranj API
+                var rootId = SessionService.id;
 
-            this.getData(root, rootId, 0);
+                self.getData(root, rootId, 0);
+                self.createOffChartWidgets(scope);
 
-            this.createOffChartWidgets(scope);
+            });
+
+
+           
 
         };
 
@@ -261,7 +266,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 return;
             }
 
-            return $http.get(newUrl, { timeout: $rootScope.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            return $http.get(newUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -458,8 +463,9 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         this.yAxisSelector = function () {
             var yAxis = {
                 min: 0,
+                allowDecimals: false,
                 title: {
-                    text: 'Number of goals'
+                    text: this.Y_AXIS_TITLE
                 }
             }
 
@@ -550,14 +556,17 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
             allSeries.forEach(function (series) {
                 if (series.data[this.point.index] && series.data[this.point.index].y) {
-                    s += '<br/>' + series.name + ': ' + series.data[this.point.index].y;
+                    s += '<br/> <span style="color:' + series.color + '">● </span>';
+                    if (this.series.index === series.index) {
+                        s += '<b>' + series.name + ':' + self.unit_prefix + series.data[this.point.index].y + '</b>';
+                    } else {
+                        s += series.name + ':' + self.unit_prefix + series.data[this.point.index].y;
+                    }
                 }
 
             }, this);
 
             return s;
-
-
         }
 
         //construct categories data for chart template
@@ -708,8 +717,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                     <form name="startForm">
                             <md-input-container style="margin-bottom: 0px !important;">
                                 <label>` + this.start_text + `</label>
-                                <md-datepicker ng-model="`+ ctrl + `.startDate" name="dateField" md-max-date="` + ctrl + `.yesterday"
-                                ng-change="`+ ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                                <md-datepicker ng-model="`+ ctrl + `.self.startDate" name="dateField" md-max-date="` + ctrl + `.self.yesterday"
+                                ng-change="`+ ctrl + `.self.checkDate()" md-open-on-focus ng-required="` + ctrl + `.self.isRequired"></md-datepicker>
 
                                 <div ng-messages="startForm.dateField.$error">
                                 <div ng-message="valid">The entered value is not a date!</div>
@@ -723,8 +732,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                         <form name="endForm">
                             <md-input-container style="margin-bottom: 0px !important;">
                                 <label>`+ this.end_text + `</label>
-                                <md-datepicker ng-model="`+ ctrl + `.endDate" name="dateField" md-min-date="` + ctrl + `.startDate"
-                                md-max-date="`+ ctrl + `.yesterday" ng-change="` + ctrl + `.checkDate()" md-open-on-focus ng-required="` + ctrl + `.isRequired"></md-datepicker>
+                                <md-datepicker ng-model="`+ ctrl + `.self.endDate" name="dateField" md-min-date="` + ctrl + `.self.startDate"
+                                md-max-date="`+ ctrl + `.self.yesterday" ng-change="` + ctrl + `.self.checkDate()" md-open-on-focus ng-required="` + ctrl + `.self.isRequired"></md-datepicker>
 
                                 <div ng-messages="endForm.dateField.$error">
                                 <div ng-message="valid">The entered value is not a date!</div>
@@ -737,8 +746,8 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
                         </form>
 
-                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.clearDate()" ng-hide="` + ctrl + `.isRequired">Clear</md-button>
-                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.assignYTD()">YTD</md-button>
+                        <md-button class="md-secondary md-raised"  ng-click="`+ ctrl + `.self.clearDate()" ng-hide="` + ctrl + `.self.isRequired">Clear</md-button>
+                        <md-button class="md-primary md-raised"  ng-click="`+ ctrl + `.self.assignYTD()">YTD</md-button>
                 </div>
             `;
 
@@ -747,7 +756,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
         }
 
         this.updateSearchlist = function () {
-            var list = self.level_list[self.current_level].option.xAxis.categories;
+            var list = this.level_list[this.current_level].option.xAxis.categories;
 
             var objList = list.map(function (x, i) {
                 var series = self.level_list[self.current_level].option.series.map(function (obj) {
@@ -775,25 +784,34 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                 ]
             };
             fuse = new Fuse(objList, options); // "list" is the item array
+
+
+            if (this.current_level === 0) {
+                this.icon = 'fa-building';
+            } else if (self.current_level === 1) {
+                this.icon = 'fa-black-tie';
+            } else {
+                this.icon = 'fa-user';
+            }
         }
 
         this.createSearchBar = function (scope) {
             var ctrl = this.controllerName;
             var searchBarHTML = `
                 <div layout="column">
-                    <div layout="row"  layout-align="start center">
+                    <div layout="row"  layout-align="end center">
                         <md-autocomplete 
                             class="oranj-default"
                             md-autoselect="'true'"
                             md-no-cache="'true'"
-                            md-selected-item-change="`+ ctrl + `.selectedItemChange(item)"
+                            md-selected-item-change="`+ ctrl + `.self.selectedItemChange(item)"
                             md-selected-item="`+ ctrl + `.selectedItem" 
                             md-search-text="`+ ctrl + `.searchText" 
-                            md-items="item in `+ ctrl + `.querySearch(` + ctrl + `.searchText)" 
+                            md-items="item in `+ ctrl + `.self.querySearch(` + ctrl + `.searchText)" 
                             md-item-text="item.display"
                             md-min-length="0"
                             placeholder="Search">
-                            <span md-highlight-text="`+ ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
+                            <i id="search-icon" class="fa" ng-class="` + ctrl + `.self.icon" aria-hidden="true" style="margin:5px"></i><span  md-highlight-text="` + ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
                         </md-autocomplete>
                     </div>
 
@@ -816,7 +834,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 return `<div style="text-align: center">
-                        <h1 style="color:`+ self.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h1 style="color:`+ self.chart.series[i].color + `">` + self.unit_prefix + obj.data + ` </h1>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
             }).join("") : "";

@@ -51,7 +51,7 @@ $lb-light-yellow: #FEFAC0;
 }
 
 @media (min-width: 600px) {
-        
+
     #main-container {
         position: relative;
         padding: 64px 0 0 70px;
@@ -62,7 +62,7 @@ $lb-light-yellow: #FEFAC0;
 body {
     font-family: $font-universal;
     background-color: $app-main-bg;
-    
+
 }
 
 ul {
@@ -307,6 +307,7 @@ div#button-group {
 }
 .tile-outer {
 	background-color: $tile-bg;
+    height: 100%;
 }
 
 .tile-inner {
@@ -331,6 +332,10 @@ div#button-group {
 
 .open-left{
     left: $sub-sidebar-width+80px !important
+}
+
+.login-category {
+    margin: 35px 0px;
 }
 
 .loginCol {
@@ -838,7 +843,7 @@ md-tabs {
     height: 40px !important;
     padding-left:2px;
     padding-right:2px;
-    
+
 }
 
 
@@ -880,8 +885,8 @@ md-tabs .md-tab.md-active{
     padding:15px;
     height:50px;
     position: absolute;
-    text-align: center; 
-    margin-left: -5px; 
+    text-align: center;
+    margin-left: -5px;
     top: 5px;
     z-index: 1;
 }
@@ -927,10 +932,40 @@ md-tabs .md-tab.md-active{
 }
 
 md-autocomplete-wrap:before {
-    font-family: 'FontAwesome';
-    content: "\f002";
-    line-height: 1;
-    padding: 8px 0px 0px 8px;
-    font-weight: normal;
-    font-size: 20px;
+  font-family: 'FontAwesome';
+   content: "\f002";
+  line-height: 1;
+  padding: 8px 0px 0px 8px;
+  font-weight: normal;
+  font-size: 24px;
 }
+
+//gridstack
+.grid-stack {
+    width: 100%;
+}
+
+.grid-stack-item {
+
+    $gridstack-columns: 6;
+
+    @for $i from 1 through $gridstack-columns {
+        &[data-gs-width='#{$i}'] { width: (100% / $gridstack-columns) * $i !important; }
+        &[data-gs-x='#{$i}'] { left: (100% / $gridstack-columns) * $i !important; }
+        &.grid-stack-item[data-gs-min-width='#{$i}'] { min-width: (100% / $gridstack-columns) * $i !important; }
+        &.grid-stack-item[data-gs-max-width='#{$i}'] { max-width: (100% / $gridstack-columns) * $i !important; }
+    }
+}
+
+.md-button[disabled] {
+    background-color: #ACE6F9 !important;
+}
+
+.remove {
+    display: none !important;
+}
+
+.remove-tile {
+    margin: 10px 0px 0px 10px;
+}
+//end gridstack

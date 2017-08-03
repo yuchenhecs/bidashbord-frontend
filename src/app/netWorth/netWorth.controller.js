@@ -13,7 +13,7 @@ function NetWorthService(MetricsService) {
     var avgAdvsior = 120;
 
     // constants
-    base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    //base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     base.SUB_DOMAIN = "/bi/networth";
     base.USE_DUMMY_DATA = false;
     base.controllerName = "netWorth";

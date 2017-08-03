@@ -13,6 +13,8 @@ function LeaderBoardService(LeaderBoardDialogService) {
 function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, SessionService) {
     SessionService.refreshCanceller();
 
+    var DOMAIN = $rootScope.domain;
+
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);
@@ -23,8 +25,8 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
     var advisorId = 5098;
 
 
-    var kpiUrl = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/summary";
-    var POTBUrlBase = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
+    var kpiUrl = DOMAIN + "/bi/gamification/advisors/" + advisorId + "/summary";
+    var POTBUrlBase = DOMAIN + "/bi/gamification/advisors/" + advisorId + "/patOnTheBack?region="
     var avatarUrl = "https://" + SessionService.firm + ".oranjsites.com/oranj/" + SessionService.firm + "/profile/get/avatar";
 
     var preprocessing = function (data, type) {
@@ -103,71 +105,71 @@ function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDia
 
     var kpiApi = function (url) {
         
-        var response = {
-            "data": {
-                "id": 80,
-                "advisorId": 510,
-                "aum": 46189396,
-                "netWorth": 1406872689582.8,
-                "hni": 5,
-                "conversionRate": 40.2778,
-                "avgConversionTime": 1304.43,
-                "retentionRate": 90.2778,
-                "weeklyLogins": 2,
-                "aumGrowth": 1,
-                "netWorthGrowth": 0.206,
-                "clienteleGrowth": 2300,
-                "updateDate": 1499981783000,
-                "name": "Some Body",
-                "points": 89283,
-                "percentileOverall": 88,
-                "percentileState": 90,
-                "percentileFirm": 95
-            }
-        }
-        $scope.kpi = response["data"];
-        preprocessing($scope.kpi, "kpi");
-        $scope.changeScope('state'); //have the default scope set to state
-
-        // return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-        //     $scope.kpi = response["data"]["data"];
-        //     preprocessing($scope.kpi, "kpi");
-        //     $scope.changeScope('state'); //have the default scope set to state
-        // }), function myError(response) {
-        //     $log.error("Error " + response.status + ": " + response.statusText + "!");
+        // var response = {
+        //     "data": {
+        //         "id": 80,
+        //         "advisorId": 510,
+        //         "aum": 46189396,
+        //         "netWorth": 1406872689582.8,
+        //         "hni": 5,
+        //         "conversionRate": 40.2778,
+        //         "avgConversionTime": 1304.43,
+        //         "retentionRate": 90.2778,
+        //         "weeklyLogins": 2,
+        //         "aumGrowth": 1,
+        //         "netWorthGrowth": 0.206,
+        //         "clienteleGrowth": 2300,
+        //         "updateDate": 1499981783000,
+        //         "name": "Some Body",
+        //         "points": 89283,
+        //         "percentileOverall": 88,
+        //         "percentileState": 90,
+        //         "percentileFirm": 95
+        //     }
         // }
+        // $scope.kpi = response["data"];
+        // preprocessing($scope.kpi, "kpi");
+        // $scope.changeScope('state'); //have the default scope set to state
+
+        return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            $scope.kpi = response["data"]["data"];
+            preprocessing($scope.kpi, "kpi");
+            $scope.changeScope('state'); //have the default scope set to state
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
     };
 
     var POTBApi = function (url) {
-        var response = 
-        {
-            "data": {
-                "id": 3,
-                "advisorId": 510,
-                "region": "firm",
-                "aumAchievement": "You are Ranked 1st in AUM among all advisors in the firm",
-                "netWorthAchievement": "Your NET WORTH is above the firm average",
-                "hniAchievement": null,
-                "conversionRateAchievement": null,
-                "avgConversionRateAchievement": null,
-                "retentionRateAchievement": "Your RETENTION RATE is above the firm average",
-                "weeklyClientLoginsAchievement": null,
-                "aumGrowthAchievement": null,
-                "netWorthGrowthAchievement": null,
-                "clienteleGrowthAchievement": null
-            }
-        }
+        // var response = 
+        // {
+        //     "data": {
+        //         "id": 3,
+        //         "advisorId": 510,
+        //         "region": "firm",
+        //         "aumAchievement": "You are Ranked 1st in AUM among all advisors in the firm",
+        //         "netWorthAchievement": "Your NET WORTH is above the firm average",
+        //         "hniAchievement": null,
+        //         "conversionRateAchievement": null,
+        //         "avgConversionRateAchievement": null,
+        //         "retentionRateAchievement": "Your RETENTION RATE is above the firm average",
+        //         "weeklyClientLoginsAchievement": null,
+        //         "aumGrowthAchievement": null,
+        //         "netWorthGrowthAchievement": null,
+        //         "clienteleGrowthAchievement": null
+        //     }
+        // }
 
-        preprocessing(response["data"], "POTB");
+        // preprocessing(response["data"], "POTB");
         
 
 
 
-        // return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-        //     preprocessing(response["data"]["data"], "POTB");
-        // }), function myError(response) {
-        //     $log.error("Error " + response.status + ": " + response.statusText + "!");
-        // }
+        return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            preprocessing(response["data"]["data"], "POTB");
+        }), function myError(response) {
+            $log.error("Error " + response.status + ": " + response.statusText + "!");
+        }
     };
 
     var avatarApi = function (url) {            

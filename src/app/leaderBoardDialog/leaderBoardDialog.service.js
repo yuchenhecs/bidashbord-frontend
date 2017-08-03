@@ -7,7 +7,9 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
     //var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
     var $scope;
-    var DOMAIN = "http://10.1.15.102:8080";
+    //var DOMAIN = "http://10.1.15.102:8080";
+    var DOMAIN = $rootScope.domain;
+    
     var SUB_DOMAIN = "/bi/gamification";
     var advisorId = 5493;
     var USE_DUMMY_DATA = false;

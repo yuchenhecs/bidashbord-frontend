@@ -6,11 +6,6 @@ angular
 //factory object with methods
 function chartData($http, $log, SessionService) {
 	var chartData = {};
-
-	var DOMAIN = $rootScope.domain;
-
-	//http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/
-
 	
     SessionService.refreshCanceller();
 
@@ -313,7 +308,9 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	HomeController.self = this; // singleton
 	$scope.$http = $http;
 	this.$log = $log;
-	this.DOMAIN = $scope.domain;
+	//var DOMAIN = $scope.domain;
+	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
+
 	this.total = 0;
 
 	var colorTheme = {

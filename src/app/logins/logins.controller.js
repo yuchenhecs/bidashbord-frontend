@@ -7,7 +7,7 @@ function LoginsService(MetricsService, $compile) {
     this.init = function () {
         var base = new MetricsService();
         // constants
-        //base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         //base.DOMAIN = "http://10.1.10.11:8080";
         base.SUB_DOMAIN = "/bi/stats";
         base.USE_DUMMY_DATA = false;

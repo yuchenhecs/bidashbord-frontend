@@ -4,7 +4,6 @@ angular
     .service('LeaderBoardService', LeaderBoardService);
 
 function LeaderBoardService(LeaderBoardDialogService) {
-
     this.init = function () {
 
     };

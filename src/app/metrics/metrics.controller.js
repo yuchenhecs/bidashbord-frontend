@@ -3,7 +3,7 @@ angular
     .factory('MetricsService', MetricsService);
 
 
-function MetricsService($http, $rootScope, $compile, $q, SessionService) {
+function MetricsService($http, $rootScope, $compile, SessionService) {
     return function () {
         var self = this;
 
@@ -811,7 +811,7 @@ function MetricsService($http, $rootScope, $compile, $q, SessionService) {
                             md-item-text="item.display"
                             md-min-length="0"
                             placeholder="Search">
-                            <i id="search-icon" class="fa" ng-class="` + ctrl + `.self.icon" aria-hidden="true" style="margin:3px"></i><span  md-highlight-text="` + ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
+                            <i id="search-icon" class="fa" ng-class="` + ctrl + `.self.icon" aria-hidden="true" style="margin:5px"></i><span  md-highlight-text="` + ctrl + `.searchText" md-highlight-flags="gi">{{item.display}}</span>
                         </md-autocomplete>
                     </div>
 

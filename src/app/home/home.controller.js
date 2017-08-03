@@ -8,9 +8,11 @@ function chartData($http, $log, SessionService) {
 	var chartData = {};
 
 
-	chartData.callApi = function (chartType, chartId, url) {
+	chartData.callApi = function (chartType, chartId, show, url) {
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
+		} if (!show) {
+			return;
 		} else {
 			return $http.get(url, { headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 				var apiData = response["data"];
@@ -319,11 +321,11 @@ function HomeController($scope, $http, $log, chartData) {
 
 	$scope.saveToggle = false;
 
-	//replace with api response for positions
-	$scope.goalsGrid = {x: 4, y: 0, height: 6, width: 2, show:1};
-	$scope.aumGrid = {x: 0, y: 0, height: 6, width: 4, show:1};
-	$scope.netWorthGrid = {x: 0, y: 6, height: 6, width: 3, show:1};
-	$scope.loginsGrid = {x: 3, y: 6, height: 6, width: 3, show:1};
+	//default position
+	$scope.goalsGrid = {x: 0, y: 0, height: 7, width: 2, show:1};
+	$scope.aumGrid = {x: 4, y: 0, height: 7, width: 4, show:1};
+	$scope.netWorthGrid = {x: 0, y: 13, height: 7, width: 6, show:1};
+	$scope.loginsGrid = {x: 0, y: 7, height: 6, width: 6, show:1};
 
 	var storeGrid = function(items) {
 		for (var i=0;i<Object.keys(items).length;i++) {
@@ -364,33 +366,37 @@ function HomeController($scope, $http, $log, chartData) {
 		var aum = $('#aumContainer').highcharts();
 		var networth = $('#netWorthContainer').highcharts();
 
-		if (goalsGrid.show) {
+		if ($scope.goalsGrid.show) {
 			goals.reflow();
-		} else if (aumGrid.show) {
+		}
+		if ($scope.aumGrid.show) {
 			aum.reflow();
-		} else if (netWorthGrid.show){
+		}
+		if ($scope.netWorthGrid.show){
 			networth.reflow();
 		}
 	};
 
+/////
 	$scope.toggle = function() {
 		$scope.saveToggle = !$scope.saveToggle;
 		document.getElementById("checkbox").checked = $scope.saveToggle;
 		console.log($scope.saveToggle);
 	};
+/////
 
 	$scope.remove = function (id) {
-		var grid = $('.grid-stack').data('gridstack'); //using provided api
+		var grid = $('.grid-stack').data('gridstack');
 		var element = document.getElementById(id);
-		grid.removeWidget(element);
+		grid.removeWidget(element); //using provided api
 		if (id === 'goals') {
-			goalsGrid.show = 0;
+			$scope.goalsGrid.show = 0;
 		} else if (id === 'aum') {
-			aumGrid.show = 0;
+			$scope.aumGrid.show = 0;
 		} else if (id === 'netWorth') {
-			netWorthGrid.show = 0;
+			$scope.netWorthGrid.show = 0;
 		} else if (id === 'logins') {
-			loginsGrid.show = 0;
+			$scope.loginsGrid.show = 0;
 		}
 	};
 
@@ -427,23 +433,39 @@ function HomeController($scope, $http, $log, chartData) {
 	var clientUrl = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=client';
 	var prospectUrl = 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/stats?user=prospect';
 
+
 	this.chart = Highcharts.setOptions(colorTheme);
-	chartData.callApi('pie', 'goalsContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
-	chartData.callApi('area', 'aumContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/networth');
+	chartData.callApi('pie', 'goalsContainer', $scope.goalsGrid.show, 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/goals');
+	chartData.callApi('area', 'aumContainer', $scope.aumGrid.show, 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/aums');
+	chartData.callApi('line', 'netWorthContainer', $scope.netWorthGrid.show, 'http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/bi/networth');
 	$scope.loginApi();
 
 	//jQuery for gridstack
 	$(function () {
-	    var gridOptions = {
-	        float: false,
+		var gridOptions = {
+			float: false,
 			width: 6
-	    };
-	    $('.grid-stack').gridstack(gridOptions);
+		};
+		$('.grid-stack').gridstack(gridOptions);
+		if (!$scope.goalsGrid.show) {
+			$scope.remove('goals');
+		}
+		if (!$scope.aumGrid.show) {
+			$scope.remove('aum');
+		}
+		if (!$scope.netWorthGrid.show) {
+			$scope.remove('netWorth');
+		}
+		if (!$scope.loginsGrid.show) {
+			$scope.remove('logins');
+		}
 		$('.grid-stack').on('change', function(event, items) {
-		    redrawCharts(); //redraw highcharts to match new dimensions after every change
-			storeGrid(items); //store new position after every change
+			redrawCharts(); //redraw highcharts to match new dimensions after every change
+			if (items !== undefined) {
+				storeGrid(items); //store new position after every change
+			}
 			$scope.saveToggle = false;
 		});
 	});
+
 };

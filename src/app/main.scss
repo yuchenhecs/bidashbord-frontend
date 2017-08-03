@@ -307,6 +307,7 @@ div#button-group {
 }
 .tile-outer {
 	background-color: $tile-bg;
+    height: 100%;
 }
 
 .tile-inner {
@@ -331,6 +332,10 @@ div#button-group {
 
 .open-left{
     left: $sub-sidebar-width+80px !important
+}
+
+.login-category {
+    margin: 35px 0px;
 }
 
 .loginCol {
@@ -934,6 +939,8 @@ md-autocomplete-wrap:before {
   font-weight: normal;
   font-size: 24px;
 }
+
+//gridstack
 .grid-stack {
     width: 100%;
 }
@@ -955,5 +962,10 @@ md-autocomplete-wrap:before {
 }
 
 .remove {
-    display: none !important;    
+    display: none !important;
 }
+
+.remove-tile {
+    margin: 10px 0px 0px 10px;
+}
+//end gridstack

@@ -7,8 +7,6 @@ angular
 function chartData($http, $log, SessionService) {
 	var chartData = {};
 
-	var DOMAIN = $rootScope.domain;
-
 	//http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/
 
 	
@@ -360,13 +358,13 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		});
 	};
 
-	var clientUrl = DOMAIN + '/bi/stats?user=client';
-	var prospectUrl = DOMAIN + '/bi/stats?user=prospect';
+	var clientUrl = this.DOMAIN + '/bi/stats?user=client';
+	var prospectUrl = this.DOMAIN + '/bi/stats?user=prospect';
 
 	this.chart = Highcharts.setOptions(colorTheme);
-	chartData.callApi('pie', 'goalsContainer', DOMAIN + '/bi/goals');
-	chartData.callApi('area', 'aumContainer', DOMAIN + '/bi/aums');
-	chartData.callApi('line', 'netWorthContainer', DOMAIN + '/bi/networth');
+	chartData.callApi('pie', 'goalsContainer', this.DOMAIN + '/bi/goals');
+	chartData.callApi('area', 'aumContainer', this.DOMAIN + '/bi/aums');
+	chartData.callApi('line', 'netWorthContainer', this.DOMAIN + '/bi/networth');
 	$scope.loginApi();
 
 };

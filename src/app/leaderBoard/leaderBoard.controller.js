@@ -10,7 +10,7 @@ function LeaderBoardService(LeaderBoardDialogService) {
 }
 
 
-function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, SessionService) {
+function LeaderBoardController($scope, $http, LeaderBoardService, LeaderBoardDialogService, SessionService, $rootScope) {
     SessionService.refreshCanceller();
 
     var DOMAIN = $rootScope.domain;

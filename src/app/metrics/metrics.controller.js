@@ -279,13 +279,13 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
                     return data;
                 }
                 else {
-                    var hasNext = response.data.data['last'];
+                    var hasNext = response.data['last'];
 
                     if (data) {
-                        data['data'] = data['data'].concat(response.data.data[type]);
+                        data['data'] = data['data'].concat(response.data[type]);
                     } else {
-                        data = response.data.data;
-                        data['data'] = response.data.data[type];
+                        data = response.data;
+                        data['data'] = response.data[type];
                     }
                     if (hasNext) {
 
@@ -305,13 +305,13 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
 
         this.PreProcessData = function (response, type, newUrl, name, id, page, level, args, data) {
-            var hasNext = response.data.data['hasNext'];
+            var hasNext = response.data['hasNext'];
 
             if (data) {
-                data['data'] = data['data'].concat(response.data.data[type]);
+                data['data'] = data['data'].concat(response.data[type]);
             } else {
-                data = response.data.data;
-                data['data'] = response.data.data[type];
+                data = response.data;
+                data['data'] = response.data[type];
             }
 
             if (!hasNext) {

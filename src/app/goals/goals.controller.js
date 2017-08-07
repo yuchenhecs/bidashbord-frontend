@@ -8,7 +8,9 @@ function GoalsService(MetricsService) {
         // most code is written in MetricsController
         var base = new MetricsService();
         // constants
-        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        //base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        //base.DOMAIN = "http://10.1.15.49:8080"
+        base.DOMAIN = "http://10.1.15.102:8080";
         base.SUB_DOMAIN = "/bi/goals";
         base.USE_DUMMY_DATA = false;
         base.controllerName = "goals";

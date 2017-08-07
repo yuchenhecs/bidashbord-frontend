@@ -3,7 +3,7 @@ angular
     .factory('MetricsService', MetricsService);
 
 
-function MetricsService($http, $rootScope, $compile, SessionService) {
+function MetricsService($http, $rootScope, $compile, SessionService, $q) {
     return function () {
         var self = this;
 
@@ -63,7 +63,6 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         };
 
 
-
         // 1. Initial launch pipeline 
         //      launch -> getData -> loadData -> createChart
         // 2. When-click-on-bars pipeline
@@ -83,18 +82,22 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         //------------------------------------ Pipeline ---------------------------------------------------------------
         this.launch = function (scope) {
             $scope = scope;
-               
-            SessionService.role_promise.then(function mySuccess() {
+
+            SessionService.curr_page = this.controllerName;
+
+            $q.race([SessionService.role_promise, SessionService.canceller.promise]).then(function mySuccess() {
+
                 var root = SessionService.name;  // dummy root name, should be returned by Oranj API
                 var rootId = SessionService.id;
 
                 self.getData(root, rootId, 0);
                 self.createOffChartWidgets(scope);
 
+            }, function myError(response) {
             });
 
 
-           
+
 
         };
 
@@ -225,6 +228,10 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         }
 
         this.getDataFromApi = function (newUrl, name, id, page, level, args, data) {
+
+            if (!(SessionService.curr_page === this.controllerName)) return;
+
+
             var type;
 
             var role_level = level + SessionService.level;
@@ -272,13 +279,13 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
                     return data;
                 }
                 else {
-                    var hasNext = response.data.data['last'];
+                    var hasNext = response.data['last'];
 
                     if (data) {
-                        data['data'] = data['data'].concat(response.data.data[type]);
+                        data['data'] = data['data'].concat(response.data[type]);
                     } else {
-                        data = response.data.data;
-                        data['data'] = response.data.data[type];
+                        data = response.data;
+                        data['data'] = response.data[type];
                     }
                     if (hasNext) {
 
@@ -298,13 +305,13 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
 
 
         this.PreProcessData = function (response, type, newUrl, name, id, page, level, args, data) {
-            var hasNext = response.data.data['hasNext'];
+            var hasNext = response.data['hasNext'];
 
             if (data) {
-                data['data'] = data['data'].concat(response.data.data[type]);
+                data['data'] = data['data'].concat(response.data[type]);
             } else {
-                data = response.data.data;
-                data['data'] = response.data.data[type];
+                data = response.data;
+                data['data'] = response.data[type];
             }
 
             if (!hasNext) {
@@ -758,7 +765,13 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
         this.updateSearchlist = function () {
             var list = this.level_list[this.current_level].option.xAxis.categories;
 
-            var objList = list.map(function (x, i) {
+            var objList = this.wrapCategoryWithData(list);
+
+            this.generateSearchList(objList);
+        }
+
+        this.wrapCategoryWithData = function (list) {
+            return list.map(function (x, i) {
                 var series = self.level_list[self.current_level].option.series.map(function (obj) {
                     return {
                         name: obj.name,
@@ -771,7 +784,9 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
                     series: series
                 };
             });
+        }
 
+        this.generateSearchList = function (objList) {
             var options = {
                 shouldSort: true,
                 threshold: 0.6,
@@ -793,6 +808,7 @@ function MetricsService($http, $rootScope, $compile, SessionService) {
             } else {
                 this.icon = 'fa-user';
             }
+
         }
 
         this.createSearchBar = function (scope) {

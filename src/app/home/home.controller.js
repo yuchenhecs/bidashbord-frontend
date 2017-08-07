@@ -7,10 +7,8 @@ angular
 function chartData($http, $log, SessionService) {
 	var chartData = {};
 
-    SessionService.refreshCanceller();
-
-
 	chartData.callApi = function (chartType, chartId, show, url) {
+		if(!(SessionService.curr_page === "home")) return;
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		}
@@ -306,10 +304,17 @@ function chartData($http, $log, SessionService) {
 	return chartData;
 }
 
-function HomeController($scope, $http, $log, $rootScope, $window, $mdDialog, chartData, SessionService) {
+function HomeController($scope, $http, $log, $rootScope, chartData, SessionService) {
+
 	HomeController.self = this; // singleton
 	$scope.$http = $http;
 	this.$log = $log;
+
+	SessionService.refreshCanceller();
+	SessionService.curr_page = "home";
+	var DOMAIN = "http://10.1.15.102:8080";
+	//var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend"
+
 	this.total = 0;
 	//var DOMAIN = $scope.domain;
 

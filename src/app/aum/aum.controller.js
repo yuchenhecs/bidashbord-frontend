@@ -7,7 +7,10 @@ function AUMService(MetricsService) {
     this.init = function () {
         var base = new MetricsService();
         // constants
-        base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        //base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+        
+        base.DOMAIN = "http://10.1.15.49:8080"
+        
         base.SUB_DOMAIN = "/bi/aums";
         base.USE_DUMMY_DATA = false;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;

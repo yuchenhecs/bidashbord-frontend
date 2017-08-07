@@ -4,16 +4,19 @@ angular
   .service('NetWorthService', NetWorthService);
 
 function NetWorthService(MetricsService) {
-  this.init = function(){
+  this.init = function () {
     // most code is written in MetricsController
 
     var base = new MetricsService();
     var seriesRaw = [];
-    var avgFirm = 100;
-    var avgAdvsior = 120;
+    var avgFirm;
+    var avgAdvsior;
 
     // constants
-    base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    //base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
+    base.DOMAIN = "http://10.1.15.102:8080";
+
+
     base.SUB_DOMAIN = "/bi/networth";
     base.USE_DUMMY_DATA = false;
     base.controllerName = "netWorth";
@@ -135,10 +138,10 @@ function NetWorthService(MetricsService) {
       return series;
     };
 
-    base.yAxisSelector = function(input) {
-      var avgFirm = input['avgFirm'];
-      var avgAdvsior = input['avgAdvisor'];
-      
+    base.yAxisSelector = function (input) {
+      avgFirm = input['avgFirm'];
+      avgAdvsior = input['avgAdvisor'];
+
       var yAxis = [{
         labels: {
           style: {
@@ -151,7 +154,9 @@ function NetWorthService(MetricsService) {
             color: Highcharts.getOptions().colors[1]
           }
         },
-        opposite: true
+        opposite: true,
+
+        minPadding: 0.1
       },
       { // Secondary yAxis
         title: {
@@ -164,7 +169,9 @@ function NetWorthService(MetricsService) {
           style: {
             color: Highcharts.getOptions().colors[0]
           }
-        }
+        },
+
+        minPadding: 0.1
       }
       ];
 
@@ -173,7 +180,7 @@ function NetWorthService(MetricsService) {
         yAxis[1]['plotLines'] =
           [{
             value: avgFirm,
-            color: 'red',
+            color: Highcharts.getOptions().colors[1],
             dashStyle: 'shortdash',
             marker: {
               enabled: false
@@ -202,7 +209,7 @@ function NetWorthService(MetricsService) {
       return yAxis;
     }
 
-    base.seriesSelector = function(input) {
+    base.seriesSelector = function (input) {
       var seriesRaw = this.prepareSeries(input.data);
 
       var series = [{
@@ -224,22 +231,43 @@ function NetWorthService(MetricsService) {
       }];
 
       if (base.current_level === 2) {
-        series[1].showInLegend = false;
+        // series[1].showInLegend = false;
+        // series.push(
+        //   {
+        //     name: 'Avg Advisor',
+        //     type: 'spline',
+        //     color: 'green',
+        //     yAxis: 1,
+        //     marker: {
+        //       enabled: false
+        //     }
+        //   },
+        //   {
+        //     name: 'Avg Firm',
+        //     type: 'spline',
+        //     dashStyle: 'shortdash',
+        //     color: Highcharts.getOptions().colors[1],
+        //     yAxis: 1,
+        //     marker: {
+        //       enabled: false
+        //     }
+        //   }
+        // );
+        series[1] = {
+          name: 'Avg Advisor',
+          type: 'spline',
+          color: 'green',
+          yAxis: 1,
+          marker: {
+            enabled: false
+          }
+        };
         series.push(
-          {
-            name: 'Avg Advisor',
-            type: 'spline',
-            color: 'green',
-            yAxis: 1,
-            marker: {
-              enabled: false
-            }
-          },
           {
             name: 'Avg Firm',
             type: 'spline',
             dashStyle: 'shortdash',
-            color: 'red',
+            color: Highcharts.getOptions().colors[1],
             yAxis: 1,
             marker: {
               enabled: false
@@ -249,6 +277,24 @@ function NetWorthService(MetricsService) {
       }
 
       return series;
+    }
+
+
+    base.wrapCategoryWithData = function (list) {
+      console.log(base.level_list[base.current_level].option.series);
+      return list.map(function (x, i) {
+        var series = base.level_list[base.current_level].option.series.map(function (obj, obj_i) {
+          return {
+            name: obj.name,
+            data: obj_i === 0 ? obj.data[i].y : (obj_i === 1 ? avgFirm : avgAdvsior)
+          };
+        });
+        return {
+          value: x.toLowerCase(),
+          display: x,
+          series: series
+        };
+      });
     }
 
     return base;

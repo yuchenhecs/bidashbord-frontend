@@ -311,8 +311,8 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 
 	SessionService.refreshCanceller();
 	SessionService.curr_page = "home";
-	//var DOMAIN = $scope.domain;
-	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
+	var DOMAIN = "http://10.1.15.102:8080";
+	//var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend"
 
 	this.total = 0;
 

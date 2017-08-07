@@ -97,7 +97,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             });
 
 
-           
+
 
         };
 
@@ -229,9 +229,9 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
         this.getDataFromApi = function (newUrl, name, id, page, level, args, data) {
 
-            if(!(SessionService.curr_page === this.controllerName)) return;
-        
-            
+            if (!(SessionService.curr_page === this.controllerName)) return;
+
+
             var type;
 
             var role_level = level + SessionService.level;
@@ -765,7 +765,13 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
         this.updateSearchlist = function () {
             var list = this.level_list[this.current_level].option.xAxis.categories;
 
-            var objList = list.map(function (x, i) {
+            var objList = this.wrapCategoryWithData(list);
+
+            this.generateSearchList(objList);
+        }
+
+        this.wrapCategoryWithData = function (list) {
+            return list.map(function (x, i) {
                 var series = self.level_list[self.current_level].option.series.map(function (obj) {
                     return {
                         name: obj.name,
@@ -778,7 +784,9 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
                     series: series
                 };
             });
+        }
 
+        this.generateSearchList = function (objList) {
             var options = {
                 shouldSort: true,
                 threshold: 0.6,
@@ -800,6 +808,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             } else {
                 this.icon = 'fa-user';
             }
+
         }
 
         this.createSearchBar = function (scope) {

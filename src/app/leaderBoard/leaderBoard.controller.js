@@ -17,7 +17,7 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
 
    // var DOMAIN = $scope.domain;
 
-    var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
+    var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend"
 
 
     $scope.showChart = function (ev, tab) {

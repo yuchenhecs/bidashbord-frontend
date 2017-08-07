@@ -341,7 +341,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
 
     this.getDataFromApi = function (url) {
-if(!(SessionService.curr_page === "LeaderBoard")) return;
+        //if(!(SessionService.curr_page === "LeaderBoard")) return;
         
         console.log(url);
 
@@ -430,7 +430,6 @@ if(!(SessionService.curr_page === "LeaderBoard")) return;
         $scope.currentTab = tab;
 
         $mdDialog.show({
-            controller: LeaderBoardController,
             template: dialogHTML,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,

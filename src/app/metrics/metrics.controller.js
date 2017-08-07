@@ -83,7 +83,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
         this.launch = function (scope) {
             $scope = scope;
 
-            SessionService.curr_page = this.controllerName;
+            //SessionService.curr_page = this.controllerName;
 
             $q.race([SessionService.role_promise, SessionService.canceller.promise]).then(function mySuccess() {
 
@@ -229,7 +229,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
         this.getDataFromApi = function (newUrl, name, id, page, level, args, data) {
 
-            if (!(SessionService.curr_page === this.controllerName)) return;
+            //if (!(SessionService.curr_page === this.controllerName)) return;
 
 
             var type;

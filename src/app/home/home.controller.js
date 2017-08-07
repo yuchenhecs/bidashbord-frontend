@@ -8,7 +8,7 @@ function chartData($http, $log, SessionService) {
 	var chartData = {};
 
 	chartData.callApi = function (chartType, chartId, show, url) {
-		if(!(SessionService.curr_page === "home")) return;
+		//if(!(SessionService.curr_page === "home")) return;
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		}
@@ -311,14 +311,12 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	this.$log = $log;
 
 	SessionService.refreshCanceller();
-	SessionService.curr_page = "home";
-	//var DOMAIN = "http://10.1.15.102:8080";
-	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend"
+	//SessionService.curr_page = "home";
 
 	this.total = 0;
 	//var DOMAIN = $scope.domain;
 
-	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend/"
+	var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend"
 	var clientUrl = DOMAIN + '/bi/stats?user=client';
 	var prospectUrl = DOMAIN + '/bi/stats?user=prospect';
 	var colorTheme = {colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]};

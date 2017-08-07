@@ -4,8 +4,9 @@
             <div>
                 <!-- <input id="checkbox" type="checkbox" ng-model="all">
                 <header>{{ all }} // {{ saveToggle }}</header> -->
-                <md-button ng-click="saveGridData()" ng-disabled="all" style="background-color:#11BEDF">Save</md-button>
+                <md-button ng-click="saveGridData(0)" ng-disabled="all" style="background-color:#11BEDF">Save</md-button>
                 <md-button ng-click="reset()" style="background-color:#11BEDF">Reset</md-button>
+                <md-button ng-click="showForm($event)" style="background-color:#11BEDF">Form</md-button>
             </div>
         </div>
         <div layout="row">

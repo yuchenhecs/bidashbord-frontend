@@ -9,6 +9,9 @@ function LoginsService(MetricsService, $compile) {
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
         //base.DOMAIN = "http://10.1.10.11:8080";
+        //base.DOMAIN = "http://10.1.15.102:8080";
+
+        
         base.SUB_DOMAIN = "/bi/stats";
         base.USE_DUMMY_DATA = false;
         base.controllerName = "logins";

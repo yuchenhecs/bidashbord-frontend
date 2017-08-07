@@ -850,7 +850,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 return `<div style="text-align: center">
-                        <h1 style="color:`+ self.chart.series[i].color + `">` + self.unit_prefix + obj.data + ` </h1>
+                        <h3 style="color:`+ self.chart.series[i].color + `">` + self.unit_prefix + obj.data + ` </h3>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
             }).join("") : "";

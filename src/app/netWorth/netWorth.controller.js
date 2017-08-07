@@ -154,9 +154,7 @@ function NetWorthService(MetricsService) {
             color: Highcharts.getOptions().colors[1]
           }
         },
-        opposite: true,
-
-        minPadding: 0.1
+        opposite: true
       },
       { // Secondary yAxis
         title: {
@@ -169,14 +167,11 @@ function NetWorthService(MetricsService) {
           style: {
             color: Highcharts.getOptions().colors[0]
           }
-        },
-
-        minPadding: 0.1
+        }
       }
       ];
 
       if (base.current_level === 2) {
-        yAxis[0]['title']['text'] = null;
         yAxis[1]['plotLines'] =
           [{
             value: avgFirm,
@@ -188,7 +183,7 @@ function NetWorthService(MetricsService) {
             width: 2,
             zIndex: 4,
             label: {
-              // text: 'Avg Firm'
+              //text: 'Avg Firm'
               text: null
             }
           }, {
@@ -200,7 +195,7 @@ function NetWorthService(MetricsService) {
             width: 2,
             zIndex: 4,
             label: {
-              // text: 'Avg Advisor'
+              //text: 'Avg Advisor'
               text: null
             }
           }];
@@ -224,6 +219,7 @@ function NetWorthService(MetricsService) {
       {
         name: 'Average Net Worth',
         type: 'spline',
+        yAxis: 0,        
         data: seriesRaw[1],
         tooltip: {
           valueSuffix: 'k'
@@ -231,33 +227,11 @@ function NetWorthService(MetricsService) {
       }];
 
       if (base.current_level === 2) {
-        // series[1].showInLegend = false;
-        // series.push(
-        //   {
-        //     name: 'Avg Advisor',
-        //     type: 'spline',
-        //     color: 'green',
-        //     yAxis: 1,
-        //     marker: {
-        //       enabled: false
-        //     }
-        //   },
-        //   {
-        //     name: 'Avg Firm',
-        //     type: 'spline',
-        //     dashStyle: 'shortdash',
-        //     color: Highcharts.getOptions().colors[1],
-        //     yAxis: 1,
-        //     marker: {
-        //       enabled: false
-        //     }
-        //   }
-        // );
         series[1] = {
           name: 'Avg Advisor',
           type: 'spline',
           color: 'green',
-          yAxis: 1,
+          yAxis: 0,
           marker: {
             enabled: false
           }
@@ -268,7 +242,7 @@ function NetWorthService(MetricsService) {
             type: 'spline',
             dashStyle: 'shortdash',
             color: Highcharts.getOptions().colors[1],
-            yAxis: 1,
+            yAxis: 0,
             marker: {
               enabled: false
             }

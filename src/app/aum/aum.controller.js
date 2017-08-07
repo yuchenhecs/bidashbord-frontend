@@ -8,9 +8,9 @@ function AUMService(MetricsService) {
         var base = new MetricsService();
         // constants
         base.DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend";
-        
+
         //base.DOMAIN = "http://10.1.15.49:8080"
-        
+
         base.SUB_DOMAIN = "/bi/aums";
         base.USE_DUMMY_DATA = false;
         base.COLOR_ARRAY = Highcharts.getOptions().colors;
@@ -246,10 +246,10 @@ function AUMService(MetricsService) {
             this.series.chart.series.forEach(function (series) {
                 if (currentStack === series.userOptions['stackId'] && series.data[this.point.index].y) {
                     s += '<br/> <span style="color:' + series.color + '">● </span>';
-                
-                    if(this.series.index === series.index){
+
+                    if (this.series.index === series.index) {
                         s += '<b>' + series.name + ':' + base.unit_prefix + series.data[this.point.index].y + '</b>';
-                    }else {
+                    } else {
                         s += series.name + ':' + base.unit_prefix + series.data[this.point.index].y;
                     }
                 }
@@ -305,13 +305,14 @@ function AUMService(MetricsService) {
 
                 Object.entries(aumMap).sort().forEach(function (entry) {
                     var dataDrillDown = entry[1].map(function (x, i) {
-                        var self = base;
                         var name = 'firmId';
-                        if (self.current_level === 0) {
+                        var role_level = base.current_level + SessionService.level;
+
+                        if (role_level === 0) {
                             name = 'firmId';
-                        } else if (self.current_level === 1) {
+                        } else if (role_level === 1) {
                             name = 'advisorId';
-                        } else if (self.current_level === 2) {
+                        } else if (role_level === 2) {
                             name = 'clientId'
                         }
 
@@ -377,12 +378,12 @@ function AUMService(MetricsService) {
             var searchResultHTML = "";
             for (var i = 0; i < length / 2; i++) {
                 searchResultHTML += `<div style="text-align: center">
-                        <h1> 
+                        <h3> 
                         <span style="color:`+ base.chart.series[i].color + `">` + base.unit_prefix + item.series[i].data + `</span>
-                        </h1>
-                        <h1>
+                        </h3>
+                        <h3>
                         <span style="color:`+ base.chart.series[i + length / 2].color + `">` + base.unit_prefix + item.series[i + length / 2].data + `</span>  
-                        </h1>
+                        </h3>
                         <h6> `+ item.series[i].name + `</h6>
                     </div>`;
             };

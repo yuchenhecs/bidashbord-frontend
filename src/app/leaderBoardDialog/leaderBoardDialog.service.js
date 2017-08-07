@@ -11,8 +11,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
     //var DOMAIN = $rootScope.domain;
     
     var SUB_DOMAIN = "/bi/gamification";
-    var advisorId = 5493;
-    var USE_DUMMY_DATA = true;
+    var USE_DUMMY_DATA = false;
     var tagColors = ["tag-one", "tag-two", "tag-three"];
     var colors = ["#00a4d3", "#72bb53", "#CDC114"];
     var tabInfo = [
@@ -334,7 +333,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
     }
 
     this.getData = function (tab) {
-        var url = DOMAIN + SUB_DOMAIN + $scope.tabInfo[$scope.currentTab].KPI_DOMAIN + "?advisorId=" + advisorId;
+        var url = DOMAIN + SUB_DOMAIN + $scope.tabInfo[$scope.currentTab].KPI_DOMAIN;
 
         this.getDataFromApi(url);
     }
@@ -383,10 +382,10 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
             return;
         }
 
-        return $http.get(url, { timeout: $rootScope.canceller.promise, headers: {'Authorization': SessionService.access_token }  }).then(function mySuccess(response) {
+        return $http.get(url, { timeout: SessionService.canceller.promise, headers: {'Authorization': SessionService.access_token }  }).then(function mySuccess(response) {
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
            
-            var kpi_details = response.data.data;
+            var kpi_details = response.data;
            
             kpi_details.advisorKpi = formatter(kpi_details.advisorKpi);
             kpi_details.overall.best = formatter(kpi_details.overall.best);

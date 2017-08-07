@@ -138,14 +138,14 @@ function GoalsService(MetricsService) {
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 total += obj.data;
                 return `<div style="text-align: center">
-                        <h1 style="color:`+ base.chart.series[i].color + `">` + obj.data + ` </h1>
+                        <h3 style="color:`+ base.chart.series[i].color + `">` + obj.data + ` </h3>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
             }).join("") : "";
 
             var searchSuffix = item ?
                 `<div style="text-align: center">
-                    <h1>` + total + ` </h1>
+                    <h3>` + total + ` </h3>
                     <h6> Total </h6>
                 </div>`: "";
 

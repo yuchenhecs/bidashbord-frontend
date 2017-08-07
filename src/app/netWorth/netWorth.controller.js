@@ -117,13 +117,15 @@ function NetWorthService(MetricsService) {
       var series = [];
 
       input.forEach(function (x, i) {
-        var self = base;
         var name = '';
-        if (self.current_level === 0) {
+
+
+        var role_level = base.current_level + SessionService.level;
+        if (role_level === 0) {
           name = 'firmId';
-        } else if (self.current_level === 1) {
+        } else if (role_level === 1) {
           name = 'advisorId';
-        } else if (self.current_level === 2) {
+        } else if (role_level === 2) {
           name = 'clientId'
         }
 
@@ -171,7 +173,7 @@ function NetWorthService(MetricsService) {
       }
       ];
 
-      if (base.current_level === 2) {
+      if (base.current_level + SessionService.level === 2) {
         yAxis[1]['plotLines'] =
           [{
             value: avgFirm,
@@ -226,7 +228,7 @@ function NetWorthService(MetricsService) {
         }
       }];
 
-      if (base.current_level === 2) {
+      if (base.current_level + SessionService.level === 2) {
         series[1] = {
           name: 'Avg Advisor',
           type: 'spline',
@@ -255,7 +257,7 @@ function NetWorthService(MetricsService) {
 
 
     base.wrapCategoryWithData = function (list) {
-      console.log(base.level_list[base.current_level].option.series);
+      
       return list.map(function (x, i) {
         var series = base.level_list[base.current_level].option.series.map(function (obj, obj_i) {
           return {

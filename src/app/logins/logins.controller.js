@@ -252,14 +252,14 @@ function LoginsService(MetricsService, $compile) {
 
             var series = [];
 
-            var self = base;
             input.forEach(function (obj, p) {
                 var name = 'firmId';
-                if (self.current_level === 0) {
+                var role_level = base.current_level + SessionService.level;
+                if (role_level === 0) {
                     name = 'firmId';
-                } else if (self.current_level === 1) {
+                } else if (role_level === 1) {
                     name = 'advisorId';
-                } else if (self.current_level === 2) {
+                } else if (role_level === 2) {
                     name = 'clientId'
                 }
                 totalLogins.push({ id: obj[name], y: obj['totalLogins'] });

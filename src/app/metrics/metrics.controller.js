@@ -181,14 +181,17 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             if (role_level === 0) {
                 baseUrl = domain + subdomain + "/firms?";
             } else if (role_level === 1) {
-                baseUrl = domain + subdomain + "/advisors?firmId=" + id;
+                var id_url = id === -1 ? "": "firmId=" + id;
+                baseUrl = domain + subdomain + "/advisors?" + id_url;
             } else if (role_level === 2) {
-                baseUrl = domain + subdomain + "/clients?advisorId=" + id;
+                var id_url = id === -1 ? "": "advisorId=" + id;
+                baseUrl = domain + subdomain + "/clients?" + id_url;
             } else {
                 console.log("Invalid level!");
                 self.hideLoading();
                 return;
             }
+            
 
             var endDate = !this.endDate ? null : this.endDate.toISOString().slice(0, 10);
             var startDate = !this.startDate ? null : this.startDate.toISOString().slice(0, 10);
@@ -274,6 +277,8 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             }
 
             return $http.get(newUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+                console.log(response);
+
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
                     return data;
@@ -579,15 +584,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
         //construct categories data for chart template
         this.prepareCategories = function (input) {
             var categories = input.map(function (x) {
-                var name = x['name'];
-                if (self.current_level === 0) {
-                    name = x['name'];
-                } else if (self.current_level === 1) {
-                    name = x['name'];
-                } else if (self.current_level === 2) {
-                    name = x['name'];
-                }
-                return name;
+                return  x['name'];
             });
 
             var output = [];
@@ -616,17 +613,19 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
             // combine all points for each series into lists
 
+
             var series = [];
             for (var key in goalMap) {
                 var dataDrillDown = goalMap[key].map(function (x, i) {
 
                     var name = 'firmId';
-                    if (self.current_level === 0) {
+                    var role_level = self.current_level + SessionService.level;
+                    if (role_level === 0) {
                         name = 'firmId';
-                    } else if (self.current_level === 1) {
+                    } else if (role_level === 1) {
                         name = 'advisorId';
-                    } else if (self.current_level === 2) {
-                        name = 'clientId'
+                    } else if (role_level === 2) {
+                        name = 'clientId';
                     }
                     return { id: input[i][name], y: x };
                 });
@@ -638,7 +637,6 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
                     };
                 series.push(points);
             }
-
             return series;
         }
 
@@ -800,12 +798,13 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             };
             fuse = new Fuse(objList, options); // "list" is the item array
 
+            var role_level = self.current_level + SessionService.level;
 
-            if (this.current_level === 0) {
+            if (role_level === 0) {
                 this.icon = 'fa-building';
-            } else if (self.current_level === 1) {
+            } else if (role_level === 1) {
                 this.icon = 'fa-black-tie';
-            } else {
+            } else if (role_level === 2) {
                 this.icon = 'fa-user';
             }
 

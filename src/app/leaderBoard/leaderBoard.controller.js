@@ -138,7 +138,7 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
         // $scope.changeScope('state'); //have the default scope set to state
 
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            $scope.kpi = response["data"]["data"];
+            $scope.kpi = response.data;
             preprocessing($scope.kpi, "kpi");
             $scope.changeScope('state'); //have the default scope set to state
         }), function myError(response) {
@@ -176,7 +176,7 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
 
 
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            preprocessing(response["data"]["data"], "POTB");
+            preprocessing(response.data, "POTB");
         }), function myError(response) {
             $log.error("Error " + response.status + ": " + response.statusText + "!");
         }

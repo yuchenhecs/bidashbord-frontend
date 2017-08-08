@@ -1,34 +1,34 @@
 
 angular
-  .module('app')
-  .run(runBlock);
+    .module('app')
+    .run(runBlock);
 
 
 function runBlock($location, $rootScope) {
 
-	function environmentDetection() {
-		var host = $location.host();
-		var protocol = $location.protocol();
-		var port = 8080;
+    function environmentDetection() {
+        var host = $location.host();
+        var protocol = $location.protocol();
+        var port = 8080;
 
-		if (host.indexOf('local') > -1) {
-			$rootScope.domain = protocol + '://' + host + '/bibackend';
-		} else if (host.indexOf('dev') > -1 || host.indexOf('uat') > -1) {
-			$rootScope.domain = protocol + '://' + host + '/bibackend';
-		} else {
-			$rootScope.domain = protocol + '://' + host + '/bibackend';
-		}
-		//console.log('Environment:', $rootScope.environment);
-	};
+        if (host.indexOf('local') > -1) {
+            $rootScope.domain = protocol + '://' + host + '/bibackend';
+        } else if (host.indexOf('dev') > -1 || host.indexOf('uat') > -1) {
+            $rootScope.domain = protocol + '://' + host + '/bibackend';
+        } else {
+            $rootScope.domain = protocol + '://' + host + '/bibackend';
+        }
+        //console.log('Environment:', $rootScope.environment);
+    };
 
-	environmentDetection();
+    environmentDetection();
 
 
-	// configuration obj for <oranj-navigation></oranj-navigation> directive
-	$rootScope.logo = 'https://s3.amazonaws.com/imagesso/logo_262987_635774065687042408-1111111111111111111111111111111111111111111111111111111111111111.png'; 
+    // configuration obj for <oranj-navigation></oranj-navigation> directive
+    $rootScope.logo = 'https://s3.amazonaws.com/imagesso/logo_262987_635774065687042408-1111111111111111111111111111111111111111111111111111111111111111.png';
     $rootScope.user = {
-        name : 'Matt Frosty',
-        id   : 234526424
+        name: 'Matt Frosty',
+        id: 234526424
     };
     $rootScope.userNavConfig = [
         {
@@ -77,6 +77,7 @@ function runBlock($location, $rootScope) {
     ];
     $rootScope.sideNavConfig = [
         {
+            index: 3,
             name: 'Home',
             iconClass: 'fa fa-home',
             state: 'home',
@@ -88,6 +89,7 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
+            index: 6,
             name: 'Metrics',
             iconClass: 'fa fa-globe',
             state: 'home',
@@ -111,21 +113,25 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
+            index: 12,
             name: 'Leader Board',
             iconClass: 'fa fa-trophy',
             state: 'leaderBoard'
         },
         {
+            index: 23,
             name: 'Contacts',
             iconClass: 'fa fa-users',
             state: 'advisor',
         },
         {
+            index: 31,
             name: 'Accounts',
             iconClass: 'fa fa-dollar',
             state: 'accounts',
         },
         {
+            index: 35,
             name: 'Models',
             iconClass: 'fa fa-bullseye',
             state: 'accounts',
@@ -150,6 +156,7 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
+            index: 1,
             name: 'Rebalance',
             iconClass: 'fa fa-balance-scale',
             state: 'vault',
@@ -162,6 +169,7 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
+            index: 999,
             name: 'Admin',
             iconClass: 'fa fa-user',
             state: 'disclaimer',
@@ -191,8 +199,27 @@ function runBlock($location, $rootScope) {
     ];
 
 
+    // $rootScope.sideNavConfig = $rootScope.sideNavConfig.map(function (config) {
+    //     config.index = hashCode(config.name);
+    //     return config;
+    // });
 
 
 
-    
+
+    // function hashCode(str) {
+    //     var hash = 0;
+    //     if (str.length == 0) return hash;
+    //     for (var i = 0; i < str.length; i++) {
+    //         var char = str.charCodeAt(i);
+    //         hash = ((hash << 5) - hash) + char;
+    //         hash = hash & hash; // Convert to 32bit integer
+    //     }
+
+    //     return hash;
+    // }
+
+
+
+
 }

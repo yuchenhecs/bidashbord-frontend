@@ -181,17 +181,17 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             if (role_level === 0) {
                 baseUrl = domain + subdomain + "/firms?";
             } else if (role_level === 1) {
-                var id_url = id === -1 ? "": "firmId=" + id;
+                var id_url = id === -1 ? "" : "firmId=" + id;
                 baseUrl = domain + subdomain + "/advisors?" + id_url;
             } else if (role_level === 2) {
-                var id_url = id === -1 ? "": "advisorId=" + id;
+                var id_url = id === -1 ? "" : "advisorId=" + id;
                 baseUrl = domain + subdomain + "/clients?" + id_url;
             } else {
-                console.log("Invalid level!");
+                console.log("Invalid level!" + role_level);
                 self.hideLoading();
                 return;
             }
-            
+
 
             var endDate = !this.endDate ? null : this.endDate.toISOString().slice(0, 10);
             var startDate = !this.startDate ? null : this.startDate.toISOString().slice(0, 10);
@@ -277,7 +277,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
             }
 
             return $http.get(newUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-                console.log(response);
+                //console.log(response);
 
                 if (self.controllerName.localeCompare("goals") != 0) {
                     self.PreProcessData(response, type, newUrl, name, id, page, level, args, data);
@@ -584,7 +584,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
         //construct categories data for chart template
         this.prepareCategories = function (input) {
             var categories = input.map(function (x) {
-                return  x['name'];
+                return x['name'];
             });
 
             var output = [];
@@ -613,7 +613,6 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
             // combine all points for each series into lists
 
-
             var series = [];
             for (var key in goalMap) {
                 var dataDrillDown = goalMap[key].map(function (x, i) {
@@ -637,6 +636,14 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
                     };
                 series.push(points);
             }
+
+
+            series.push({
+                name: "padding",
+                showInLegend: false,
+                data: Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0)
+            });
+
             return series;
         }
 
@@ -848,10 +855,13 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
                 ` : "";
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
+                if (obj.name.localeCompare("padding") === 0) { return ''; }
+
                 return `<div style="text-align: center">
                         <h3 style="color:`+ self.chart.series[i].color + `">` + self.unit_prefix + obj.data + ` </h3>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
+
             }).join("") : "";
 
             return searchPrefix + searchResultHTML;

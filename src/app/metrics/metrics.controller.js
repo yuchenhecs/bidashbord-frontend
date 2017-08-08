@@ -777,7 +777,9 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
         this.wrapCategoryWithData = function (list) {
             return list.map(function (x, i) {
-                var series = self.level_list[self.current_level].option.series.map(function (obj) {
+                var series = self.level_list[self.current_level].option.series.filter(obj => {
+                    return obj.name.localeCompare("padding") != 0;
+                }).map(function (obj) {
                     return {
                         name: obj.name,
                         data: obj.data[i].y

@@ -137,6 +137,8 @@ function NetWorthService(MetricsService) {
       series.push(absNet);
       series.push(avgNet);
 
+      console.log(series);
+
       return series;
     };
 
@@ -221,7 +223,7 @@ function NetWorthService(MetricsService) {
       {
         name: 'Average Net Worth',
         type: 'spline',
-        yAxis: 0,        
+        yAxis: 0,
         data: seriesRaw[1],
         tooltip: {
           valueSuffix: 'k'
@@ -257,12 +259,14 @@ function NetWorthService(MetricsService) {
 
 
     base.wrapCategoryWithData = function (list) {
-      
+
       return list.map(function (x, i) {
-        var series = base.level_list[base.current_level].option.series.map(function (obj, obj_i) {
+        var series = base.level_list[base.current_level].option.series.filter(obj => {
+          return obj.name.localeCompare("padding") != 0;
+        }).map(function (obj, obj_i) {
           return {
             name: obj.name,
-            data: obj_i === 0 ? obj.data[i].y : (obj_i === 1 ? avgFirm : avgAdvsior)
+            data: obj.data[i].y || 0
           };
         });
         return {

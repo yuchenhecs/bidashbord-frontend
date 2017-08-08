@@ -331,6 +331,12 @@ function AUMService(MetricsService) {
                 });
             });
 
+            series.push({
+                name: "padding",
+                showInLegend: false,
+                data: Array.apply(null, Array(input.length)).map(Number.prototype.valueOf, 0)
+            });
+
             return series;
         }
 
@@ -374,15 +380,16 @@ function AUMService(MetricsService) {
                 ` : "";
 
             var length = item ? item.series.length : 0;
+            var half_length = Math.floor(length/2);
 
             var searchResultHTML = "";
-            for (var i = 0; i < length / 2; i++) {
+            for (var i = 0; i <  half_length; i++) {
                 searchResultHTML += `<div style="text-align: center">
                         <h3> 
                         <span style="color:`+ base.chart.series[i].color + `">` + base.unit_prefix + item.series[i].data + `</span>
                         </h3>
                         <h3>
-                        <span style="color:`+ base.chart.series[i + length / 2].color + `">` + base.unit_prefix + item.series[i + length / 2].data + `</span>  
+                        <span style="color:`+ base.chart.series[i + half_length].color + `">` + base.unit_prefix + item.series[i + half_length].data + `</span>  
                         </h3>
                         <h6> `+ item.series[i].name + `</h6>
                     </div>`;

@@ -136,7 +136,6 @@ function GoalsService(MetricsService) {
                 ` : "";
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
-                if (obj.name.localeCompare("padding") === 0) { return ''; }
                 
                 total += obj.data;
                 return `<div style="text-align: center">

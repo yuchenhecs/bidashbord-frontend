@@ -324,18 +324,13 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	//default position
 	var goalsDefault = {x: 0, y: 0, height: 7, width: 4};
 	var aumDefault = {x: 5, y: 0, height: 7, width: 8};
-	var netWorthDefault = {x: 7, y: 7, height: 7, width: 6};
-	var loginsDefault = {x: 0, y: 7, height: 7, width: 6};
+	var netWorthDefault = {x: 0, y: 13, height: 7, width: 12};
+	var loginsDefault = {x: 0, y: 7, height: 7, width: 12};
 
 	var goalsGrid = goalsDefault;
 	var aumGrid = aumDefault;
 	var netWorthGrid = netWorthDefault;
 	var loginsGrid = loginsDefault;
-
-	$scope.goalsGrid = goalsDefault;
-	$scope.aumGrid = aumDefault;
-	$scope.netWorthGrid = netWorthDefault;
-	$scope.loginsGrid = loginsDefault;
 
 	var storeGrid = function(items) {
 		for (var i=0;i<Object.keys(items).length;i++) {
@@ -377,6 +372,19 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 		$scope.netWorthGrid = netWorthDefault;
 		$scope.loginsGrid = loginsDefault;
 
+		setTimeout(function() {
+			var gridOptions = {
+				float: false,
+				width: 12
+			};
+			$('.grid-stack').gridstack(gridOptions);
+			console.log('after grid-stack');
+			$('.grid-stack').on('change', function(event, items) {
+				redrawCharts(); //redraw highcharts to match new dimensions after every change
+				if (items !== undefined) {storeGrid(items);}//store new position after every change
+			});
+		}, 1000)
+
 		$scope.goalsShow = true;
 		$scope.aumShow = true;
 		$scope.netWorthShow = true;
@@ -391,25 +399,38 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	var useCustom = function (response) {
 		console.log('custom');
 		console.log(response);
-		$scope.goalsGrid = response.data.goals;
-		$scope.aumGrid = response.data.aum;
-		$scope.netWorthGrid = response.data.netWorth;
-		$scope.loginsGrid = response.data.logins;
+		$scope.goalsGrid = response.goals;
+		$scope.aumGrid = response.aum;
+		$scope.netWorthGrid = response.netWorth;
+		$scope.loginsGrid = response.logins;
 
-		if (response.data.goals === null) {$scope.goalsShow = false;} else {$scope.goalsShow = true;}
-		if (response.data.aum === null) {$scope.aumShow = false;} else {$scope.aumShow = true;}
-		if (response.data.netWorth === null) {$scope.netWorthShow = false;} else {$scope.netWorthShow = true;}
-		if (response.data.logins === null) {$scope.loginsShow = false;} else {$scope.loginsShow = true;}
+		if (response.goals === null) {$scope.goalsShow = false; $scope.goalsGrid = {x:0,y:0,height:7,width:0};} else {$scope.goalsShow = true;}
+		if (response.aum === null) {$scope.aumShow = false; $scope.aumGrid = {x:0,y:0,height:7,width:0};} else {$scope.aumShow = true;}
+		if (response.netWorth === null) {$scope.netWorthShow = false; $scope.netWorthGrid = {x:0,y:0,height:7,width:0};} else {$scope.netWorthShow = true;}
+		if (response.logins === null) {$scope.loginsShow = false; $scope.loginsGrid = {x:0,y:0,height:7,width:0};} else {$scope.loginsShow = true;}
 
-		chartData.callApi('pie', 'goalsContainer', $scope.goalsShow, DOMAIN + '/bi/goals');
-		chartData.callApi('area', 'aumContainer', $scope.aumShow, DOMAIN + '/bi/aums');
-		chartData.callApi('line', 'netWorthContainer', $scope.netWorthShow, DOMAIN + '/bi/networth');
-		$scope.loginApi($scope.loginsShow);
+		setTimeout(function() {
+			var gridOptions = {
+				float: false,
+				width: 12
+			};
+			$('.grid-stack').gridstack(gridOptions);
+			console.log('after grid-stack');
+			$('.grid-stack').on('change', function(event, items) {
+				redrawCharts(); //redraw highcharts to match new dimensions after every change
+				if (items !== undefined) {storeGrid(items);}//store new position after every change
+			});
 
-		if (!$scope.goalsShow) {$scope.remove('goals');}
-		if (!$scope.aumShow) {$scope.remove('aum');}
-		if (!$scope.netWorthShow) {$scope.remove('netWorth');}
-		if (!$scope.loginsShow) {$scope.remove('logins');}
+			chartData.callApi('pie', 'goalsContainer', $scope.goalsShow, DOMAIN + '/bi/goals');
+			chartData.callApi('area', 'aumContainer', $scope.aumShow, DOMAIN + '/bi/aums');
+			chartData.callApi('line', 'netWorthContainer', $scope.netWorthShow, DOMAIN + '/bi/networth');
+			$scope.loginApi($scope.loginsShow);
+
+			if (!$scope.goalsShow) {$scope.remove('goals');}
+			if (!$scope.aumShow) {$scope.remove('aum');}
+			if (!$scope.netWorthShow) {$scope.remove('netWorth');}
+			if (!$scope.loginsShow) {$scope.remove('logins');}
+		}, 1000);
 	}
 
 	var redrawCharts = function () {
@@ -470,7 +491,7 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 		}
 		var grid = $('.grid-stack').data('gridstack');
 		var element = document.getElementById(id);
-		grid.removeWidget(element); //using provided api
+		if (element !== null && grid !== undefined) grid.removeWidget(element); //using provided api
 
 		console.log('remove');
 	};
@@ -516,7 +537,7 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 			} else {
 				console.log(response);
 				console.log('else');
-				useCustom(response);
+				useCustom(response.data);
 			}
 
 			//hide loading, then show grid
@@ -554,8 +575,8 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 
 	var formHTML = `
 			<md-dialog>
-				<md-dialog-content>
-					<header>Add or Remove Tiles</header>
+				<md-dialog-content class="md-dialog-content">
+					<strong>Add or Remove Tiles</strong>
 					<md-switch ng-model="goalsShow">Goals</md-switch>
 					<md-switch ng-model="aumShow">Assets Under Management</md-switch>
 					<md-switch ng-model="netWorthShow">Net Worth</md-switch>
@@ -571,13 +592,13 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	$scope.showForm = function (ev) {
 		console.log('show');
 		$mdDialog.show({
-            controller: HomeController,
             template: formHTML,
 			preserveScope: true,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
             scope: $scope,
-            clickOutsideToClose: true
+            clickOutsideToClose: true,
+			escapeToClose: true
         });
 	}
 
@@ -591,18 +612,5 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	});
 
 	this.chart = Highcharts.setOptions(colorTheme);
-
-	//jQuery for gridstack
-	$(function () {
-		var gridOptions = {
-			float: false,
-			width: 12
-		};
-		$('.grid-stack').gridstack(gridOptions);
-		$('.grid-stack').on('change', function(event, items) {
-			redrawCharts(); //redraw highcharts to match new dimensions after every change
-			if (items !== undefined) {storeGrid(items);}//store new position after every change
-		});
-	});
 
 };

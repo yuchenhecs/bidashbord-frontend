@@ -1,20 +1,21 @@
 <div id="main-container">
     <div class="page">
-        <div layout="row">
-            <div id="dialog-loading" layout="row"  layout-align="center center" style="height:800px;">
-                <div class="loader no-animate primary-loader loader--style3" >
-                    <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
-                                xml:space="preserve">
-                        <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                    <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
-                                    />
-                        </path>
-                    </svg>
-                </div>
+        <div id="dialog-loading" layout="row"  layout-align="center center" style="height:800px;">
+            <div class="loader no-animate primary-loader loader--style3" >
+                <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
+                            xml:space="preserve">
+                    <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
+                                />
+                    </path>
+                </svg>
             </div>
+        </div>
+        <div layout="row" layout-align="end none" style="margin-bottom:10px;">
             <div>
-                <md-button ng-click="saveGridData(0)" style="background-color:#11BEDF">Save</md-button>
+                <md-button id="faux-grid-save" ng-disabled="true" style="background-color:#11BEDF">Save</md-button>
+                <md-button id="grid-save" class="grid-save" ng-click="saveGridData(0, $event)" style="background-color:#11BEDF">Save</md-button>
                 <md-button ng-click="showForm($event)" style="background-color:#11BEDF">Edit</md-button>
             </div>
         </div>

@@ -373,14 +373,14 @@ function AUMService(MetricsService, SessionService) {
         base.createSearchResultHTML = function (item) {
 
             var searchPrefix = item ?
-                `<div style="text-align: center">
+                `<div style="text-align: center" flex="auto">
                     <h5 style="margin-top:10px">`+ item.display + `</h5> 
                 </div>
-                <div class="vertical-line"></div>
+                <div class="vertical-line" flex="nogrow"></div>
                 ` : "";
 
             searchPrefix += 
-                    `<div style="text-align: center">
+                    `<div style="text-align: center" flex="auto">
                         <h3> <small> Previous </small></h3>
                         <h3> <small> Current  </small></h3>
                     </div>`;
@@ -390,7 +390,7 @@ function AUMService(MetricsService, SessionService) {
 
             var searchResultHTML = "";
             for (var i = 0; i <  half_length; i++) {
-                searchResultHTML += `<div style="text-align: center">
+                searchResultHTML += `<div style="text-align: center" flex="auto">
                         <h3> 
                         <span style="color:`+ base.chart.series[i].color + `">` + base.unit_prefix + item.series[i].data + `</span>
                         </h3>

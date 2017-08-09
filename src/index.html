@@ -19,10 +19,15 @@
 </head>
 
 <body>
+	<div ng-if="appReady" >
+
 	<oranj-navigation logo="{{ logo }}" user="user" user-nav-config="userNavConfig" top-nav-config="topNavConfig" side-nav-config="sideNavConfig"></oranj-navigation>
 	<div>
 		<ui-view></ui-view>
 	</div>
+
+	</div>
+	
 </body>
 
 <!-- build:js({.tmp,src}) scripts/vendor.js -->

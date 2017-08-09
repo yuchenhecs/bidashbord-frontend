@@ -850,16 +850,16 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
         this.createSearchResultHTML = function (item) {
             var searchPrefix = item ?
-                `<div style="text-align: center">
+                `<div style="text-align: center" flex="auto">
                     <h5 style="margin-top:10px">`+ item.display + `</h5> 
                 </div>
-                <div class="vertical-line"></div>
+                <div class="vertical-line" flex="nogrow"></div>
                 ` : "";
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 if (obj.name.localeCompare("padding") === 0) { return ''; }
 
-                return `<div style="text-align: center">
+                return `<div style="text-align: center" flex="auto">
                         <h3 style="color:`+ self.chart.series[i].color + `">` + self.unit_prefix + obj.data + ` </h3>
                         <h6> `+ obj.name + `</h6>
                     </div>`;

@@ -137,6 +137,8 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
         // $scope.changeScope('state'); //have the default scope set to state
 
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            
+            console.log(response);
             $scope.kpi = response.data;
             preprocessing($scope.kpi, "kpi");
             $scope.changeScope('state'); //have the default scope set to state

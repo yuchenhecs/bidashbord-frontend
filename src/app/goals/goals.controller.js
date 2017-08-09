@@ -129,23 +129,23 @@ function GoalsService(MetricsService) {
             var total = 0;
 
             var searchPrefix = item ?
-                `<div style="text-align: center">
+                `<div style="text-align: center" flex="auto">
                     <h5 style="margin-top:10px">`+ item.display + `</h5>
                 </div>
-                <div class="vertical-line"></div>
+                <div class="vertical-line" flex="nogrow"></div>
                 ` : "";
 
             var searchResultHTML = item ? item.series.map(function (obj, i) {
                 
                 total += obj.data;
-                return `<div style="text-align: center">
+                return `<div style="text-align: center" flex="auto">
                         <h3 style="color:`+ base.chart.series[i].color + `">` + obj.data + ` </h3>
                         <h6> `+ obj.name + `</h6>
                     </div>`;
             }).join("") : "";
 
             var searchSuffix = item ?
-                `<div style="text-align: center">
+                `<div style="text-align: center" flex="auto">
                     <h3>` + total + ` </h3>
                     <h6> Total </h6>
                 </div>`: "";

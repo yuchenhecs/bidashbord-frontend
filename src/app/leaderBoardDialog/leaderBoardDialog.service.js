@@ -284,11 +284,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
                             </md-tabs>
                         </div>
                     </div>
-
-                </div>
-                
-                
-                
+                </div>            
             </md-dialog>
         `;
 
@@ -390,6 +386,8 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
         }
 
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+            console.log(response);
+        
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
 
             var kpi_details = response.data;

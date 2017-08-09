@@ -4,7 +4,7 @@ angular
     .run(runBlock);
 
 
-function runBlock($location, $rootScope) {
+function runBlock($location, $rootScope, SessionService) {
 
     function environmentDetection() {
         var host = $location.host();
@@ -77,7 +77,6 @@ function runBlock($location, $rootScope) {
     ];
     $rootScope.sideNavConfig = [
         {
-            index: 3,
             name: 'Home',
             iconClass: 'fa fa-home',
             state: 'home',
@@ -89,7 +88,6 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
-            index: 6,
             name: 'Metrics',
             iconClass: 'fa fa-globe',
             state: 'home',
@@ -113,25 +111,21 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
-            index: 12,
             name: 'Leader Board',
             iconClass: 'fa fa-trophy',
             state: 'leaderBoard'
         },
         {
-            index: 23,
             name: 'Contacts',
             iconClass: 'fa fa-users',
             state: 'advisor',
         },
         {
-            index: 31,
             name: 'Accounts',
             iconClass: 'fa fa-dollar',
             state: 'accounts',
         },
         {
-            index: 35,
             name: 'Models',
             iconClass: 'fa fa-bullseye',
             state: 'accounts',
@@ -156,7 +150,6 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
-            index: 1,
             name: 'Rebalance',
             iconClass: 'fa fa-balance-scale',
             state: 'vault',
@@ -169,7 +162,6 @@ function runBlock($location, $rootScope) {
             ]
         },
         {
-            index: 999,
             name: 'Admin',
             iconClass: 'fa fa-user',
             state: 'disclaimer',
@@ -197,27 +189,6 @@ function runBlock($location, $rootScope) {
             ]
         }
     ];
-
-
-    // $rootScope.sideNavConfig = $rootScope.sideNavConfig.map(function (config) {
-    //     config.index = hashCode(config.name);
-    //     return config;
-    // });
-
-
-
-
-    // function hashCode(str) {
-    //     var hash = 0;
-    //     if (str.length == 0) return hash;
-    //     for (var i = 0; i < str.length; i++) {
-    //         var char = str.charCodeAt(i);
-    //         hash = ((hash << 5) - hash) + char;
-    //         hash = hash & hash; // Convert to 32bit integer
-    //     }
-
-    //     return hash;
-    // }
 
 
 

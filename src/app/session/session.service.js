@@ -3,21 +3,9 @@ angular
     .service('SessionService', SessionService);
 
 function SessionService($http, $q, $rootScope) {
-
-    // this.level = 2;
-    // this.name = 'John Doe';
-    // this.id = 1347;
-
     // Advisor
     // FirmAdmin
     // SuperAdmin
-
-    //     {
-    //     "status": "success",
-    //     "data": {
-    //         "avatar": "https://runoranj-test.s3.amazonaws.com/user/mattfirm/8586267/avatar.jpeg?AWSAccessKeyId=AKIAIHEVGBZU5CTURLAQ&Expires=1501111784&Signature=kslOAeRq9KAhBmU3rg910692aUE%3D"
-    //         }
-    //     }
 
     SessionService.self = this;
 
@@ -40,7 +28,6 @@ function SessionService($http, $q, $rootScope) {
     this.roles = ["Metrics_SummaryGoalsAll_Enable", "Metrics_SummaryGoalsFirm_Enable", "Metrics_SummaryGoalsManaged_Enable"];
     this.role_promise = $http.get("https://dev-oauth.oranjsites.com/user/oranj", { headers: { 'Authorization': this.access_token } });
     this.role_promise.then(function mySuccess(response) {
-        console.log(response);
         var self = SessionService.self;
         self.roles = response.data.authorities;
         self.user_id = response.data.user_id;
@@ -56,10 +43,6 @@ function SessionService($http, $q, $rootScope) {
         this.canceller = $q.defer();
     }
 
-// var sidebar = document.querySelector(".oranj-side-nav");
-//         sidebar.removeChild(sidebar.childNodes[6]);
-
-
     this.applyPermission = function (){
         var self = SessionService.self;
         
@@ -67,6 +50,7 @@ function SessionService($http, $q, $rootScope) {
         if(!self.hasPermission('Advisor')){
             $rootScope.sideNavConfig.splice(2, 1);
         }
+        $rootScope.appReady = true;
     }
     this.hasPermission = function (permission) {
         return this.roles.includes(permission);

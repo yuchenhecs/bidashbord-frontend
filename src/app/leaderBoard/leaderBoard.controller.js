@@ -14,10 +14,9 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
     SessionService.refreshCanceller();
 
     //SessionService.curr_page = "LeaderBoard";
-   // var DOMAIN = $scope.domain;
+    //var DOMAIN = $scope.domain;
 
     var DOMAIN = "http://buisness-intelligence-1347684756.us-east-1.elb.amazonaws.com/bibackend"
-
 
     $scope.showChart = function (ev, tab) {
         LeaderBoardDialogService.show(ev, tab, $scope);
@@ -150,7 +149,6 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
         console.log(url);         
         //if(!(SessionService.curr_page === "LeaderBoard")) return;
         
-        
         // var response = 
         // {
         //     "data": {
@@ -171,9 +169,6 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
         // }
 
         // preprocessing(response["data"], "POTB");
-        
-
-
 
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             preprocessing(response.data, "POTB");
@@ -184,7 +179,8 @@ function LeaderBoardController($scope, $http, LeaderBoardDialogService, SessionS
 
     var avatarApi = function (url) {   
         //if(!(SessionService.curr_page === "LeaderBoard")) return;
-
+        console.log(url);         
+        
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             if (response.data.data) {
                 $scope.avatar = response.data.data.avatarCompleteUrl;

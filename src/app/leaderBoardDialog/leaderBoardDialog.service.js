@@ -9,128 +9,128 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
     var $scope;
     //var DOMAIN = "http://10.1.15.102:8080";
     //var DOMAIN = $rootScope.domain;
-    
+
     var SUB_DOMAIN = "/bi/gamification";
     var USE_DUMMY_DATA = false;
     var tagColors = ["tag-one", "tag-two", "tag-three"];
     var colors = ["#00a4d3", "#72bb53", "#CDC114"];
     var tabInfo = [
-            {
-                title: "Asset Under Management", colorId: 0,
-                formatter: shortenNumber,
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/aum"
-            },
-            {
-                title: "Net Worth", colorId: 0,
-                formatter: shortenNumber,
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/net_worth"
-            },
-            {
-                title: "Number of HNIs", colorId: 0,
-                formatter: (num) => { return num? num : 0  },
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/hni"
-            },
-            {
-                title: "Conversion Rate", colorId: 1,
-                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/conversion_rate"
-            },
-            {
-                title: "Average Conversion Time", colorId: 1,
-                formatter: (num) => { return ((num? num : 0 ) / 24).toFixed(1) + unitWrapper('days') },
-                text_worst: 'longest', text_best: 'shortest',
-                KPI_DOMAIN: "/avg_conversion_time"
-            },
-            {
-                title: "Retention Rate", colorId: 1,
-                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/retention_rate"
-            },
-            {
-                title: "Weekly Client Logins", colorId: 1,
-                formatter: (num) => { return num? num : 0  },
-                text_worst: 'least', text_best: 'most',
-                KPI_DOMAIN: "/weekly_logins"
-            },
-            {
-                title: "Annualized AUM Growth", colorId: 2,
-                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/aum_growth"
-            },
-            {
-                title: "Annualized Clientele Growth", colorId: 2,
-                formatter: (num) => { return (num? num : 0 ).toFixed(2) + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/clientele_growth"
-            },
-            {
-                title: "Annualized Net Worth Growth", colorId: 2,
-                formatter: (num) => { return (num? num : 0 ).toFixed(2)  + unitWrapper('%') },
-                text_worst: 'lowest', text_best: 'highest',
-                KPI_DOMAIN: "/net_worth_growth"
-            }
-        ];
+        {
+            title: "Asset Under Management", colorId: 0,
+            formatter: shortenNumber,
+            text_worst: 'least', text_best: 'most',
+            KPI_DOMAIN: "/aum"
+        },
+        {
+            title: "Net Worth", colorId: 0,
+            formatter: shortenNumber,
+            text_worst: 'least', text_best: 'most',
+            KPI_DOMAIN: "/net_worth"
+        },
+        {
+            title: "Number of HNIs", colorId: 0,
+            formatter: (num) => { return num ? num : 0 },
+            text_worst: 'least', text_best: 'most',
+            KPI_DOMAIN: "/hni"
+        },
+        {
+            title: "Conversion Rate", colorId: 1,
+            formatter: (num) => { return (num ? num : 0).toFixed(2) + unitWrapper('%') },
+            text_worst: 'lowest', text_best: 'highest',
+            KPI_DOMAIN: "/conversion_rate"
+        },
+        {
+            title: "Average Conversion Time", colorId: 1,
+            formatter: (num) => { return ((num ? num : 0) / 24).toFixed(1) + unitWrapper('days') },
+            text_worst: 'longest', text_best: 'shortest',
+            KPI_DOMAIN: "/avg_conversion_time"
+        },
+        {
+            title: "Retention Rate", colorId: 1,
+            formatter: (num) => { return (num ? num : 0).toFixed(2) + unitWrapper('%') },
+            text_worst: 'lowest', text_best: 'highest',
+            KPI_DOMAIN: "/retention_rate"
+        },
+        {
+            title: "Weekly Client Logins", colorId: 1,
+            formatter: (num) => { return num ? num : 0 },
+            text_worst: 'least', text_best: 'most',
+            KPI_DOMAIN: "/weekly_logins"
+        },
+        {
+            title: "Annualized AUM Growth", colorId: 2,
+            formatter: (num) => { return (num ? num : 0).toFixed(2) + unitWrapper('%') },
+            text_worst: 'lowest', text_best: 'highest',
+            KPI_DOMAIN: "/aum_growth"
+        },
+        {
+            title: "Annualized Clientele Growth", colorId: 2,
+            formatter: (num) => { return (num ? num : 0).toFixed(2) + unitWrapper('%') },
+            text_worst: 'lowest', text_best: 'highest',
+            KPI_DOMAIN: "/clientele_growth"
+        },
+        {
+            title: "Annualized Net Worth Growth", colorId: 2,
+            formatter: (num) => { return (num ? num : 0).toFixed(2) + unitWrapper('%') },
+            text_worst: 'lowest', text_best: 'highest',
+            KPI_DOMAIN: "/net_worth_growth"
+        }
+    ];
 
 
     var STATE_NAMES = {
-            AL: 'Alabama',
-            AK: 'Alaska',
-            AZ: 'Arizona',
-            AR: 'Arkansas',
-            CA: 'California',
-            CO: 'Colorado',
-            CT: 'Connecticut',
-            DE: 'Delaware',
-            FL: 'Florida',
-            GA: 'Georgia',
-            HI: 'Hawaii',
-            ID: 'Idaho',
-            IL: 'Illinois',
-            IN: 'Indiana',
-            IA: 'Iowa',
-            KS: 'Kansas',
-            KY: 'Kentucky',
-            LA: 'Louisiana',
-            ME: 'Maine',
-            MD: 'Maryland',
-            MA: 'Massachusetts',
-            MI: 'Michigan',
-            MN: 'Minnesota',
-            MS: 'Mississippi',
-            MO: 'Missouri',
-            MT: 'Montana',
-            NE: 'Nebraska',
-            NV: 'Nevada',
-            NH: 'New Hampshire',
-            NJ: 'New Jersey',
-            NM: 'New Mexico',
-            NY: 'New York',
-            NC: 'North Carolina',
-            ND: 'North Dakota',
-            OH: 'Ohio',
-            OK: 'Oklahoma',
-            OR: 'Oregon',
-            PA: 'Pennsylvania',
-            RI: 'Rhode Island',
-            SC: 'South Carolina',
-            SD: 'South Dakota',
-            TN: 'Tennessee',
-            TX: 'Texas',
-            UT: 'Utah',
-            VT: 'Vermont',
-            VA: 'Virginia',
-            WA: 'Washington',
-            WV: 'West Virginia',
-            WI: 'Wisconsin',
-            WY: 'Wyoming'
-        };
-    
+        AL: 'Alabama',
+        AK: 'Alaska',
+        AZ: 'Arizona',
+        AR: 'Arkansas',
+        CA: 'California',
+        CO: 'Colorado',
+        CT: 'Connecticut',
+        DE: 'Delaware',
+        FL: 'Florida',
+        GA: 'Georgia',
+        HI: 'Hawaii',
+        ID: 'Idaho',
+        IL: 'Illinois',
+        IN: 'Indiana',
+        IA: 'Iowa',
+        KS: 'Kansas',
+        KY: 'Kentucky',
+        LA: 'Louisiana',
+        ME: 'Maine',
+        MD: 'Maryland',
+        MA: 'Massachusetts',
+        MI: 'Michigan',
+        MN: 'Minnesota',
+        MS: 'Mississippi',
+        MO: 'Missouri',
+        MT: 'Montana',
+        NE: 'Nebraska',
+        NV: 'Nevada',
+        NH: 'New Hampshire',
+        NJ: 'New Jersey',
+        NM: 'New Mexico',
+        NY: 'New York',
+        NC: 'North Carolina',
+        ND: 'North Dakota',
+        OH: 'Ohio',
+        OK: 'Oklahoma',
+        OR: 'Oregon',
+        PA: 'Pennsylvania',
+        RI: 'Rhode Island',
+        SC: 'South Carolina',
+        SD: 'South Dakota',
+        TN: 'Tennessee',
+        TX: 'Texas',
+        UT: 'Utah',
+        VT: 'Vermont',
+        VA: 'Virginia',
+        WA: 'Washington',
+        WV: 'West Virginia',
+        WI: 'Wisconsin',
+        WY: 'Wyoming'
+    };
+
     var STATE_RATIOS = {
         SC: 0.799,
         SD: 0.620,
@@ -163,135 +163,142 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
 
     var dialogHTML = `
-            <md-dialog style="width:1100px;overflow: visible">
-                <div id="dialog-loading" layout="row"  layout-align="center center">
-                    <div class="loader no-animate primary-loader loader--style3" >
-                        <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
-                                    xml:space="preserve">
-                            <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
-                                        />
-                            </path>
-                        </svg>
-                    </div>
+            <md-dialog style="width:1100px; overflow: visible; position: relative;">
+
+                <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
+                    <h5 style="margin:0"><b>{{tabInfo[currentTab].title}}</b>
+                        <i class="fa fa-info-circle" style="color:white">
+                            <md-tooltip>
+                                Points shown are calculated by ...
+                            </md-tooltip>
+                        </i>
+                    </h5>
                 </div>
 
-                <div id="dialog-content" style="position: relative;visibility: hidden;">
-                
-                    <div id="tag" class="md-whiteframe-2dp {{tagColors[tabInfo[currentTab].colorId]}}">
-                        <h5 style="margin:0"><b>{{tabInfo[currentTab].title}}</b>
-                            <i class="fa fa-info-circle" style="color:white">
-                                <md-tooltip>
-                                    Points shown are calculated by ...
-                                </md-tooltip>
-                            </i>
-                        
-                        </h5>
-                    </div>
 
-
-                    <div layout="column" >
-                        <div layout="column" layout-align="center end"  layout-padding>
-                                <h1 style="margin:0" ng-bind-html="kpi_details.advisorKpi"></h1>
-                                <h6 style="margin:0"> is better than...</h6>
-                                
+                <div style="overflow: scroll;">
+                    <div id="dialog-loading" layout="row"  layout-align="center center">
+                        <div class="loader no-animate primary-loader loader--style3" >
+                            <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                        width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
+                                        xml:space="preserve">
+                                <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
+                                            />
+                                </path>
+                            </svg>
                         </div>
-                        
-                        <div layout="row" layout-align="space-between none"  layout-padding>
-                            
-                            <div flex="40" layout="column" layout-align="center center" >
-                                <div style="text-align: center">
-                                    <h6>Overall</h6>
-                                </div>
-                                <div id="chart-overall" style="height:200px;width:300px"></div>
-                                
-                                <div layout="row" layout-align="space-between center"  layout-margin>
-                                    <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi_details.overall.worst"></h3>
-                                        <h6>{{tabInfo[currentTab].text_worst}}</h6>
-                                    </div>
-
-                                    <div style="height:50px;border-right: thin solid #dfdfdf;">
-                                    </div>
-                         
-                                    <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi_details.overall.best"></h3>
-                                        <h6>{{tabInfo[currentTab].text_best}}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div flex="30" layout="column" layout-align="center center" >
-                                <div style="text-align: center">
-                                    <h6>{{ STATE_NAMES[kpi_details.stateCode] }}</h6>
-                                </div>
-                                <div id="chart-state" style="height:200px;width:200px"></div>
-                                
-                                <div layout="row" layout-align="space-between center"  layout-margin>
-                                    <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi_details.state.worst"></h3>
-                                        <h6>{{tabInfo[currentTab].text_worst}}</h6>
-                                    </div>
-
-                                    <div style="height:50px;border-right: thin solid #dfdfdf;">
-                                    </div>
-                         
-                                    <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi_details.state.best"></h3>
-                                        <h6>{{tabInfo[currentTab].text_best}}</h6>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            
-                            <div flex="30" layout="column" layout-align="center center" >
-                                <div style="text-align: center">
-                                    <h6>Firm</h6>
-                                </div>
-                                <div id="chart-firm" style="height:200px;width:200px"></div>
-                                
-                                <div layout="row" layout-align="space-between center"  layout-margin>
-                                    <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi_details.firm.worst"></h3>
-                                        <h6>{{tabInfo[currentTab].text_worst}}</h6>
-                                    </div>
-
-                                    <div style="height:50px;border-right: thin solid #dfdfdf;">
-                                    </div>
-                         
-                                    <div flex="50" style="text-align: center">
-                                        <h3 ng-bind-html="kpi_details.firm.best"></h3>
-                                        <h6>{{tabInfo[currentTab].text_best}}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>          
-
-                        <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" md-selected="currentTab" > 
-                            <md-tab label="AUM" md-on-select="tabOnSelected(0)"></md-tab>
-                            <md-tab label="Net Worth" md-on-select="tabOnSelected(1)"></md-tab>
-                            <md-tab label="# HNIs" md-on-select="tabOnSelected(2)"></md-tab>
-                            <md-tab label="Conv. Rate" md-on-select="tabOnSelected(3)"></md-tab>
-                            <md-tab label="Avg Conv. Time" md-on-select="tabOnSelected(4)"></md-tab>
-                            <md-tab label="Retention Rate" md-on-select="tabOnSelected(5)"></md-tab>
-                            <md-tab label="Weekly Client Logins" md-on-select="tabOnSelected(6)"></md-tab>
-                            <md-tab label="Annual AUM" md-on-select="tabOnSelected(7)"></md-tab>
-                            <md-tab label="Annual Clientele" md-on-select="tabOnSelected(8)"></md-tab>
-                            <md-tab label="Annual Net Worth" md-on-select="tabOnSelected(9)"></md-tab>
-                        </md-tabs>
                     </div>
+
+                    <div id="dialog-content" style="visibility: hidden;">
+                    
+
+                        <div layout="column" >
+                            <div layout="column" layout-align="center end"  layout-padding>
+                                    <h1 style="margin:0" ng-bind-html="kpi_details.advisorKpi"></h1>
+                                    <h6 style="margin:0"> is better than...</h6>
+                                    
+                            </div>
+                            
+                            <div layout="row" layout-align="space-between none"  layout-padding>
+                                
+                                <div flex="40" layout="column" layout-align="center center" >
+                                    <div style="text-align: center">
+                                        <h6>Overall</h6>
+                                    </div>
+                                    <div id="chart-overall" style="height:200px;width:300px"></div>
+                                    
+                                    <div layout="row" layout-align="space-between center"  layout-margin>
+                                        <div flex="50" style="text-align: center">
+                                            <h3 ng-bind-html="kpi_details.overall.worst"></h3>
+                                            <h6>{{tabInfo[currentTab].text_worst}}</h6>
+                                        </div>
+
+                                        <div style="height:50px;border-right: thin solid #dfdfdf;">
+                                        </div>
+                            
+                                        <div flex="50" style="text-align: center">
+                                            <h3 ng-bind-html="kpi_details.overall.best"></h3>
+                                            <h6>{{tabInfo[currentTab].text_best}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div flex="30" layout="column" layout-align="center center" >
+                                    <div style="text-align: center">
+                                        <h6>{{ STATE_NAMES[kpi_details.stateCode] }}</h6>
+                                    </div>
+                                    <div id="chart-state" style="height:200px;width:200px"></div>
+                                    
+                                    <div layout="row" layout-align="space-between center"  layout-margin>
+                                        <div flex="50" style="text-align: center">
+                                            <h3 ng-bind-html="kpi_details.state.worst"></h3>
+                                            <h6>{{tabInfo[currentTab].text_worst}}</h6>
+                                        </div>
+
+                                        <div style="height:50px;border-right: thin solid #dfdfdf;">
+                                        </div>
+                            
+                                        <div flex="50" style="text-align: center">
+                                            <h3 ng-bind-html="kpi_details.state.best"></h3>
+                                            <h6>{{tabInfo[currentTab].text_best}}</h6>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div flex="30" layout="column" layout-align="center center" >
+                                    <div style="text-align: center">
+                                        <h6>Firm</h6>
+                                    </div>
+                                    <div id="chart-firm" style="height:200px;width:200px"></div>
+                                    
+                                    <div layout="row" layout-align="space-between center"  layout-margin>
+                                        <div flex="50" style="text-align: center">
+                                            <h3 ng-bind-html="kpi_details.firm.worst"></h3>
+                                            <h6>{{tabInfo[currentTab].text_worst}}</h6>
+                                        </div>
+
+                                        <div style="height:50px;border-right: thin solid #dfdfdf;">
+                                        </div>
+                            
+                                        <div flex="50" style="text-align: center">
+                                            <h3 ng-bind-html="kpi_details.firm.best"></h3>
+                                            <h6>{{tabInfo[currentTab].text_best}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>          
+
+                            <md-tabs md-stretch-tabs="always" md-no-pagination="'true'" md-no-ink="'true'" md-no-ink-bar="'true'" md-selected="currentTab" > 
+                                <md-tab label="AUM" md-on-select="tabOnSelected(0)"></md-tab>
+                                <md-tab label="Net Worth" md-on-select="tabOnSelected(1)"></md-tab>
+                                <md-tab label="# HNIs" md-on-select="tabOnSelected(2)"></md-tab>
+                                <md-tab label="Conv. Rate" md-on-select="tabOnSelected(3)"></md-tab>
+                                <md-tab label="Avg Conv. Time" md-on-select="tabOnSelected(4)"></md-tab>
+                                <md-tab label="Retention Rate" md-on-select="tabOnSelected(5)"></md-tab>
+                                <md-tab label="Weekly Client Logins" md-on-select="tabOnSelected(6)"></md-tab>
+                                <md-tab label="Annual AUM" md-on-select="tabOnSelected(7)"></md-tab>
+                                <md-tab label="Annual Clientele" md-on-select="tabOnSelected(8)"></md-tab>
+                                <md-tab label="Annual Net Worth" md-on-select="tabOnSelected(9)"></md-tab>
+                            </md-tabs>
+                        </div>
+                    </div>
+
                 </div>
+                
+                
+                
             </md-dialog>
         `;
 
-    function unitWrapper (unit) {
+    function unitWrapper(unit) {
         return '<small>' + unit + '</small>';
     }
 
-    function shortenNumber(num){
-        num = num ? num : 0 ;
-        
+    function shortenNumber(num) {
+        num = num ? num : 0;
+
         if (num >= 1000 && num < 1000000) {
             return (num / 1000).toFixed(2) + unitWrapper('k');
         } else if (num >= 1000000 && num < 1000000000) {
@@ -341,7 +348,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
 
     this.getDataFromApi = function (url) {
         //if(!(SessionService.curr_page === "LeaderBoard")) return;
-        
+
         console.log(url);
 
         if (USE_DUMMY_DATA) {
@@ -382,11 +389,11 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
             return;
         }
 
-        return $http.get(url, { timeout: SessionService.canceller.promise, headers: {'Authorization': SessionService.access_token }  }).then(function mySuccess(response) {
+        return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
-           
+
             var kpi_details = response.data;
-           
+
             kpi_details.advisorKpi = formatter(kpi_details.advisorKpi);
             kpi_details.overall.best = formatter(kpi_details.overall.best);
             kpi_details.overall.worst = formatter(kpi_details.overall.worst);

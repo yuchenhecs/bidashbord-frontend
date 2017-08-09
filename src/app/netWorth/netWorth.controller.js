@@ -108,9 +108,6 @@ function NetWorthService(MetricsService, SessionService) {
       }]
     };
 
-
-
-
     base.prepareSeries = function (input) {
       var avgNet = [];
       var absNet = [];
@@ -118,7 +115,6 @@ function NetWorthService(MetricsService, SessionService) {
 
       input.forEach(function (x, i) {
         var name = '';
-
 
         var role_level = base.current_level + SessionService.level;
         if (role_level === 0) {
@@ -128,18 +124,12 @@ function NetWorthService(MetricsService, SessionService) {
         } else if (role_level === 2) {
           name = 'clientId'
         }
-
-        console.log(SessionService.level);
         avgNet.push({ id: x[name], y: x['avgNet'] });
         absNet.push({ id: x[name], y: x['absNet'] });
 
       });
-
       series.push(absNet);
       series.push(avgNet);
-
-      console.log(series);
-
       return series;
     };
 
@@ -272,7 +262,7 @@ function NetWorthService(MetricsService, SessionService) {
           }else{
             data = obj.data[i].y;
           }
-          
+
           return {
             name: obj.name,
             data: data

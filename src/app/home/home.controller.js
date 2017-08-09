@@ -12,13 +12,12 @@ function chartData($http, $log, SessionService) {
 		if (url === null) {
 			chartData.createOptions(chartType, chartId, '');
 		}
-		if (!show) {
-			return;
-		} else {
+		if (!show) return;
+		else {
 			return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-				var apiData = response["data"];
+				var apiData = response.data;
 				if (chartId !== null) {
-					chartData.createOptions(chartType, chartId, apiData["data"]);
+					chartData.createOptions(chartType, chartId, apiData);
 				}
 				//returning for unit testing purposes
 				return apiData;
@@ -65,7 +64,7 @@ function chartData($http, $log, SessionService) {
 		if (chartId === "goalsContainer") {
 			subtitle = {
 				useHTML: true,
-				text: "<h6> total goals </h6>",
+				text: "<h6> Total Goals </h6>",
 				y: 170,
 				floating: true
 			};
@@ -93,7 +92,7 @@ function chartData($http, $log, SessionService) {
 			};
 		} else if (chartId === "netWorthContainer") {
 			var categories = [];
-			apiData.summary.forEach(function (x) {
+			apiData.forEach(function (x) {
 				categories.push(x.date);
 			});
 			xAxis = {
@@ -250,7 +249,6 @@ function chartData($http, $log, SessionService) {
 				series.push(points);
 			}
 		} else if (chartId === "netWorthContainer") {
-			apiData = apiData.summary;
 			var data = [];
 			var clientsDiff = [];
 			apiData.forEach(function (x) {
@@ -304,14 +302,15 @@ function chartData($http, $log, SessionService) {
 	return chartData;
 }
 
-function HomeController($scope, $http, $log, $rootScope, chartData, SessionService) {
+function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, chartData, SessionService) {
 
 	HomeController.self = this; // singleton
 	$scope.$http = $http;
 	this.$log = $log;
 
 	SessionService.refreshCanceller();
-	//SessionService.curr_page = "home";
+	SessionService.curr_page = "home";
+	//var DOMAIN = "http://10.1.15.102:8080";
 
 	this.total = 0;
 	//var DOMAIN = $scope.domain;
@@ -321,49 +320,40 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	var prospectUrl = DOMAIN + '/bi/stats?user=prospect';
 	var colorTheme = {colors: ["#000285", "#11BEDF", "#40B349", "#A1CB39", "#ACE6F9", "#FCCC08"]};
 	var loginsToggle = true;
-	var goalsGrid = {};
-	var aumGrid = {};
-	var netWorthGrid = {};
-	var loginsGrid = {};
 
 	//default position
-	var goalsDefault = {x: 0, y: 0, height: 7, width: 2};
-	var aumDefault = {x: 4, y: 0, height: 7, width: 4};
-	var netWorthDefault = {x: 0, y: 13, height: 7, width: 6};
-	var loginsDefault = {x: 0, y: 7, height: 6, width: 6};
+	var goalsDefault = {x: 0, y: 0, height: 7, width: 4};
+	var aumDefault = {x: 5, y: 0, height: 7, width: 8};
+	var netWorthDefault = {x: 0, y: 13, height: 7, width: 12};
+	var loginsDefault = {x: 0, y: 7, height: 7, width: 12};
 
-	goalsGrid = $scope.goalsDefault;
-	aumGrid = $scope.aumDefault;
-	netWorthGrid = $scope.netWorthDefault;
-	loginsGrid = $scope.loginsDefault;
-
-	$scope.goalsGrid = goalsDefault;
-	$scope.aumGrid = aumDefault;
-	$scope.netWorthGrid = netWorthDefault;
-	$scope.loginsGrid = loginsDefault;
+	var goalsGrid = goalsDefault;
+	var aumGrid = aumDefault;
+	var netWorthGrid = netWorthDefault;
+	var loginsGrid = loginsDefault;
 
 	var storeGrid = function(items) {
 		for (var i=0;i<Object.keys(items).length;i++) {
-			if (items[i]['id'] === 'goalsContainer' && $scope.goalsShow) {
-				goalsGrid['x'] = items[i]['x'];
-				goalsGrid['y'] = items[i]['y'];
-				goalsGrid['height'] = items[i]['height'];
-				goalsGrid['width'] = items[i]['width'];
-			} else if (items[i]['id'] === 'aumContainer' && $scope.aumShow) {
-				aumGrid['x'] = items[i]['x'];
-				aumGrid['y'] = items[i]['y'];
-				aumGrid['height'] = items[i]['height'];
-				aumGrid['width'] = items[i]['width'];
-			} else if (items[i]['id'] === 'netWorthContainer' && $scope.netWorthShow) {
-				netWorthGrid['x'] = items[i]['x'];
-				netWorthGrid['y'] = items[i]['y'];
-				netWorthGrid['height'] = items[i]['height'];
-				netWorthGrid['width'] = items[i]['width'];
-			} else if (items[i]['id'] === 'loginsContainer' && $scope.loginsShow) {
-				loginsGrid['x'] = items[i]['x'];
-				loginsGrid['y'] = items[i]['y'];
-				loginsGrid['height'] = items[i]['height'];
-				loginsGrid['width'] = items[i]['width'];
+			if (items[i].id === 'goalsContainer' && $scope.goalsShow) {
+				goalsGrid.x = items[i].x;
+				goalsGrid.y = items[i].y;
+				goalsGrid.height = items[i].height;
+				goalsGrid.width = items[i].width;
+			} else if (items[i].id === 'aumContainer' && $scope.aumShow) {
+				aumGrid.x = items[i].x;
+				aumGrid.y = items[i].y;
+				aumGrid.height = items[i].height;
+				aumGrid.width = items[i].width;
+			} else if (items[i].id === 'netWorthContainer' && $scope.netWorthShow) {
+				netWorthGrid.x = items[i].x;
+				netWorthGrid.y = items[i].y;
+				netWorthGrid.height = items[i].height;
+				netWorthGrid.width = items[i].width;
+			} else if (items[i].id === 'loginsContainer' && $scope.loginsShow) {
+				loginsGrid.x = items[i].x;
+				loginsGrid.y = items[i].y;
+				loginsGrid.height = items[i].height;
+				loginsGrid.width = items[i].width;
 			}
 		}
 	};
@@ -382,6 +372,19 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		$scope.netWorthGrid = netWorthDefault;
 		$scope.loginsGrid = loginsDefault;
 
+		setTimeout(function() {
+			var gridOptions = {
+				float: false,
+				width: 12
+			};
+			$('.grid-stack').gridstack(gridOptions);
+			console.log('after grid-stack');
+			$('.grid-stack').on('change', function(event, items) {
+				redrawCharts(); //redraw highcharts to match new dimensions after every change
+				if (items !== undefined) {storeGrid(items);}//store new position after every change
+			});
+		}, 10)
+
 		$scope.goalsShow = true;
 		$scope.aumShow = true;
 		$scope.netWorthShow = true;
@@ -394,25 +397,40 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	}
 
 	var useCustom = function (response) {
-		$scope.goalsGrid = response.data.goals;
-		$scope.aumGrid = response.data.aum;
-		$scope.netWorthGrid = response.data.netWorth;
-		$scope.loginsGrid = response.data.logins;
+		console.log('custom');
+		console.log(response);
+		$scope.goalsGrid = response.goals;
+		$scope.aumGrid = response.aum;
+		$scope.netWorthGrid = response.netWorth;
+		$scope.loginsGrid = response.logins;
 
-		if (response.data.goals === null) {$scope.goalsShow = false;} else {$scope.goalsShow = true;}
-		if (response.data.aum === null) {$scope.aumShow = false;} else {$scope.aumShow = true;}
-		if (response.data.netWorth === null) {$scope.netWorthShow = false;} else {$scope.netWorthShow = true;}
-		if (response.data.logins === null) {$scope.loginsShow = false;} else {$scope.loginsShow = true;}
+		if (response.goals === null) {$scope.goalsShow = false; $scope.goalsGrid = {x:0,y:0,height:7,width:0};} else {$scope.goalsShow = true;}
+		if (response.aum === null) {$scope.aumShow = false; $scope.aumGrid = {x:0,y:0,height:7,width:0};} else {$scope.aumShow = true;}
+		if (response.netWorth === null) {$scope.netWorthShow = false; $scope.netWorthGrid = {x:0,y:0,height:7,width:0};} else {$scope.netWorthShow = true;}
+		if (response.logins === null) {$scope.loginsShow = false; $scope.loginsGrid = {x:0,y:0,height:7,width:0};} else {$scope.loginsShow = true;}
+
+		setTimeout(function() {
+			var gridOptions = {
+				float: false,
+				width: 12
+			};
+			$('.grid-stack').gridstack(gridOptions);
+			console.log('after grid-stack');
+			$('.grid-stack').on('change', function(event, items) {
+				redrawCharts(); //redraw highcharts to match new dimensions after every change
+				if (items !== undefined) {storeGrid(items);}//store new position after every change
+			});
+
+			if (!$scope.goalsShow) {$scope.remove('goals');}
+			if (!$scope.aumShow) {$scope.remove('aum');}
+			if (!$scope.netWorthShow) {$scope.remove('netWorth');}
+			if (!$scope.loginsShow) {$scope.remove('logins');}
+		}, 10);
 
 		chartData.callApi('pie', 'goalsContainer', $scope.goalsShow, DOMAIN + '/bi/goals');
 		chartData.callApi('area', 'aumContainer', $scope.aumShow, DOMAIN + '/bi/aums');
 		chartData.callApi('line', 'netWorthContainer', $scope.netWorthShow, DOMAIN + '/bi/networth');
 		$scope.loginApi($scope.loginsShow);
-
-		if (!$scope.goalsShow) {$scope.remove('goals');}
-		if (!$scope.aumShow) {$scope.remove('aum');}
-		if (!$scope.netWorthShow) {$scope.remove('netWorth');}
-		if (!$scope.loginsShow) {$scope.remove('logins');}
 	}
 
 	var redrawCharts = function () {
@@ -420,13 +438,13 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 		var aum = $('#aumContainer').highcharts();
 		var networth = $('#netWorthContainer').highcharts();
 
-		if ($scope.goalsShow) {
+		if ($scope.goalsShow && goals !== undefined) {
 			goals.reflow();
 		}
-		if ($scope.aumShow) {
+		if ($scope.aumShow && aum !== undefined) {
 			aum.reflow();
 		}
-		if ($scope.netWorthShow){
+		if ($scope.netWorthShow && networth !== undefined){
 			networth.reflow();
 		}
 	};
@@ -443,32 +461,39 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	$scope.reset = function() {
 		console.log('reset');
 
-		$scope.goalsGrid = goalsDefault;
-		$scope.aumGrid = aumDefault;
-		$scope.netWorthGrid = netWorthDefault;
-		$scope.loginsGrid = loginsDefault;
-
 		goalsGrid = goalsDefault;
 		aumGrid = aumDefault;
 		netWorthGrid = netWorthDefault;
 		loginsGrid = loginsDefault;
 
-		$scope.saveGridData(1);
+		console.log(netWorthGrid);
+		console.log(loginsGrid);
+		$scope.saveGridData(0);
 	};
 
 	$scope.remove = function (id) {
-		var grid = $('.grid-stack').data('gridstack');
-		var element = document.getElementById(id);
-		grid.removeWidget(element); //using provided api
 		if (id === 'goals') {
 			$scope.goalsShow = false;
+			goalsGrid = null;
+			console.log(goalsGrid);
 		} else if (id === 'aum') {
 			$scope.aumShow = false;
+			aumGrid = null;
+			console.log(aumGrid);
 		} else if (id === 'netWorth') {
 			$scope.netWorthShow = false;
+			netWorthGrid = null;
+			console.log(netWorthGrid);
 		} else if (id === 'logins') {
 			$scope.loginsShow = false;
+			loginsGrid = null;
+			console.log(loginsGrid);
 		}
+		var grid = $('.grid-stack').data('gridstack');
+		var element = document.getElementById(id);
+		if (element !== null && grid !== undefined) grid.removeWidget(element); //using provided api
+
+		console.log('remove');
 	};
 
 	$scope.toggleLoginData = function () {
@@ -484,14 +509,14 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	$scope.loginApi = function (show) {
 		if (!show) {return;}
 		return $http.get(clientUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(clientResponse) {
-			$scope.clientData = clientResponse["data"]["data"]["client"];
+			$scope.clientData = clientResponse.data;
 
 			$scope.clientData['changeInTotalLogins'] = addSign($scope.clientData['changeInTotalLogins']);
 			$scope.clientData['changeInUniqueLogins'] = addSign($scope.clientData['changeInUniqueLogins']);
 			$scope.clientData['changeInAvgSessionTime'] = addSign($scope.clientData['changeInAvgSessionTime']);
 		}).then(function () {
 			return $http.get(prospectUrl, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess1(prospectResponse) {
-				$scope.prospectData = prospectResponse["data"]["data"]["prospect"];
+				$scope.prospectData = prospectResponse.data;
 
 				$scope.prospectData['changeInTotalLogins'] = addSign($scope.prospectData['changeInTotalLogins']);
 				$scope.prospectData['changeInUniqueLogins'] = addSign($scope.prospectData['changeInUniqueLogins']);
@@ -506,14 +531,21 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 
 	$scope.getGridData = function() {
 		return $http.get(DOMAIN + '/bi/grid-config/' + SessionService.user_id, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-		// return $http.get('http://10.1.15.102:8080/bi/grid-config/' + SessionService.user_id, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 			if (response.data === null) {
 				console.log('if');
 				useDefault();
 			} else {
+				console.log(response);
 				console.log('else');
-				useCustom(response);
+				useCustom(response.data);
 			}
+
+			//hide loading, then show grid
+			var loading = document.getElementById("dialog-loading");
+	        loading.style['visibility'] = "hidden";
+			var grid = document.getElementById('grid');
+			grid.style['visibility'] = 'visible';
+
 		}, function myError(response) {
 			$log.error("Error " + response.status + ": " + response.statusText + "!");
 		});
@@ -527,11 +559,12 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 			netWorth: netWorthGrid,
 			logins: loginsGrid
 		};
-		return $http.post(DOMAIN + '/bi/grid-config', gridData).then(function mySuccess(response) {
-		// return $http.post('http://10.1.15.102:8080/bi/grid-config/', gridData).then(function mySuccess(response) {
+		console.log(gridData);
+		return $http.post(DOMAIN + '/bi/grid-config', gridData, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 			console.log('reset');
 			if (reset) $window.location.reload();
 		}, function myError(response) {
+			console.log(response);
 			console.log('err');
 		});
 	};
@@ -542,16 +575,16 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 
 	var formHTML = `
 			<md-dialog>
-				<md-dialog-content>
-					<header>Add or Remove Tiles</header>
+				<md-dialog-content class="md-dialog-content">
+					<strong>Add or Remove Tiles</strong>
 					<md-switch ng-model="goalsShow">Goals</md-switch>
 					<md-switch ng-model="aumShow">Assets Under Management</md-switch>
 					<md-switch ng-model="netWorthShow">Net Worth</md-switch>
 					<md-switch ng-model="loginsShow">Logins</md-switch>
 				</md-dialog-content>
 				<md-dialog-actions>
-					<md-button ng-click="closeDialog()" class="md-primary">Close</md-button>
-					<md-button ng-click="saveGridData()"style="background-color:#11BEDF">Save</md-button>
+					<md-button ng-click="closeDialog()"style="background-color:#11BEDF">Cancel</md-button>
+					<md-button ng-click="addRemove()"style="background-color:#11BEDF">Save</md-button>
 				</md-dialog-actions>
 			</md-dialog>
 		`;
@@ -559,15 +592,19 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	$scope.showForm = function (ev) {
 		console.log('show');
 		$mdDialog.show({
-            controller: HomeController,
             template: formHTML,
 			preserveScope: true,
             parent: angular.element(document.getElementById('main-container')),
             targetEvent: ev,
             scope: $scope,
-            clickOutsideToClose: true
+            clickOutsideToClose: true,
+			escapeToClose: true
         });
 	}
+
+	//hide grid until it's done loading
+	var grid = document.getElementById('grid');
+	grid.style['visibility'] = "hidden";
 
 	SessionService.role_promise.then(function mySuccess() {
 		console.log(SessionService.user_id);
@@ -575,19 +612,5 @@ function HomeController($scope, $http, $log, $rootScope, chartData, SessionServi
 	});
 
 	this.chart = Highcharts.setOptions(colorTheme);
-
-
-	//jQuery for gridstack
-	$(function () {
-		var gridOptions = {
-			float: false,
-			width: 6
-		};
-		$('.grid-stack').gridstack(gridOptions);
-		$('.grid-stack').on('change', function(event, items) {
-			redrawCharts(); //redraw highcharts to match new dimensions after every change
-			if (items !== undefined) {storeGrid(items);}//store new position after every change
-		});
-	});
 
 };

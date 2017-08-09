@@ -130,7 +130,7 @@ function GoalsService(MetricsService) {
 
             var searchPrefix = item ?
                 `<div style="text-align: center">
-                    <h5 style="margin-top:10px">`+ item.display + `</h5> 
+                    <h5 style="margin-top:10px">`+ item.display + `</h5>
                 </div>
                 <div class="vertical-line"></div>
                 ` : "";

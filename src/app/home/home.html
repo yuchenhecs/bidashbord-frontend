@@ -1,16 +1,25 @@
 <div id="main-container">
     <div class="page">
         <div layout="row">
+            <div id="dialog-loading" layout="row"  layout-align="center center" style="height:800px;">
+                <div class="loader no-animate primary-loader loader--style3" >
+                    <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="40px" height="40px" viewBox="0 0 50 50" style="enable-background: new 0 0 50 50;"
+                                xml:space="preserve">
+                        <path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                    <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"
+                                    />
+                        </path>
+                    </svg>
+                </div>
+            </div>
             <div>
-                <!-- <input id="checkbox" type="checkbox" ng-model="all">
-                <header>{{ all }} // {{ saveToggle }}</header> -->
-                <md-button ng-click="saveGridData(0)" ng-disabled="all" style="background-color:#11BEDF">Save</md-button>
-                <md-button ng-click="reset()" style="background-color:#11BEDF">Reset</md-button>
-                <md-button ng-click="showForm($event)" style="background-color:#11BEDF">Form</md-button>
+                <md-button ng-click="saveGridData(0)" style="background-color:#11BEDF">Save</md-button>
+                <md-button ng-click="showForm($event)" style="background-color:#11BEDF">Edit</md-button>
             </div>
         </div>
         <div layout="row">
-            <div class="grid-stack" data-gs-width="6" id="grid">
+            <div class="grid-stack" data-gs-width="12" id="grid">
                 <div  id="goals" class="grid-stack-item" data-gs-x="{{ goalsGrid.x }}" data-gs-y="{{ goalsGrid.y }}" data-gs-height="{{ goalsGrid.height }}" data-gs-width="{{ goalsGrid.width }}" data-gs-min-height="7" data-gs-id="goalsContainer">
                     <div class="grid-stack-item-content">
                         <div class="tile-outer">
@@ -93,7 +102,7 @@
                                     </div>
                                     <div layout="row">
                                         <div class="subtitle" flex="100">
-                                        Login Metrics from the Last 7 Days
+                                        <strong>Login Metrics from the Last 7 Days</strong>
                                         </div>
                                     </div>
                                     <div layout="row">

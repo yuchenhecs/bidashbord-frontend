@@ -180,6 +180,11 @@ function NetWorthService(MetricsService, SessionService) {
             label: {
               //text: 'Avg Firm'
               text: null
+            },
+            events: {
+                click: base.lineClick,
+                mouseover: base.lineMouseOver,
+                mouseout: base.lineMouseOut
             }
           }, {
             value: avgAdvsior,
@@ -192,12 +197,30 @@ function NetWorthService(MetricsService, SessionService) {
             label: {
               //text: 'Avg Advisor'
               text: null
+            },
+            events: {
+                click: base.lineClick,
+                mouseover: base.lineMouseOver,
+                mouseout: base.lineMouseOut
             }
           }];
       }
 
       return yAxis;
     }
+
+    base.lineClick = function (){
+    //  console.log('click');
+    }
+
+    base.lineMouseOver = function (){
+    //  console.log('mouseover');
+    }
+
+    base.lineMouseOut = function (){
+    //  console.log('mouseout');
+    }
+
 
     base.seriesSelector = function (input) {
       var seriesRaw = this.prepareSeries(input.data);
@@ -275,6 +298,16 @@ function NetWorthService(MetricsService, SessionService) {
         };
       });
     }
+
+    base.createWidgets = function (chart) {
+      base.createPathSelector(chart);
+      base.createLineTooltip();
+    }
+
+    base.createLineTooltip = function(){
+      // var lines = document.getElementsByTagName('path');
+      // console.log(lines);
+    };
 
     return base;
   }

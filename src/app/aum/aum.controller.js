@@ -379,6 +379,12 @@ function AUMService(MetricsService, SessionService) {
                 <div class="vertical-line"></div>
                 ` : "";
 
+            searchPrefix += 
+                    `<div style="text-align: center">
+                        <h3> <small> Previous </small></h3>
+                        <h3> <small> Current  </small></h3>
+                    </div>`;
+
             var length = item ? item.series.length : 0;
             var half_length = Math.floor(length/2);
 

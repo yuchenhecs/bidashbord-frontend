@@ -3,7 +3,7 @@ angular
     .controller('AUMController', AUMController)
     .service('AUMService', AUMService);
 
-function AUMService(MetricsService) {
+function AUMService(MetricsService, SessionService) {
     this.init = function () {
         var base = new MetricsService();
         // constants
@@ -307,7 +307,7 @@ function AUMService(MetricsService) {
                     var dataDrillDown = entry[1].map(function (x, i) {
                         var name = 'firmId';
                         var role_level = base.current_level + SessionService.level;
-
+                        
                         if (role_level === 0) {
                             name = 'firmId';
                         } else if (role_level === 1) {

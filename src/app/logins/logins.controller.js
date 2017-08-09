@@ -3,7 +3,7 @@ angular
     .controller('LoginsController', LoginsController)
     .service('LoginsService', LoginsService);
 
-function LoginsService(MetricsService, $compile) {
+function LoginsService(MetricsService, $compile, SessionService) {
     this.init = function () {
         var base = new MetricsService();
         // constants

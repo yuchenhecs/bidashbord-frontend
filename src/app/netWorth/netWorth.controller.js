@@ -3,7 +3,7 @@ angular
   .controller('NetWorthController', NetWorthController)
   .service('NetWorthService', NetWorthService);
 
-function NetWorthService(MetricsService) {
+function NetWorthService(MetricsService, SessionService) {
   this.init = function () {
     // most code is written in MetricsController
 
@@ -129,6 +129,7 @@ function NetWorthService(MetricsService) {
           name = 'clientId'
         }
 
+        console.log(SessionService.level);
         avgNet.push({ id: x[name], y: x['avgNet'] });
         absNet.push({ id: x[name], y: x['absNet'] });
 
@@ -264,9 +265,17 @@ function NetWorthService(MetricsService) {
         var series = base.level_list[base.current_level].option.series.filter(obj => {
           return obj.name.localeCompare("padding") != 0;
         }).map(function (obj, obj_i) {
+          var role_level = base.current_level + SessionService.level;
+          var data;
+          if(role_level === 2){
+            data = obj_i === 0 ? obj.data[i].y : ( obj_i === 1 ? avgFirm : avgAdvsior ); 
+          }else{
+            data = obj.data[i].y;
+          }
+          
           return {
             name: obj.name,
-            data: obj.data[i].y || 0
+            data: data
           };
         });
         return {

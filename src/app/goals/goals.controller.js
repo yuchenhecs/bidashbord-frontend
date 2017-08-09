@@ -126,6 +126,8 @@ function GoalsService(MetricsService) {
         };
 
         base.createSearchResultHTML = function (item) {
+            if(!item) return '';
+            
             var total = 0;
 
             var searchPrefix = item ?

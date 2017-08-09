@@ -849,6 +849,8 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
         }
 
         this.createSearchResultHTML = function (item) {
+            if(!item) return '';
+            
             var searchPrefix = item ?
                 `<div style="text-align: center" flex="auto">
                     <h5 style="margin-top:10px">`+ item.display + `</h5> 

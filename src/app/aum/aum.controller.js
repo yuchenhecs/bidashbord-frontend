@@ -371,6 +371,8 @@ function AUMService(MetricsService, SessionService) {
         }
 
         base.createSearchResultHTML = function (item) {
+            if(!item) return '';
+            
 
             var searchPrefix = item ?
                 `<div style="text-align: center" flex="auto">

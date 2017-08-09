@@ -64,7 +64,7 @@ function chartData($http, $log, SessionService) {
 		if (chartId === "goalsContainer") {
 			subtitle = {
 				useHTML: true,
-				text: "<h6> total goals </h6>",
+				text: "<h6> Total Goals </h6>",
 				y: 170,
 				floating: true
 			};
@@ -383,7 +383,7 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 				redrawCharts(); //redraw highcharts to match new dimensions after every change
 				if (items !== undefined) {storeGrid(items);}//store new position after every change
 			});
-		}, 1000)
+		}, 10)
 
 		$scope.goalsShow = true;
 		$scope.aumShow = true;
@@ -421,16 +421,16 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 				if (items !== undefined) {storeGrid(items);}//store new position after every change
 			});
 
-			chartData.callApi('pie', 'goalsContainer', $scope.goalsShow, DOMAIN + '/bi/goals');
-			chartData.callApi('area', 'aumContainer', $scope.aumShow, DOMAIN + '/bi/aums');
-			chartData.callApi('line', 'netWorthContainer', $scope.netWorthShow, DOMAIN + '/bi/networth');
-			$scope.loginApi($scope.loginsShow);
-
 			if (!$scope.goalsShow) {$scope.remove('goals');}
 			if (!$scope.aumShow) {$scope.remove('aum');}
 			if (!$scope.netWorthShow) {$scope.remove('netWorth');}
 			if (!$scope.loginsShow) {$scope.remove('logins');}
-		}, 1000);
+		}, 10);
+
+		chartData.callApi('pie', 'goalsContainer', $scope.goalsShow, DOMAIN + '/bi/goals');
+		chartData.callApi('area', 'aumContainer', $scope.aumShow, DOMAIN + '/bi/aums');
+		chartData.callApi('line', 'netWorthContainer', $scope.netWorthShow, DOMAIN + '/bi/networth');
+		$scope.loginApi($scope.loginsShow);
 	}
 
 	var redrawCharts = function () {
@@ -583,7 +583,7 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 					<md-switch ng-model="loginsShow">Logins</md-switch>
 				</md-dialog-content>
 				<md-dialog-actions>
-					<md-button ng-click="closeDialog()" class="md-primary">Cancel</md-button>
+					<md-button ng-click="closeDialog()"style="background-color:#11BEDF">Cancel</md-button>
 					<md-button ng-click="addRemove()"style="background-color:#11BEDF">Save</md-button>
 				</md-dialog-actions>
 			</md-dialog>

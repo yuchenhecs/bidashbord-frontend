@@ -335,7 +335,7 @@ div#button-group {
 }
 
 .login-category {
-    margin: 35px 0px;
+    margin: 50px 0px;
 }
 
 .loginCol {
@@ -344,7 +344,7 @@ div#button-group {
 }
 
 .loginNum {
-	font-size: 65px;
+	font-size: 74px;
 	color: #3EB6B5;
 }
 
@@ -355,7 +355,7 @@ div#button-group {
 
 .subtitle {
 	text-align: center;
-	font-size: 14px;
+	font-size: 16px;
 }
 
 
@@ -970,3 +970,11 @@ md-autocomplete-wrap:before {
     margin: 10px 0px 0px 10px;
 }
 //end gridstack
+
+md-switch.md-checked .md-bar {
+    background-color: #11BEDF !important; /* set selected bar color */
+}
+
+md-switch.md-checked .md-thumb {
+    background-color: #FFFFFF !important; /* set selected thumb color */
+}

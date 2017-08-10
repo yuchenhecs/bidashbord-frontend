@@ -327,10 +327,10 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	var netWorthDefault = {x: 0, y: 13, height: 7, width: 12};
 	var loginsDefault = {x: 0, y: 7, height: 7, width: 12};
 
-	var goalsGrid = goalsDefault;
-	var aumGrid = aumDefault;
-	var netWorthGrid = netWorthDefault;
-	var loginsGrid = loginsDefault;
+	var goalsGrid = {x: 0, y: 0, height: 7, width: 4};
+	var aumGrid = {x: 5, y: 0, height: 7, width: 8};
+	var netWorthGrid = {x: 0, y: 13, height: 7, width: 12};
+	var loginsGrid = {x: 0, y: 7, height: 7, width: 12};
 
 	var editHTML = `
 		<md-dialog>
@@ -409,6 +409,7 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 		return $http.get(DOMAIN + '/bi/grid-config/' + SessionService.user_id, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 			if (response.data === null) useDefault();
 			else useCustom(response.data);
+			console.log(response.data);
 			//hide loading, then show grid
 			var loading = document.getElementById("dialog-loading");
 			loading.style['visibility'] = "hidden";
@@ -422,10 +423,10 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	//use defualt grid options when response is null
 	var useDefault = function () {
 		//set grid to defualt values
-		$scope.goalsGrid = goalsDefault;
-		$scope.aumGrid = aumDefault;
-		$scope.netWorthGrid = netWorthDefault;
-		$scope.loginsGrid = loginsDefault;
+		$scope.goalsGrid = {x: 0, y: 0, height: 7, width: 4};
+		$scope.aumGrid = {x: 5, y: 0, height: 7, width: 8};
+		$scope.netWorthGrid = {x: 0, y: 13, height: 7, width: 12};
+		$scope.loginsGrid = {x: 0, y: 7, height: 7, width: 12};
 
 		setTimeout(function() {
 			var gridOptions = {
@@ -522,6 +523,7 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 			netWorth: netWorthGrid,
 			logins: loginsGrid
 		};
+		console.log(gridData);
 		return $http.post(DOMAIN + '/bi/grid-config', gridData, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 			if (reset) $window.location.reload();
 			if (ev !== null) showConfirmation(ev);

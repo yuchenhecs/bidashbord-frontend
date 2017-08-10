@@ -523,6 +523,12 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 		};
 		console.log(gridData);
 		return $http.post(DOMAIN + '/bi/grid-config', gridData, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
+			//grey out save button
+			var save = document.getElementById('gridSave');
+			var fauxSave = document.getElementById('fauxGridSave');
+			fauxSave.style['display'] = 'inline';
+			save.style['display'] = 'none';
+
 			if (reset) $window.location.reload();
 			if (ev !== null) showConfirmation(ev);
 		}, function myError(response) {

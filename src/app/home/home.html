@@ -14,8 +14,8 @@
         </div>
         <div layout="row" layout-align="end none" style="margin-bottom:10px;">
             <div>
-                <md-button id="faux-grid-save" ng-disabled="true" style="background-color:#11BEDF">Save</md-button>
-                <md-button id="grid-save" class="grid-save" ng-click="saveGridData(0, $event)" style="background-color:#11BEDF">Save</md-button>
+                <md-button id="fauxGridSave" ng-disabled="true" style="background-color:#11BEDF">Save</md-button>
+                <md-button id="gridSave" class="grid-save" ng-click="saveGridData(0, $event)" style="background-color:#11BEDF">Save</md-button>
                 <md-button ng-click="showForm($event)" style="background-color:#11BEDF">Edit</md-button>
             </div>
         </div>
@@ -88,198 +88,72 @@
                 </div>
                 <div id="logins" class="grid-stack-item" data-gs-x="{{ loginsGrid.x }}" data-gs-y="{{ loginsGrid.y }}" data-gs-height="{{ loginsGrid.height }}" data-gs-width="{{ loginsGrid.width }}" data-gs-min-height="6" data-gs-id="loginsContainer">
                     <div class="grid-stack-item-content">
-                            <div class="tile-outer">
-                                <i class="fa fa-times remove-tile" aria-hidden="true" ng-click="remove('logins')"></i>
-                                <div class="tile-inner">
-                                    <div layout="row" class="tile-header">
-                                        <div flex="75">
-                                            Login
+                        <div class="tile-outer">
+                            <i class="fa fa-times remove-tile" aria-hidden="true" ng-click="remove('logins')"></i>
+                            <div class="tile-inner">
+                                <div layout="row" class="tile-header">
+                                    <div flex="75">
+                                        Login
+                                    </div>
+                                    <div flex="25">
+                                        <div class="more">
+                                            <a href="/#!/login">More</a>
                                         </div>
-                                        <div flex="25">
-                                            <div class="more">
-                                                <a href="/#!/logins">More</a>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <div class="subtitle" flex="100">
+                                    <strong>Login Metrics from the Last 7 Days</strong>
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <div class="login-category" layout="column" flex="33" layout-align="center center">
+                                            <div layout="row" class="loginNum">
+                                                {{ showData['totalLogins'] }}
                                             </div>
-                                        </div>
+                                            <div layout="row">
+                                                <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong>  &nbsp; from previous week
+                                            </div>
+                                            <div layout="row" class="loginText">
+                                                Total Logins
+                                            </div>
                                     </div>
-                                    <div layout="row">
-                                        <div class="subtitle" flex="100">
-                                        <strong>Login Metrics from the Last 7 Days</strong>
-                                        </div>
+                                    <div class="login-category" layout="column" flex="33" layout-align="center center">
+                                            <div layout="row" class="loginNum">
+                                                {{ showData['uniqueLogins'] }}
+                                            </div>
+                                            <div layout="row">
+                                                <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> &nbsp; from previous week
+                                            </div>
+                                            <div layout="row" class="loginText">
+                                                Unique Logins
+                                            </div>
                                     </div>
-                                    <div layout="row">
-                                        <div class="login-category" layout="column" flex="33" layout-align="center center">
-                                                <div layout="row" class="loginNum">
-                                                    {{ showData['totalLogins'] }}
-                                                </div>
-                                                <div layout="row">
-                                                    <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong>  &nbsp; from previous week
-                                                </div>
-                                                <div layout="row" class="loginText">
-                                                    Total Logins
-                                                </div>
-                                        </div>
-                                        <div class="login-category" layout="column" flex="33" layout-align="center center">
-                                                <div layout="row" class="loginNum">
-                                                    {{ showData['uniqueLogins'] }}
-                                                </div>
-                                                <div layout="row">
-                                                    <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> &nbsp; from previous week
-                                                </div>
-                                                <div layout="row" class="loginText">
-                                                    Unique Logins
-                                                </div>
-                                        </div>
-                                        <div class="login-category" layout="column" flex="33" layout-align="center center">
-                                                <div layout="row" class="loginNum">
-                                                    {{ showData['avgSessionTime'] }}
-                                                </div>
-                                                <div layout="row">
-                                                    <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> &nbsp; from previous week
-                                                </div>
-                                                <div layout="row" class="loginText">
-                                                    Average User Session (min)
-                                                </div>
-                                        </div>
-                                    </div>
-                                    <div layout="row">
-                                        <div class="oranj-toggle medium-one-color">
-                                            <input id="login" type="checkbox"  ng-model="ngModel" ng-change="toggleLoginData()">
-                                            <label for="login">
-                                                <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
-                                            </label>
-                                        </div>
+                                    <div class="login-category" layout="column" flex="33" layout-align="center center">
+                                            <div layout="row" class="loginNum">
+                                                {{ showData['avgSessionTime'] }}
+                                            </div>
+                                            <div layout="row">
+                                                <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> &nbsp; from previous week
+                                            </div>
+                                            <div layout="row" class="loginText">
+                                                Average User Session (min)
+                                            </div>
                                     </div>
                                 </div>
+                                <div layout="row" layout-align="center center">
+                                    <div class="oranj-toggle medium-one-color">
+                                        <input id="login" type="checkbox"  ng-model="ngModel" ng-change="toggleLoginData()">
+                                        <label for="login">
+                                            <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- <div layout="row">
-            <div flex="33" layout-padding>
-                <div class="tile-outer">
-                    <div class="tile-inner">
-                        <div layout="row" class="tile-header">
-                            <div flex="75">
-                                Goals
-                            </div>
-                            <div flex="25">
-                                <div class="more">
-                                    <a href="/#!/goals">More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="goalsContainer">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div flex="66" layout-padding>
-                <div class="tile-outer">
-                    <div class="tile-inner">
-                        <div layout="row" class="tile-header">
-                            <div flex="75">
-                                Assets Under Management
-                            </div>
-                            <div flex="25">
-                                <div class="more">
-                                    <a href="/#!/aum">More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="aumContainer">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div layout="row">
-            <div class="tile" flex="100">
-                <div class="tile-outer">
-                    <div class="tile-inner">
-                        <div class="row tile-header">
-                            <div class="col-md-9">
-                                Net Worth
-                            </div>
-                            <div class="col-md-3">
-                                <div class="more">
-                                    <a href="/#!/networth">More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="netWorthContainer">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div layout="row">
-            <div class="tile" flex="100">
-                <div class="tile-outer">
-                    <div class="tile-inner">
-                        <div layout="row" class="tile-header">
-                            <div flex="75">
-                                Session Stats
-                            </div>
-                            <div flex="25">
-                                <div class="more">
-                                    <a href="/#!/login">More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="subtitle" flex="100">
-                            Session Stats from the Last 7 Days
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div layout="column" flex="33" layout-align="center center">
-                                    <div layout="row" class="loginNum">
-                                        {{ showData['totalLogins'] }}
-                                    </div>
-                                    <div layout="row">
-                                        <strong class="{{ totalSign }}">{{ showData['changeInTotalLogins'] }} </strong> &nbsp;&nbsp; from previous week
-                                    </div>
-                                    <div layout="row" class="loginText">
-                                        Total Logins
-                                    </div>
-                            </div>
-                            <div layout="column" flex="33" layout-align="center center">
-                                    <div layout="row" class="loginNum">
-                                        {{ showData['uniqueLogins'] }}
-                                    </div>
-                                    <div layout="row">
-                                        <strong class="{{ uniqueSign }}">{{ showData['changeInUniqueLogins'] }} </strong> &nbsp;&nbsp; from previous week
-                                    </div>
-                                    <div layout="row" class="loginText">
-                                        Unique Logins
-                                    </div>
-                            </div>
-                            <div layout="column" flex="33" layout-align="center center">
-                                    <div layout="row" class="loginNum">
-                                        {{ showData['avgSessionTime'] }}
-                                    </div>
-                                    <div layout="row">
-                                        <strong class="{{ timeSign }}">{{ showData['changeInAvgSessionTime'] }} </strong> &nbsp;&nbsp; from previous week
-                                    </div>
-                                    <div layout="row" class="loginText">
-                                        Average User Session (min)
-                                    </div>
-                            </div>
-                        </div>
-                        <div layout="row">
-                            <div class="oranj-toggle medium-one-color">
-                                <input id="login" type="checkbox"  ng-model="ngModel" ng-change="toggleLoginData()">
-                                <label for="login">
-                                    <div class="toggle-switch" data-unchecked="Clients" data-checked="Prospects" style="margin:auto"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>

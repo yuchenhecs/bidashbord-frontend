@@ -16,6 +16,7 @@ function chartData($http, $log, SessionService) {
 		else {
 			return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
 				var apiData = response.data;
+				if (chartId === "netWorthContainer") console.log(apiData);
 				if (chartId !== null) {
 					chartData.createOptions(chartType, chartId, apiData);
 				}
@@ -291,7 +292,6 @@ function chartData($http, $log, SessionService) {
 	};
 
 	chartData.addSign = function (num) {
-		console.log('un function');
 		if (num >= 0) {
 			return '+' + num;
 		}
@@ -434,7 +434,6 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 				width: 12
 			};
 			$('.grid-stack').gridstack(gridOptions);
-			console.log('after grid-stack');
 			$('.grid-stack').on('change', function(event, items) {
 				//highlight greyed out save button
 				var save = document.getElementById('grid-save');
@@ -479,11 +478,10 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 				width: 12
 			};
 			$('.grid-stack').gridstack(gridOptions);
-			console.log('after grid-stack');
 			$('.grid-stack').on('change', function(event, items) {
 				//highlight greyed out save button
-				var save = document.getElementById('grid-save');
-				var fauxSave = document.getElementById('faux-grid-save');
+				var save = document.getElementById('gridSave');
+				var fauxSave = document.getElementById('fauxGridSave');
 				save.style['display'] = 'inline';
 				fauxSave.style['display'] = 'none';
 				redrawCharts(); //redraw highcharts to match new dimensions after every change
@@ -614,7 +612,6 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 	}
 
 	$scope.showForm = function (ev) {
-		console.log('show');
 		$mdDialog.show({
             template: editHTML,
 			preserveScope: true,

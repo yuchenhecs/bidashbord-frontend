@@ -353,7 +353,7 @@ function LoginsService(MetricsService, $compile, SessionService) {
         base.createSwitch = function (scope) {
             var ctrl = this.controllerName;
             var switchHTML = `
-                        <div class="row">
+                        <div layout="row" layout-align="center center">
                             <div class="oranj-toggle medium-one-color">
                                 <input id="user-switch" type="checkbox"  ng-model="`+ ctrl + `.self.isProspect" ng-change="` + ctrl + `.self.checkUserType()">
                                 <label for="user-switch">

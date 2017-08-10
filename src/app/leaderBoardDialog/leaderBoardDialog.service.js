@@ -386,7 +386,7 @@ function LeaderBoardDialogService($mdDialog, $http, $q, $rootScope, SessionServi
         }
 
         return $http.get(url, { timeout: SessionService.canceller.promise, headers: { 'Authorization': SessionService.access_token } }).then(function mySuccess(response) {
-            console.log(response);
+            console.log(response.data);
         
             var formatter = $scope.tabInfo[$scope.currentTab].formatter;
 

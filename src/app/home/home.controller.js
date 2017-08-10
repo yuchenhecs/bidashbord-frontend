@@ -435,6 +435,11 @@ function HomeController($scope, $http, $log, $rootScope, $mdDialog, $window, cha
 			$('.grid-stack').gridstack(gridOptions);
 			console.log('after grid-stack');
 			$('.grid-stack').on('change', function(event, items) {
+				//highlight greyed out save button
+				var save = document.getElementById('grid-save');
+				var fauxSave = document.getElementById('faux-grid-save');
+				save.style['display'] = 'inline';
+				fauxSave.style['display'] = 'none';
 				redrawCharts(); //redraw highcharts to match new dimensions after every change
 				if (items !== undefined) {storeGrid(items);}//store new position after every change
 			});

@@ -103,7 +103,7 @@ function MetricsService($http, $rootScope, $compile, SessionService, $q) {
 
         this.drillDown = function (name, id) {
             if (this.current_level + SessionService.level >= 2) {
-                alert('Cannot drilldown anymore!');
+                alert('Cannot drilldown further!');
                 return; //level number overflowed, cannot drilldown anymore
             }
 
